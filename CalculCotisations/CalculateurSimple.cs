@@ -35,7 +35,7 @@ public class CalculateurSimple
     public void CalculeLesCotisations(decimal assiette)
     {
         CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(assiette);
-        MaladieIndemnitesJournalieres = Taux.CotisationsMaladiePourIndemnites * Math.Min(assiette, _pass.Valeur500Pct);
+        CalculeLesCotisationsPourIndemnitesMaladie(assiette);
 
         CalculeLaRetraiteDeBase(assiette);
         CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(assiette);
@@ -83,6 +83,17 @@ public class CalculateurSimple
 
         var differenceEntreAssietteEt5Pass = assiette - _pass.Valeur500Pct;
         MaladieHorsIndemnitesJournalieres = Taux.CotisationsMaladiePourRevenusSupAuPlancher * _pass.Valeur500Pct + Taux.CotisationsMaladiePourRevenusSupA5Pass * differenceEntreAssietteEt5Pass;
+    }
+
+    private void CalculeLesCotisationsPourIndemnitesMaladie(decimal assiette)
+    {
+        if (assiette < _pass.Valeur40Pct)
+        {
+            MaladieIndemnitesJournalieres = Taux.CotisationsMaladiePourIndemnites * _pass.Valeur40Pct;
+            return;
+        }
+
+        MaladieIndemnitesJournalieres = Taux.CotisationsMaladiePourIndemnites * Math.Min(assiette, _pass.Valeur500Pct);
     }
 
     private void CalculeLaRetraiteDeBase(decimal assiette)

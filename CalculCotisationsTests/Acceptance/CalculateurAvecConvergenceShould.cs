@@ -71,4 +71,51 @@ public class CalculateurAvecConvergenceShould
         Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
         Check.That(convergeur.GrandTotal).IsCloseTo(18821m, 5m);
     }
+
+    [Test]
+    // Ce test met en exergue une erreur dans la doc des taux (https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/taux-cotisations-ac-plnr.html) :
+    // Si le revenu est < 40% du PASS, alors les cotisations pour les indemnités journalières maladie ont un plancher = 40% du PASS.
+    // C'est visible dans le simulateur (https://mon-entreprise.urssaf.fr/simulateurs/ind%C3%A9pendant).
+    public void Calculer_les_cotisations_correctement_pour_un_revenu_de_12k()
+    {
+        const decimal revenuNet = 12000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsEqualTo(0m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(93m, 1m);
+        Check.That(convergeur.RetraiteDeBase).IsCloseTo(2211m, 1m);
+        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(872m, 1m);
+        Check.That(convergeur.InvaliditeDeces).IsCloseTo(162m, 1m);
+        Check.That(convergeur.AllocationsFamiliales).IsEqualTo(0m);
+        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(3338m, 5m);
+        Check.That(convergeur.CSGNonDeductible).IsCloseTo(379m, 1m);
+        Check.That(convergeur.CSGDeductible).IsCloseTo(1074m, 1m);
+        Check.That(convergeur.CRDS).IsCloseTo(78.8m, 1m);
+        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
+        Check.That(convergeur.GrandTotal).IsCloseTo(4986m, 5m);
+    }
+
+    [Test]
+    public void Calculer_les_cotisations_correctement_pour_un_revenu_de_plus_de_5_fois_le_PASS()
+    {
+        const decimal revenuNet = 300000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsCloseTo(20655m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(1159m, 1m);
+        Check.That(convergeur.RetraiteDeBase).IsCloseTo(9816m, 1m);
+        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(14408m, 1m);
+        Check.That(convergeur.InvaliditeDeces).IsCloseTo(603m, 1m);
+        Check.That(convergeur.AllocationsFamiliales).IsCloseTo(9630m, 1m);
+        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(56271m, 5m);
+        Check.That(convergeur.CSGNonDeductible).IsCloseTo(8806m, 1m);
+        Check.That(convergeur.CSGDeductible).IsCloseTo(24950m, 1m);
+        Check.That(convergeur.CRDS).IsCloseTo(1834.6m, 1m);
+        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
+        Check.That(convergeur.GrandTotal).IsCloseTo(91977m, 5m);
+    }
 }

@@ -16,8 +16,12 @@ public class CalculateurSimpleShould
         var calculateur = new CalculateurSimple(revenuNet, 2024);
         calculateur.CalculeLesCotisations();
 
-        const decimal expectedCotisations = 0m;
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsEqualTo(expectedCotisations);
+        const decimal cotisationsAttendues = 0m;
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsEqualTo(cotisationsAttendues);
+
+        // 0.5% appliqués au plancher de 40% du PASS ; pas dans la doc officielle mais découvert dans le simulateur...
+        const decimal cotisationsAttenduesPourLesIndemnites = 92.736m;
+        Check.That(calculateur.MaladieIndemnitesJournalieres).IsEqualTo(cotisationsAttenduesPourLesIndemnites);
     }
 
     [Test]
