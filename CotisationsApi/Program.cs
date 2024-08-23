@@ -11,7 +11,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "API de cotisations URSSAF",
         Version = "v1",
-        Description = "API pour calculer les cotisations URSSAF pour une profession libérale non réglementée"
+        Description = "API pour calculer les cotisations URSSAF pour une profession libérale non réglementée en métropole. Suit les règles de https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/taux-cotisations-ac-plnr.html. Attention, la retraite complémentaire est calculée comme celle des artisans/commerçants car c'est ce que fait l'URSSAF en août 2024. J'ai demandé vérification à l'URSSAF, le code sera mis à jour s'il s'avère qu'il s'agit bien d'une erreur."
     });
 });
 

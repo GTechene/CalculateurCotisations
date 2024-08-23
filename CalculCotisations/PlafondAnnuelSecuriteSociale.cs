@@ -21,5 +21,6 @@ public class PlafondAnnuelSecuriteSociale
     public decimal Valeur60Pct => 0.6m * Valeur;
     public decimal Valeur110Pct => 1.1m * Valeur;
     public decimal Valeur140Pct => 1.4m * Valeur;
+    public decimal Valeur400Pct => 4m * Valeur;
     public decimal Valeur500Pct => 5m * Valeur;
 }

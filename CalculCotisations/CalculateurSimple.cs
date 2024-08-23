@@ -50,6 +50,21 @@ public class CalculateurSimple
 
     private void CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(decimal assiette)
     {
+        if (_revenuNet <= _pass.Valeur40Pct)
+        {
+            return;
+        }
+
+        if (_revenuNet > _pass.Valeur40Pct && _revenuNet <= _pass.Valeur60Pct)
+        {
+            var difference = assiette - _pass.Valeur40Pct;
+            var differenceEntrePlafondEtPlancher = _pass.Valeur60Pct - _pass.Valeur40Pct;
+            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * 0.04m;
+
+            MaladieHorsIndemnitesJournalieres = tauxApplicable * assiette;
+            return;
+        }
+
         if (_revenuNet > _pass.Valeur60Pct && _revenuNet <= _pass.Valeur110Pct)
         {
             var difference = assiette - _pass.Valeur60Pct;
@@ -57,11 +72,17 @@ public class CalculateurSimple
             var tauxApplicable = difference/differenceEntrePlafondEtPlancher * 0.027m + 0.04m;
 
             MaladieHorsIndemnitesJournalieres = tauxApplicable * assiette;
+            return;
         }
-        if (_revenuNet > _pass.Valeur110Pct)
+
+        if (_revenuNet > _pass.Valeur110Pct && _revenuNet <= _pass.Valeur500Pct)
         {
             MaladieHorsIndemnitesJournalieres = Taux.CotisationsMaladiePourRevenusSupAuPlancher * assiette;
+            return;
         }
+
+        var differenceEntreAssietteEt5Pass = assiette - _pass.Valeur500Pct;
+        MaladieHorsIndemnitesJournalieres = Taux.CotisationsMaladiePourRevenusSupAuPlancher * _pass.Valeur500Pct + Taux.CotisationsMaladiePourRevenusSupA5Pass * differenceEntreAssietteEt5Pass;
     }
 
     private void CalculeLaRetraiteDeBase(decimal assiette)
@@ -89,8 +110,8 @@ public class CalculateurSimple
         }
         else
         {
-            var cotisationPremiereTranche = Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * Plafonds.RetraiteComplementaireArtisansCommercants;
-            var cotisationDeuxiemeTranche = Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * (assiette - Plafonds.RetraiteComplementaireArtisansCommercants);
+            const decimal cotisationPremiereTranche = Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * Plafonds.RetraiteComplementaireArtisansCommercants;
+            var cotisationDeuxiemeTranche = Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * (Math.Min(assiette, _pass.Valeur400Pct) - Plafonds.RetraiteComplementaireArtisansCommercants);
 
             RetraiteComplementaire = cotisationPremiereTranche + cotisationDeuxiemeTranche;
         }
@@ -98,18 +119,22 @@ public class CalculateurSimple
 
     private void CalculeLesAllocationsFamiliales(decimal assiette)
     {
-        if (assiette > _pass.Valeur140Pct)
+        if (assiette <= _pass.Valeur110Pct)
         {
-            AllocationsFamiliales = assiette * Taux.CotisationsAllocationsFamiliales;
+            return;
         }
-        else if (assiette > _pass.Valeur110Pct)
+
+        if (assiette > _pass.Valeur110Pct && assiette <= _pass.Valeur140Pct)
         {
             var difference = assiette - _pass.Valeur110Pct;
             var differenceEntrePlafondsEtPlancher = _pass.Valeur140Pct - _pass.Valeur110Pct;
             var tauxApplicable = difference/differenceEntrePlafondsEtPlancher * Taux.CotisationsAllocationsFamiliales;
 
             AllocationsFamiliales = assiette * tauxApplicable;
+            return;
         }
+
+        AllocationsFamiliales = assiette * Taux.CotisationsAllocationsFamiliales;
     }
 
     private void CalculeCSGEtCRDS(decimal assiette)
