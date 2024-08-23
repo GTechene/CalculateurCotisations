@@ -11,10 +11,15 @@
     <PackageReference Include="NFluent" Version="3.0.4" />
     <PackageReference Include="NUnit" Version="4.1.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="sas" Version="1.0.0" />
+    <PackageReference Include="sas.nfluent" Version="1.0.0" />
+    <PackageReference Include="sas.simulators.http" Version="1.0.0" />
+    <PackageReference Include="sas.simulators.nsubstitute" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CalculCotisations\CalculCotisations.csproj" />
+    <ProjectReference Include="..\CotisationsApi\CotisationsApi.csproj" />
   </ItemGroup>
 
 </Project>

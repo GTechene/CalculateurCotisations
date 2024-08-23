@@ -1,0 +1,6 @@
+@CotisationsApi_HostAddress = http://localhost:5179
+
+GET {{CotisationsApi_HostAddress}}/cotisations/
+Accept: application/json
+
+###
