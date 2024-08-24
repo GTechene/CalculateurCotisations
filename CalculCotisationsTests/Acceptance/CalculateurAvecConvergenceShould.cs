@@ -18,7 +18,7 @@ public class CalculateurAvecConvergenceShould
         Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(324.58m, 1m);
         Check.That(convergeur.RetraiteDeBase).IsCloseTo(8341.61m, 1m);
         Check.That(convergeur.RetraiteComplementaire).IsCloseTo(4763.83m, 1m);
-        Check.That(convergeur.InvaliditeDeces).IsCloseTo(602.78m, 1m);
+        Check.That(convergeur.InvaliditeDeces).IsEqualTo(602.784m);
         Check.That(convergeur.AllocationsFamiliales).IsCloseTo(2012.4m, 1m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(20394m, 5m);
         Check.That(convergeur.CSGNonDeductible).IsCloseTo(2047.46m, 1m);
@@ -51,6 +51,11 @@ public class CalculateurAvecConvergenceShould
     }
 
     [Test]
+    // L'exemple de 40k en 2024 est intéressant car il est :
+    // * inférieur à 1 PASS (invalidité/décès non plafonnée)
+    // * inférieur à 1.1 PASS (allocations familiales à 0)
+    // * entre 0.6 et 1.1 PASS (cotisations maladie, taux progressif entre 4% et 6.7%)
+    // * inférieur à 42946 (retraite complémentaire artisans/commerçants : uniquement la tranche à 7%)
     public void Calculer_les_cotisations_correctement_pour_un_revenu_de_40k()
     {
         const decimal revenuNet = 40000m;
@@ -74,9 +79,9 @@ public class CalculateurAvecConvergenceShould
 
     [Test]
     // Ce test met en exergue une erreur dans la doc des taux (https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/taux-cotisations-ac-plnr.html) :
-    // Si le revenu est < 40% du PASS, alors les cotisations pour les indemnités journalières maladie ont un plancher = 40% du PASS.
+    // Si le revenu est < 40% du PASS, alors les cotisations pour les indemnités journalières maladie ont un plancher = 40% du PASS. C'est-à-dire = 0.005 * 0.4 * PASS, soit 92.736 € en 2024.
     // C'est visible dans le simulateur (https://mon-entreprise.urssaf.fr/simulateurs/ind%C3%A9pendant).
-    public void Calculer_les_cotisations_correctement_pour_un_revenu_de_12k()
+    public void Calculer_les_cotisations_correctement_pour_un_revenu_inferieur_a_40_pct_du_PASS()
     {
         const decimal revenuNet = 12000m;
 
@@ -84,7 +89,7 @@ public class CalculateurAvecConvergenceShould
         convergeur.Calcule();
 
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsEqualTo(0m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(93m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres).IsEqualTo(92.736m);
         Check.That(convergeur.RetraiteDeBase).IsCloseTo(2211m, 1m);
         Check.That(convergeur.RetraiteComplementaire).IsCloseTo(872m, 1m);
         Check.That(convergeur.InvaliditeDeces).IsCloseTo(162m, 1m);
@@ -98,6 +103,11 @@ public class CalculateurAvecConvergenceShould
     }
 
     [Test]
+    // Ici, on teste les comportements suivants :
+    // * cotisations maladie hors indemnité à 6.5% pour les revenus > 5 PASS
+    // * cotisations indemnité maladie à 0% pour les revenus > 5 PASS
+    // * allocations à taux fixe car revenu > 1.4 PASS
+    // * retraite complémentaire artisans/commerçants plafonnée car revenu > 4 PASS
     public void Calculer_les_cotisations_correctement_pour_un_revenu_de_plus_de_5_fois_le_PASS()
     {
         const decimal revenuNet = 300000m;
@@ -108,8 +118,8 @@ public class CalculateurAvecConvergenceShould
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsCloseTo(20655m, 1m);
         Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(1159m, 1m);
         Check.That(convergeur.RetraiteDeBase).IsCloseTo(9816m, 1m);
-        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(14408m, 1m);
-        Check.That(convergeur.InvaliditeDeces).IsCloseTo(603m, 1m);
+        Check.That(convergeur.RetraiteComplementaire).IsEqualTo(14408.3m);
+        Check.That(convergeur.InvaliditeDeces).IsEqualTo(602.784m);
         Check.That(convergeur.AllocationsFamiliales).IsCloseTo(9630m, 1m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(56271m, 5m);
         Check.That(convergeur.CSGNonDeductible).IsCloseTo(8806m, 1m);
