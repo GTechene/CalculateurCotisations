@@ -1,0 +1,41 @@
+﻿@page "/"
+@using CalculateurCotisationsFront.Components.Data
+@inject CotisationsApiHttpClient ApiHttpClient
+
+<PageTitle>Calculateur de cotisations</PageTitle>
+
+<h1>Bienvenue</h1>
+
+<p class="intro">
+    Ce calculateur est à destination des travailleuses et travailleurs indépendant·e·s se trouvant en métropole et ayant un statut de profession libérale non réglementée. D'autres cas pourront être implémentés à l'avenir mais ce n'est pas prévu pour l'instant.
+</p>
+<EditForm Model="Form" FormName="Name" OnValidSubmit="@SubmitForm">
+    <label for="revenuNet" class="form-label">Revenu net annuel en 2024 :</label>
+    <div class="input-group mb-3">
+        <span class="input-group-text">€</span>
+        <InputNumber @bind-Value="Form.RevenuNet" id="revenuNet" class="form-control" title="Entrez ici votre revenu net pour l'année 2024" required />
+    </div>
+    <input type="submit" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" value="Lancer le calcul" />
+</EditForm>
+
+@code
+{
+    [SupplyParameterFromForm]
+    MyForm? Form { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Form ??= new MyForm();
+        return Task.CompletedTask;
+    }
+
+    public class MyForm
+    {
+        public decimal RevenuNet { get; set; }
+    }
+
+    private async Task SubmitForm(EditContext context)
+    {
+        var cotisations = await ApiHttpClient.GetCotisations(Form.RevenuNet);
+    }
+}
