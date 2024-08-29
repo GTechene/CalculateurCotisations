@@ -6,14 +6,16 @@
 
 main {
     flex: 1;
-}
-
-.youpi {
     min-height: 100vh;
 }
 
 .sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.container-lg {
+    max-width: 960px !important;
+    margin-left: inherit !important;
 }
 
 .top-row {
@@ -45,8 +47,12 @@ main {
         justify-content: space-between;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
+        .top-row ::deep a, .top-row ::deep .btn-link {
+            margin-left: 0;
+        }
+
+    main {
+        min-height: 90vh;
     }
 }
 
@@ -77,10 +83,6 @@ main {
     .top-row, article {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
-    }
-
-    .youpi {
-        min-height: 20vh;
     }
 }
 

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculCotisationsConsole", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CotisationsApi", "CotisationsApi\CotisationsApi.csproj", "{2854D1EC-4C01-4982-8C7C-4414CFE74BE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateurCotisationsFront", "CalculateurCotisationsFront\CalculateurCotisationsFront.csproj", "{940C263B-6BF4-4792-8F23-6291903FC31B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateurCotisationsFront", "CalculateurCotisationsFront\CalculateurCotisationsFront.csproj", "{940C263B-6BF4-4792-8F23-6291903FC31B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

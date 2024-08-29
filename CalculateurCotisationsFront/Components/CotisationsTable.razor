@@ -1,0 +1,63 @@
+﻿@using CalculateurCotisationsFront.Components.Data
+
+<div class="h4 pb-2 mb-4 border-bottom border-dark">
+    Cotisations @DateTime.UtcNow.Year
+</div>
+
+
+<div class="table-responsive">
+<table id="cotisationsDetaillees" class="table table-striped">
+    <tr>
+        <td>Cotisations maladie (hors indemnités)</td>
+        <td class="text-end">@Math.Round(Cotisations.MaladieHorsIndemnitesJournalieres) €</td>
+    </tr>
+    <tr>
+        <td>Cotisations indemnités maladie</td>
+        <td class="text-end">@Math.Round(Cotisations.MaladieIndemnitesJournalieres) €</td>
+    </tr>
+    <tr>
+        <td>Retraite de base</td>
+        <td class="text-end">@Math.Round(Cotisations.RetraiteDeBase) €</td>
+    </tr>
+    <tr>
+        <td>Retraite complémentaire</td>
+        <td class="text-end">@Math.Round(Cotisations.RetraiteComplementaire) €</td>
+    </tr>
+    <tr>
+        <td>Invalidité/décès</td>
+        <td class="text-end">@Math.Round(Cotisations.InvaliditeDeces) €</td>
+    </tr>
+    <tr>
+        <td>Allocations familiales</td>
+        <td class="text-end">@Math.Round(Cotisations.AllocationsFamiliales) €</td>
+    </tr>
+    <tr>
+        <td>Total cotisations obligatoires</td>
+        <td class="text-end">@Math.Round(Cotisations.TotalCotisationsObligatoires) €</td>
+    </tr>
+    <tr>
+        <td>CSG déductible</td>
+        <td class="text-end">@Math.Round(Cotisations.CSGDeductible) €</td>
+    </tr>
+    <tr>
+        <td>CSG non déductible</td>
+        <td class="text-end">@Math.Round(Cotisations.CSGNonDeductible) €</td>
+    </tr>
+    <tr>
+        <td>CRDS</td>
+        <td class="text-end">@Math.Round(Cotisations.CRDS) €</td>
+    </tr>
+    <tr>
+        <td>Formation professionnelle</td>
+        <td class="text-end">@Math.Round(Cotisations.FormationProfessionnelle) €</td>
+    </tr>
+    <tr>
+        <td>Total</td>
+        <td class="text-end">@Math.Round(Cotisations.GrandTotal) €</td>
+    </tr>
+</table>
+</div>
+
+@code {
+    [Parameter] public ResultatPrecisDeCotisations Cotisations { get; set; } = null!;
+}
