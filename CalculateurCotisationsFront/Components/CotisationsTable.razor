@@ -52,12 +52,13 @@
         <td class="text-end">@Math.Round(Cotisations.FormationProfessionnelle) €</td>
     </tr>
     <tr>
-        <td>Total</td>
-        <td class="text-end">@Math.Round(Cotisations.GrandTotal) €</td>
+        <td class="fw-bold">Total</td>
+        <td class="fw-bold text-end">@Math.Round(Cotisations.GrandTotal) €, soit @Math.Round(100 * Cotisations.GrandTotal / RevenuNet, 1) % du revenu.</td>
     </tr>
 </table>
 </div>
 
 @code {
     [Parameter] public ResultatPrecisDeCotisations Cotisations { get; set; } = null!;
+    [Parameter] public decimal RevenuNet { get; set; }
 }
