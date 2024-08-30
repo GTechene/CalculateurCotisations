@@ -51,5 +51,5 @@ steps:
   displayName: 'Publish'
   inputs:
     targetPath: '$(Pipeline.Workspace)'
-    artifact: 'CalculCotisations-$(Build.BuildNumber)'
+    artifact: 'CalculCotisations'
     publishLocation: 'pipeline'
