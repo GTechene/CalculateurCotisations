@@ -45,7 +45,7 @@ steps:
     command: 'publish'
     publishWebProjects: true
     arguments: '--no-build --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: false
+    zipAfterPublish: true
     modifyOutputPath: true
 
 - task: PublishPipelineArtifact@1
