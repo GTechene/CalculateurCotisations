@@ -41,10 +41,11 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet publish'
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--no-build --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
     modifyOutputPath: true
 
