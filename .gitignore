@@ -353,3 +353,4 @@ MigrationBackup/
 /*.ncrunchsolution.user
 /*.DotSettings
 /*.DotSettings.user
+/CalculateurCotisationsFront/appsettings.Development.json
