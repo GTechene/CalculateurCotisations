@@ -41,15 +41,16 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet publish'
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--no-build'
+    arguments: '--no-build --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+    modifyOutputPath: true
 
 - task: PublishPipelineArtifact@1
   displayName: 'Publish'
   inputs:
-    targetPath: '$(Pipeline.Workspace)'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
     artifact: 'CalculCotisations'
     publishLocation: 'pipeline'
