@@ -17,11 +17,11 @@ public class CalculateurSimpleShould
         calculateur.CalculeLesCotisations();
 
         const decimal cotisationsAttendues = 0m;
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsEqualTo(cotisationsAttendues);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsEqualTo(cotisationsAttendues);
 
         // 0.5% appliqués au plancher de 40% du PASS ; pas dans la doc officielle mais découvert dans le simulateur...
         const decimal cotisationsAttenduesPourLesIndemnites = 92.736m;
-        Check.That(calculateur.MaladieIndemnitesJournalieres).IsEqualTo(cotisationsAttenduesPourLesIndemnites);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(cotisationsAttenduesPourLesIndemnites);
     }
 
     [Test]
@@ -34,7 +34,7 @@ public class CalculateurSimpleShould
 
         // Taux progressif (~2.78% ici)
         const decimal expectedCotisations = 695.8m;
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsCloseTo(expectedCotisations, 1m);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(expectedCotisations, 1m);
     }
 
     [Test]
@@ -47,7 +47,7 @@ public class CalculateurSimpleShould
 
         // Taux progressif (~5.42% ici)
         const decimal expectedCotisations = 2167m;
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsCloseTo(expectedCotisations, 1m);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(expectedCotisations, 1m);
     }
 
     [Test]
@@ -59,9 +59,9 @@ public class CalculateurSimpleShould
         calculateur.CalculeLesCotisations();
 
         const decimal expectedCotisations = revenuNet * 0.067m;
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsEqualTo(expectedCotisations);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsEqualTo(expectedCotisations);
         const decimal expectedIndemnites = revenuNet * 0.005m;
-        Check.That(calculateur.MaladieIndemnitesJournalieres).IsEqualTo(expectedIndemnites);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(expectedIndemnites);
     }
 
     [Test]
@@ -73,11 +73,11 @@ public class CalculateurSimpleShould
         calculateur.CalculeLesCotisations();
 
         var indemnitesAttendues = PlafondAnnuelSecuriteSociale.PASS.Valeur500Pct * 0.005m;
-        Check.That(calculateur.MaladieIndemnitesJournalieres).IsEqualTo(indemnitesAttendues);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(indemnitesAttendues);
 
         // Le calcul est : 6.7% sur les revenus qui valent 5 fois le PASS + 6.5% pour les revenus au-dessus. Donc ici : 0.067 * PASS * 5 + 0.065 * (300000 - PASS * 5).
         const decimal cotisationsAttendues = 19963.68m;
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres).IsEqualTo(cotisationsAttendues);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsEqualTo(cotisationsAttendues);
     }
 
     [Test]
@@ -89,7 +89,7 @@ public class CalculateurSimpleShould
         calculateur.CalculeLesCotisations();
 
         // 17.75% pour les revenus <= 1 PASS + 0.6% pour les revenus > 1 PASS
-        Check.That(calculateur.RetraiteDeBase).IsEqualTo(8341.59m);
+        Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8341.59m);
     }
 
     [Test]
@@ -100,7 +100,7 @@ public class CalculateurSimpleShould
         var calculateur = new CalculateurSimple(revenuNet, 2024);
         calculateur.CalculeLesCotisations();
 
-        Check.That(calculateur.RetraiteComplementaire).IsEqualTo(2800m);
+        Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(2800m);
     }
 
     [Test]
@@ -112,7 +112,7 @@ public class CalculateurSimpleShould
         calculateur.CalculeLesCotisations();
 
         // 7% pour les revenus <= 42946 + 8% pour les revenus > 42946
-        Check.That(calculateur.RetraiteComplementaire).IsEqualTo(4763.58m);
+        Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4763.58m);
     }
 
     [Test]
@@ -124,7 +124,7 @@ public class CalculateurSimpleShould
         calculateur.CalculeLesCotisations();
 
         // 7% pour les revenus <= 42946 + 8% pour les revenus > 42946 ET < 4 PASS ; 0% ensuite
-        Check.That(calculateur.RetraiteComplementaire).IsEqualTo(14408.3m);
+        Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(14408.3m);
     }
 
     [Test]
@@ -137,7 +137,7 @@ public class CalculateurSimpleShould
 
         // 1.3% des revenus
         const decimal cotisationsAttendues = 520m;
-        Check.That(calculateur.InvaliditeDeces).IsEqualTo(cotisationsAttendues);
+        Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(cotisationsAttendues);
     }
 
     [Test]
@@ -150,7 +150,7 @@ public class CalculateurSimpleShould
 
         // 1.3% des revenus <= 1 PASS, 0% ensuite.
         const decimal cotisationsAttendues = 602.784m;
-        Check.That(calculateur.InvaliditeDeces).IsEqualTo(cotisationsAttendues);
+        Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(cotisationsAttendues);
     }
 
     [Test]
@@ -161,7 +161,7 @@ public class CalculateurSimpleShould
         var calculateur = new CalculateurSimple(revenuNet, 2024);
         calculateur.CalculeLesCotisations();
 
-        Check.That(calculateur.AllocationsFamiliales).IsEqualTo(0m);
+        Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class CalculateurSimpleShould
 
         // Taux progressif (~2% ici)
         const decimal cotisationsAttendues = 1202.77m;
-        Check.That(calculateur.AllocationsFamiliales).IsCloseTo(cotisationsAttendues, 1m);
+        Check.That(calculateur.AllocationsFamiliales.Valeur).IsCloseTo(cotisationsAttendues, 1m);
     }
 
     [Test]
@@ -184,7 +184,7 @@ public class CalculateurSimpleShould
         var calculateur = new CalculateurSimple(revenuNet, 2024);
         calculateur.CalculeLesCotisations();
 
-        Check.That(calculateur.AllocationsFamiliales).IsEqualTo(0.031m * revenuNet);
+        Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0.031m * revenuNet);
     }
 
     [Test]
@@ -197,9 +197,9 @@ public class CalculateurSimpleShould
 
         var revenuPrisEnComptePourCSGEtCRDS = revenuNet + calculateur.TotalCotisationsObligatoires;
 
-        Check.That(calculateur.CSGNonDeductible).IsEqualTo(0.024m * revenuPrisEnComptePourCSGEtCRDS);
-        Check.That(calculateur.CSGDeductible).IsEqualTo(0.068m * revenuPrisEnComptePourCSGEtCRDS);
-        Check.That(calculateur.CRDSNonDeductible).IsEqualTo(0.005m * revenuPrisEnComptePourCSGEtCRDS);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsEqualTo(0.024m * revenuPrisEnComptePourCSGEtCRDS);
+        Check.That(calculateur.CSGDeductible.Valeur).IsEqualTo(0.068m * revenuPrisEnComptePourCSGEtCRDS);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsEqualTo(0.005m * revenuPrisEnComptePourCSGEtCRDS);
     }
 
     [Test]
@@ -211,6 +211,6 @@ public class CalculateurSimpleShould
 
         // 0.25% du PASS quoi qu'il arrive
         const decimal cotisationsAttendues = 115.92m;
-        Check.That(calculateur.FormationProfessionnelle).IsEqualTo(cotisationsAttendues);
+        Check.That(calculateur.FormationProfessionnelle.Valeur).IsEqualTo(cotisationsAttendues);
     }
 }

@@ -16,16 +16,16 @@ public class CalculateurAvecConvergence
     }
 
     public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
-    public decimal MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
-    public decimal MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
-    public decimal RetraiteDeBase => _calculateur.RetraiteDeBase;
-    public decimal RetraiteComplementaire => _calculateur.RetraiteComplementaire;
-    public decimal InvaliditeDeces => _calculateur.InvaliditeDeces;
-    public decimal AllocationsFamiliales => _calculateur.AllocationsFamiliales;
-    public decimal CSGNonDeductible => _calculateur.CSGNonDeductible;
-    public decimal CSGDeductible => _calculateur.CSGDeductible;
-    public decimal CRDS => _calculateur.CRDSNonDeductible;
-    public decimal FormationProfessionnelle => _calculateur.FormationProfessionnelle;
+    public ResultatAvecExplication MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
+    public ResultatAvecExplication MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
+    public ResultatAvecExplication RetraiteDeBase => _calculateur.RetraiteDeBase;
+    public ResultatAvecExplication RetraiteComplementaire => _calculateur.RetraiteComplementaire;
+    public ResultatAvecExplication InvaliditeDeces => _calculateur.InvaliditeDeces;
+    public ResultatAvecExplication AllocationsFamiliales => _calculateur.AllocationsFamiliales;
+    public ResultatAvecExplication CSGNonDeductible => _calculateur.CSGNonDeductible;
+    public ResultatAvecExplication CSGDeductible => _calculateur.CSGDeductible;
+    public ResultatAvecExplication CRDS => _calculateur.CRDSNonDeductible;
+    public ResultatAvecExplication FormationProfessionnelle => _calculateur.FormationProfessionnelle;
     public decimal GrandTotal => _calculateur.GrandTotal;
 
 
@@ -40,7 +40,7 @@ public class CalculateurAvecConvergence
         while (Math.Abs(diffAssiettes) > 1)
         {
             _calculateur.CalculeLesCotisations(assietteDeBase);
-            assietteCalculee = _revenuNet + _calculateur.CSGNonDeductible + _calculateur.CRDSNonDeductible;
+            assietteCalculee = _revenuNet + _calculateur.CSGNonDeductible.Valeur + _calculateur.CRDSNonDeductible.Valeur;
             diffAssiettes = assietteCalculee - assietteDeBase;
             if (assietteCalculee <= assietteDeBase)
             {

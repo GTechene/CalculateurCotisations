@@ -14,17 +14,17 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
 
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsCloseTo(4349.38m, 1m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(324.58m, 1m);
-        Check.That(convergeur.RetraiteDeBase).IsCloseTo(8341.61m, 1m);
-        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(4763.83m, 1m);
-        Check.That(convergeur.InvaliditeDeces).IsEqualTo(602.784m);
-        Check.That(convergeur.AllocationsFamiliales).IsCloseTo(2012.4m, 1m);
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4349.38m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(324.58m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(8341.61m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(4763.83m, 1m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsEqualTo(602.784m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(2012.4m, 1m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(20394m, 5m);
-        Check.That(convergeur.CSGNonDeductible).IsCloseTo(2047.46m, 1m);
-        Check.That(convergeur.CSGDeductible).IsCloseTo(5801.13m, 1m);
-        Check.That(convergeur.CRDS).IsCloseTo(426.55m, 1m);
-        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(2047.46m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(5801.13m, 1m);
+        Check.That(convergeur.CRDS.Valeur).IsCloseTo(426.55m, 1m);
+        Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(115.92m);
         Check.That(convergeur.GrandTotal).IsCloseTo(28785m, 5m);
     }
 
@@ -36,17 +36,17 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet, 2023);
         convergeur.Calcule();
 
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsCloseTo(4538m, 1m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(338.71m, 1m);
-        Check.That(convergeur.RetraiteDeBase).IsCloseTo(7951m, 1m);
-        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(4990m, 1m);
-        Check.That(convergeur.InvaliditeDeces).IsCloseTo(571.9m, 1m);
-        Check.That(convergeur.AllocationsFamiliales).IsCloseTo(2100m, 1m);
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4538m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(338.71m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(7951m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(4990m, 1m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(571.9m, 1m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(2100m, 1m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(20490m, 5m);
-        Check.That(convergeur.CSGNonDeductible).IsCloseTo(2118m, 1m);
-        Check.That(convergeur.CSGDeductible).IsCloseTo(6000m, 1m);
-        Check.That(convergeur.CRDS).IsCloseTo(441.22m, 1m);
-        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(109.98m);
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(2118m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6000m, 1m);
+        Check.That(convergeur.CRDS.Valeur).IsCloseTo(441.22m, 1m);
+        Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(109.98m);
         Check.That(convergeur.GrandTotal).IsCloseTo(29158m, 5m);
     }
 
@@ -63,17 +63,17 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
 
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsCloseTo(2331m, 1m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(208m, 1m);
-        Check.That(convergeur.RetraiteDeBase).IsCloseTo(7383m, 1m);
-        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(2912m, 1m);
-        Check.That(convergeur.InvaliditeDeces).IsCloseTo(541m, 1m);
-        Check.That(convergeur.AllocationsFamiliales).IsEqualTo(0m);
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(2331m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(208m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(7383m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(2912m, 1m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(541m, 1m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(13373m, 5m);
-        Check.That(convergeur.CSGNonDeductible).IsCloseTo(1319m, 1m);
-        Check.That(convergeur.CSGDeductible).IsCloseTo(3738m, 1m);
-        Check.That(convergeur.CRDS).IsCloseTo(275m, 1m);
-        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(1319m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(3738m, 1m);
+        Check.That(convergeur.CRDS.Valeur).IsCloseTo(275m, 1m);
+        Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(115.92m);
         Check.That(convergeur.GrandTotal).IsCloseTo(18821m, 5m);
     }
 
@@ -88,17 +88,17 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
 
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsEqualTo(0m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres).IsEqualTo(92.736m);
-        Check.That(convergeur.RetraiteDeBase).IsCloseTo(2211m, 1m);
-        Check.That(convergeur.RetraiteComplementaire).IsCloseTo(872m, 1m);
-        Check.That(convergeur.InvaliditeDeces).IsCloseTo(162m, 1m);
-        Check.That(convergeur.AllocationsFamiliales).IsEqualTo(0m);
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsEqualTo(0m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(92.736m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(2211m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(872m, 1m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(162m, 1m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(3338m, 5m);
-        Check.That(convergeur.CSGNonDeductible).IsCloseTo(379m, 1m);
-        Check.That(convergeur.CSGDeductible).IsCloseTo(1074m, 1m);
-        Check.That(convergeur.CRDS).IsCloseTo(78.8m, 1m);
-        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(379m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(1074m, 1m);
+        Check.That(convergeur.CRDS.Valeur).IsCloseTo(78.8m, 1m);
+        Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(115.92m);
         Check.That(convergeur.GrandTotal).IsCloseTo(4986m, 5m);
     }
 
@@ -115,17 +115,17 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
 
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres).IsCloseTo(20655m, 1m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres).IsCloseTo(1159m, 1m);
-        Check.That(convergeur.RetraiteDeBase).IsCloseTo(9816m, 1m);
-        Check.That(convergeur.RetraiteComplementaire).IsEqualTo(14408.3m);
-        Check.That(convergeur.InvaliditeDeces).IsEqualTo(602.784m);
-        Check.That(convergeur.AllocationsFamiliales).IsCloseTo(9630m, 1m);
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(20655m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(1159m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(9816m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsEqualTo(14408.3m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsEqualTo(602.784m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(9630m, 1m);
         Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(56271m, 5m);
-        Check.That(convergeur.CSGNonDeductible).IsCloseTo(8806m, 1m);
-        Check.That(convergeur.CSGDeductible).IsCloseTo(24950m, 1m);
-        Check.That(convergeur.CRDS).IsCloseTo(1834.6m, 1m);
-        Check.That(convergeur.FormationProfessionnelle).IsEqualTo(115.92m);
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(8806m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(24950m, 1m);
+        Check.That(convergeur.CRDS.Valeur).IsCloseTo(1834.6m, 1m);
+        Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(115.92m);
         Check.That(convergeur.GrandTotal).IsCloseTo(91977m, 5m);
     }
 }
