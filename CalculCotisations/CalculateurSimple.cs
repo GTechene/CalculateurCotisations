@@ -198,13 +198,13 @@ public class CalculateurSimple
         var revenusPrisEnCompte = assiette + TotalCotisationsObligatoires;
 
         var valeurCsgNonDeductible = revenusPrisEnCompte * Taux.CSGNonDeductible;
-        CSGNonDeductible = new ResultatAvecExplication(valeurCsgNonDeductible, $"Un taux fixe de {Taux.CSGNonDeductible * 100:F1}% est appliqué à la somme des revenus + les cotisations obligatoires. Soit une valeur de {valeurCsgNonDeductible:C0} pour la CSG non déductible.");
+        CSGNonDeductible = new ResultatAvecExplication(valeurCsgNonDeductible, $"Un taux fixe de {Taux.CSGNonDeductible * 100:F1}% est appliqué à la somme de l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Ce qui donne une valeur de {valeurCsgNonDeductible:C0} pour la CSG non déductible.");
 
         var valeurCsgDeductible = revenusPrisEnCompte * Taux.CSGDeductible;
-        CSGDeductible = new ResultatAvecExplication(valeurCsgDeductible, $"Un taux fixe de {Taux.CSGDeductible * 100:F1}% est appliqué à la somme des revenus + les cotisations obligatoires. Soit une valeur de {valeurCsgDeductible:C0} pour la CSG déductible.");
+        CSGDeductible = new ResultatAvecExplication(valeurCsgDeductible, $"Un taux fixe de {Taux.CSGDeductible * 100:F1}% est appliqué à la somme de l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Ce qui donne une valeur de une valeur de {valeurCsgDeductible:C0} pour la CSG déductible.");
 
         var valeurCrds = revenusPrisEnCompte * Taux.CRDSNonDeductible;
-        CRDSNonDeductible = new ResultatAvecExplication(valeurCrds, $"Un taux fixe de {Taux.CRDSNonDeductible * 100:F1}% est appliqué à la somme des revenus + les cotisations obligatoires. Soit une valeur de {valeurCrds:C0} pour la CRDS.");
+        CRDSNonDeductible = new ResultatAvecExplication(valeurCrds, $"Un taux fixe de {Taux.CRDSNonDeductible * 100:F1}% est appliqué à la somme de l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Ce qui donne une valeur de {valeurCrds:C0} pour la CRDS.");
     }
 
     private void CalculeLaFormationProfessionnelle()
