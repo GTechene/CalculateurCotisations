@@ -11,7 +11,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Renvoyer_0_euro_de_cotises_maladie_avec_revenu_inferieur_a_40_pct_du_PASS()
     {
-        const decimal revenuNet = 18000m;
+        const decimal revenuNet = 17000m;
 
         var calculateur = new CalculateurSimple(revenuNet, 2024);
         calculateur.CalculeLesCotisations();

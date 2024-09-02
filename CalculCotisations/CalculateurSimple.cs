@@ -9,18 +9,18 @@ public class CalculateurSimple
 {
     private readonly decimal _revenuNet;
     private readonly PlafondAnnuelSecuriteSociale _pass;
-    public ResultatAvecExplication MaladieHorsIndemnitesJournalieres { private set; get; }
-    public ResultatAvecExplication MaladieIndemnitesJournalieres { private set; get; }
-    public ResultatAvecExplication RetraiteDeBase { private set; get; }
-    public ResultatAvecExplication RetraiteComplementaire { private set; get; }
-    public ResultatAvecExplication InvaliditeDeces { private set; get; }
-    public ResultatAvecExplication AllocationsFamiliales { private set; get; }
+    public ResultatAvecExplication MaladieHorsIndemnitesJournalieres { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication MaladieIndemnitesJournalieres { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication RetraiteDeBase { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication RetraiteComplementaire { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication InvaliditeDeces { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication AllocationsFamiliales { private set; get; } = new ResultatVideSansExplication();
 
     public decimal TotalCotisationsObligatoires => MaladieHorsIndemnitesJournalieres.Valeur + MaladieIndemnitesJournalieres.Valeur + RetraiteDeBase.Valeur + RetraiteComplementaire.Valeur + InvaliditeDeces.Valeur + AllocationsFamiliales.Valeur;
-    public ResultatAvecExplication CSGNonDeductible { private set; get; }
-    public ResultatAvecExplication CSGDeductible { private set; get; }
-    public ResultatAvecExplication CRDSNonDeductible { private set; get; }
-    public ResultatAvecExplication FormationProfessionnelle { private set; get; }
+    public ResultatAvecExplication CSGNonDeductible { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication CSGDeductible { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication CRDSNonDeductible { private set; get; } = new ResultatVideSansExplication();
+    public ResultatAvecExplication FormationProfessionnelle { private set; get; } = new ResultatVideSansExplication();
     public decimal GrandTotal => TotalCotisationsObligatoires + CSGDeductible.Valeur + CSGNonDeductible.Valeur + CRDSNonDeductible.Valeur + FormationProfessionnelle.Valeur;
 
     public CalculateurSimple(decimal revenuNet, int year = 2024)
@@ -53,13 +53,13 @@ public class CalculateurSimple
 
     private void CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(decimal assiette)
     {
-        if (_revenuNet <= _pass.Valeur40Pct)
+        if (assiette <= _pass.Valeur40Pct)
         {
             MaladieHorsIndemnitesJournalieres = new ResultatAvecExplication(0m, $"L'assiette de {assiette:C0} est inférieure à {_pass.Valeur40Pct:C0} (40% du PASS). Il n'y a donc pas de cotisation maladie à payer.");
             return;
         }
 
-        if (_revenuNet > _pass.Valeur40Pct && _revenuNet <= _pass.Valeur60Pct)
+        if (assiette > _pass.Valeur40Pct && assiette <= _pass.Valeur60Pct)
         {
             var difference = assiette - _pass.Valeur40Pct;
             var differenceEntrePlafondEtPlancher = _pass.Valeur60Pct - _pass.Valeur40Pct;
@@ -71,7 +71,7 @@ public class CalculateurSimple
             return;
         }
 
-        if (_revenuNet > _pass.Valeur60Pct && _revenuNet <= _pass.Valeur110Pct)
+        if (assiette > _pass.Valeur60Pct && assiette <= _pass.Valeur110Pct)
         {
             var difference = assiette - _pass.Valeur60Pct;
             var differenceEntrePlafondEtPlancher = _pass.Valeur110Pct - _pass.Valeur60Pct;
@@ -83,7 +83,7 @@ public class CalculateurSimple
             return;
         }
 
-        if (_revenuNet > _pass.Valeur110Pct && _revenuNet <= _pass.Valeur500Pct)
+        if (assiette > _pass.Valeur110Pct && assiette <= _pass.Valeur500Pct)
         {
             var valeur = Taux.CotisationsMaladiePourRevenusSupAuPlancher * assiette;
 

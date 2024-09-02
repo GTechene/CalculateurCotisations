@@ -128,4 +128,41 @@ public class CalculateurAvecConvergenceShould
         Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(115.92m);
         Check.That(convergeur.GrandTotal).IsCloseTo(91977m, 5m);
     }
+
+    [Test]
+    // Pour tester que les cotises maladie prennent l'assiette en compte et non le revenu net en direct (bug première implem).
+    public void Calculer_les_cotisations_maladie_correctement_pour_un_revenu_inferieur_a_40_pct_du_PASS_mais_avec_une_assiette_superieure()
+    {
+        const decimal revenuNet = 18000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(12m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(93m, 1m);
+    }
+
+    [Test]
+    public void Calculer_les_cotisations_maladie_correctement_pour_un_revenu_inferieur_a_60_pct_du_PASS_mais_avec_une_assiette_superieure()
+    {
+        const decimal revenuNet = 27000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(1131m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(140m, 1m);
+    }
+
+    [Test]
+    public void Calculer_les_cotisations_maladie_correctement_pour_un_revenu_inferieur_a_110_pct_du_PASS_mais_avec_une_assiette_superieure()
+    {
+        const decimal revenuNet = 51000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(3553, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(265m, 1m);
+    }
 }
