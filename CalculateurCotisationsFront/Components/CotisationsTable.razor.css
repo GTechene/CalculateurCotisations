@@ -18,3 +18,8 @@
     align-items: end;
     width: fit-content;
 }
+
+.definitions {
+    font-size: 0.8em;
+    font-style: italic;
+}

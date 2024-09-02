@@ -9,30 +9,8 @@ public class CotisationsApiHttpClient
         _httpClient = httpClient;
     }
 
-    public Task<ResultatPrecisDeCotisations?> GetCotisations(decimal revenuNet)
+    public Task<ResultatPrecisDeCotisationsAvecExplications?> GetCotisations(decimal revenuNet)
     {
-        return _httpClient.GetFromJsonAsync<ResultatPrecisDeCotisations>($"/cotisations/precises/{revenuNet}");
+        return _httpClient.GetFromJsonAsync<ResultatPrecisDeCotisationsAvecExplications>($"/cotisations/v2/precises/{revenuNet}");
     }
-}
-
-public record ResultatPrecisDeCotisations(
-    decimal MaladieHorsIndemnitesJournalieres,
-    decimal MaladieIndemnitesJournalieres,
-    decimal RetraiteDeBase,
-    decimal RetraiteComplementaire,
-    decimal InvaliditeDeces,
-    decimal AllocationsFamiliales,
-    decimal TotalCotisationsObligatoires,
-    decimal CSGNonDeductible,
-    decimal CSGDeductible,
-    decimal CRDS,
-    decimal FormationProfessionnelle,
-    decimal GrandTotal);
-
-
-public record CotisationsApiOptions
-{
-    public const string SectionName = "CotisationsApi";
-
-    public Uri Uri { get; set; } = null!;
 }

@@ -152,7 +152,7 @@ public class CalculateurSimple
             var cotisationDeuxiemeTranche = Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * (Math.Min(assiette, _pass.Valeur400Pct) - Plafonds.RetraiteComplementaireArtisansCommercants);
 
             var cotisations = cotisationPremiereTranche + cotisationDeuxiemeTranche;
-            RetraiteComplementaire = new ResultatAvecExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {Plafonds.RetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux de {Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.");
+            RetraiteComplementaire = new ResultatAvecExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {Plafonds.RetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.");
         }
     }
 
@@ -161,11 +161,11 @@ public class CalculateurSimple
         var valeur = Math.Min(assiette, _pass.Valeur) * Taux.InvaliditeDeces;
         if (assiette <= _pass.Valeur)
         {
-            InvaliditeDeces = new ResultatAvecExplication(valeur, $"L'assiette de {assiette:C0} est inférieure ou égale au PASS ({_pass.Valeur:C0}). Le taux de {Taux.InvaliditeDeces:F1} % est donc directement appliqué à cette assiette, soit {valeur:C0} de cotisations.");
+            InvaliditeDeces = new ResultatAvecExplication(valeur, $"L'assiette de {assiette:C0} est inférieure ou égale au PASS ({_pass.Valeur:C0}). Le taux de {Taux.InvaliditeDeces * 100} % est donc directement appliqué à cette assiette, soit {valeur:C0} de cotisations.");
         }
         else
         {
-            InvaliditeDeces = new ResultatAvecExplication(valeur, $"L'assiette de {assiette:C0} est supérieure au PASS ({_pass.Valeur:C0}). Le taux de {Taux.InvaliditeDeces:F1} % est donc appliqué au PASS, soit {valeur:C0} de cotisations.");
+            InvaliditeDeces = new ResultatAvecExplication(valeur, $"L'assiette de {assiette:C0} est supérieure au PASS ({_pass.Valeur:C0}). Le taux de {Taux.InvaliditeDeces * 100:F1} % est donc appliqué au PASS, soit {valeur:C0} de cotisations.");
         }
     }
 
@@ -189,7 +189,7 @@ public class CalculateurSimple
         else
         {
             var valeur = assiette * Taux.CotisationsAllocationsFamiliales;
-            AllocationsFamiliales = new ResultatAvecExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {_pass.Valeur140Pct:C0} (140% du PASS)donc un taux fixe de {Taux.CotisationsAllocationsFamiliales * 100:F1}% est appliqué, soit {valeur:C0} de cotisations.");
+            AllocationsFamiliales = new ResultatAvecExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {_pass.Valeur140Pct:C0} (140% du PASS) donc un taux fixe de {Taux.CotisationsAllocationsFamiliales * 100:F1}% est appliqué, soit {valeur:C0} de cotisations.");
         }
     }
 

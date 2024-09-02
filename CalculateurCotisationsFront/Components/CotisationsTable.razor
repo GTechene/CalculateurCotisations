@@ -4,61 +4,114 @@
     Cotisations @DateTime.UtcNow.Year
 </div>
 
-
 <div class="table-responsive">
-<table id="cotisationsDetaillees" class="table table-striped">
-    <tr>
-        <td>Cotisations maladie (hors indemnités)</td>
-        <td class="text-end">@Math.Round(Cotisations.MaladieHorsIndemnitesJournalieres) €</td>
-    </tr>
-    <tr>
-        <td>Cotisations indemnités maladie</td>
-        <td class="text-end">@Math.Round(Cotisations.MaladieIndemnitesJournalieres) €</td>
-    </tr>
-    <tr>
-        <td>Retraite de base</td>
-        <td class="text-end">@Math.Round(Cotisations.RetraiteDeBase) €</td>
-    </tr>
-    <tr>
-        <td>Retraite complémentaire</td>
-        <td class="text-end">@Math.Round(Cotisations.RetraiteComplementaire) €</td>
-    </tr>
-    <tr>
-        <td>Invalidité/décès</td>
-        <td class="text-end">@Math.Round(Cotisations.InvaliditeDeces) €</td>
-    </tr>
-    <tr>
-        <td>Allocations familiales</td>
-        <td class="text-end">@Math.Round(Cotisations.AllocationsFamiliales) €</td>
-    </tr>
-    <tr>
-        <td>Total cotisations obligatoires</td>
-        <td class="text-end">@Math.Round(Cotisations.TotalCotisationsObligatoires) €</td>
-    </tr>
-    <tr>
-        <td>CSG déductible</td>
-        <td class="text-end">@Math.Round(Cotisations.CSGDeductible) €</td>
-    </tr>
-    <tr>
-        <td>CSG non déductible</td>
-        <td class="text-end">@Math.Round(Cotisations.CSGNonDeductible) €</td>
-    </tr>
-    <tr>
-        <td>CRDS</td>
-        <td class="text-end">@Math.Round(Cotisations.CRDS) €</td>
-    </tr>
-    <tr>
-        <td>Formation professionnelle</td>
-        <td class="text-end">@Math.Round(Cotisations.FormationProfessionnelle) €</td>
-    </tr>
-    <tr>
-        <td class="fw-bold">Total</td>
-        <td class="fw-bold text-end">@Math.Round(Cotisations.GrandTotal) €, soit @Math.Round(100 * Cotisations.GrandTotal / RevenuNet, 1) % du revenu.</td>
-    </tr>
-</table>
+    <table id="cotisationsDetaillees" class="table table-sm table-striped">
+        <tr>
+            <td>Cotisations maladie (hors indemnités)</td>
+            <td class="text-end">@Math.Round(Cotisations.MaladieHorsIndemnitesJournalieres.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.MaladieHorsIndemnitesJournalieres.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Cotisations maladie (hors indemnités)" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Cotisations indemnités maladie</td>
+            <td class="text-end">@Math.Round(Cotisations.MaladieIndemnitesJournalieres.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.MaladieIndemnitesJournalieres.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Cotisations maladie (indemnités)" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Retraite de base</td>
+            <td class="text-end">@Math.Round(Cotisations.RetraiteDeBase.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.RetraiteDeBase.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Retraite de base" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Retraite complémentaire</td>
+            <td class="text-end">@Math.Round(Cotisations.RetraiteComplementaire.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.RetraiteComplementaire.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Retraite complémentaire" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Invalidité/décès</td>
+            <td class="text-end">@Math.Round(Cotisations.InvaliditeDeces.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.InvaliditeDeces.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Invalidité/décès" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Allocations familiales</td>
+            <td class="text-end">@Math.Round(Cotisations.AllocationsFamiliales.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.AllocationsFamiliales.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Allocations familiales" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td class="fw-bold">Total cotisations obligatoires</td>
+            <td class="fw-bold text-end">@Math.Round(Cotisations.TotalCotisationsObligatoires) €</td>
+        </tr>
+        <tr>
+            <td>CSG déductible</td>
+            <td class="text-end">@Math.Round(Cotisations.CSGDeductible.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.CSGDeductible.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="CSG déductible" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>CSG non déductible</td>
+            <td class="text-end">@Math.Round(Cotisations.CSGNonDeductible.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.CSGNonDeductible.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="CSG non déductible" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>CRDS</td>
+            <td class="text-end">@Math.Round(Cotisations.CRDS.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.CRDS.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="CRDS" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Formation professionnelle</td>
+            <td class="text-end">@Math.Round(Cotisations.FormationProfessionnelle.Valeur) €</td>
+            <td class="explication-cell">
+                <a data-bs-content="@Cotisations.FormationProfessionnelle.Explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Formation professionnelle" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                    <span class="info-icon"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td class="fw-bold">Total</td>
+            <td class="fw-bold text-end">@Math.Round(Cotisations.GrandTotal) €<br/>@Math.Round(100 * Cotisations.GrandTotal / RevenuNet, 1)% du revenu</td>
+        </tr>
+    </table>
+    <p class="definitions">
+        PASS = Plafond Annuel de la Sécurité Sociale.<br />
+        Assiette = nombre retenu pour calculer la base de la plupart des cotisations. En général, c'est la somme du revenu net et des cotisations obligatoires.
+    </p>
 </div>
 
 @code {
-    [Parameter] public ResultatPrecisDeCotisations Cotisations { get; set; } = null!;
+    [Parameter] public ResultatPrecisDeCotisationsAvecExplications Cotisations { get; set; } = null!;
     [Parameter] public decimal RevenuNet { get; set; }
 }
