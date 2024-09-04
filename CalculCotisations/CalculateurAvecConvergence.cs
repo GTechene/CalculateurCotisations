@@ -4,16 +4,9 @@
 /// Calcule les cotisations en faisant converger l'assiette de base (revenu net + CSG non déductible + CRDS) avec l'assiette calculée. En effet, pour calculer CSG et CRDS, il faut connaître le total des cotisations obligatoires. Or celles-ci ne sont calculables qu'en connaissant l'assiette de base... qui dépend de la CSG et de la CRDS.
 /// J'ai donc opté pour un ratio "au doigt mouillé" pour le premier calcul (1.125) puis je fais converger par dichotomie en fonction de l'assiette calculée à partir de ce premier calcul.
 /// </summary>
-public class CalculateurAvecConvergence
+public class CalculateurAvecConvergence(decimal revenuNet, int year = 2024)
 {
-    private readonly CalculateurSimple _calculateur;
-    private readonly decimal _revenuNet;
-
-    public CalculateurAvecConvergence(decimal revenuNet, int year = 2024)
-    {
-        _revenuNet = revenuNet;
-        _calculateur = new CalculateurSimple(_revenuNet, year);
-    }
+    private readonly CalculateurDeBase _calculateur = Calculateurs.TrouveUnCalculateur(year);
 
     public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
     public ResultatAvecExplication MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
@@ -34,13 +27,13 @@ public class CalculateurAvecConvergence
         var ratioMin = 1m;
         var ratioMax = 1.25m;
         var ratio = ratioMin + (ratioMax - ratioMin) / 2;
-        var assietteDeBase = _revenuNet * ratio;
+        var assietteDeBase = revenuNet * ratio;
         var assietteCalculee = 0m;
         var diffAssiettes = assietteCalculee - assietteDeBase;
         while (Math.Abs(diffAssiettes) > 1)
         {
             _calculateur.CalculeLesCotisations(assietteDeBase);
-            assietteCalculee = _revenuNet + _calculateur.CSGNonDeductible.Valeur + _calculateur.CRDSNonDeductible.Valeur;
+            assietteCalculee = revenuNet + _calculateur.CSGNonDeductible.Valeur + _calculateur.CRDSNonDeductible.Valeur;
             diffAssiettes = assietteCalculee - assietteDeBase;
             if (assietteCalculee <= assietteDeBase)
             {
@@ -53,7 +46,7 @@ public class CalculateurAvecConvergence
                 ratio += (ratioMax - ratioMin) / 2;
             }
 
-            assietteDeBase = _revenuNet * ratio;
+            assietteDeBase = revenuNet * ratio;
         }
     }
 }

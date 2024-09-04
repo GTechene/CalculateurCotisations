@@ -29,6 +29,7 @@ public class CalculateurAvecConvergenceShould
     }
 
     [Test]
+    // Ce test est raccord avec ce que propose le simulateur officiel si j'entre mon revenu net hors CSG non déductible + CRDS non déductible.
     public void Calculer_mes_cotisations_2023_correctement()
     {
         const decimal revenuNet = 65182m;
@@ -36,18 +37,42 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet, 2023);
         convergeur.Calcule();
 
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4538m, 1m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(338.71m, 1m);
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4301m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(575.8m, 1m);
         Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(7951m, 1m);
-        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(4990m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(5011m, 1m);
         Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(571.9m, 1m);
         Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(2100m, 1m);
-        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(20490m, 5m);
+        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(20512m, 5m);
         Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(2118m, 1m);
-        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6000m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6001m, 1m);
         Check.That(convergeur.CRDS.Valeur).IsCloseTo(441.22m, 1m);
         Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(109.98m);
-        Check.That(convergeur.GrandTotal).IsCloseTo(29158m, 5m);
+        Check.That(convergeur.GrandTotal).IsCloseTo(29182m, 5m);
+    }
+
+    [Test]
+    // Ce test est presque raccord (à 99.997%) avec les cotisations réelles demandées par l'URSSAF. 100% raccord avec le simulateur officiel.
+    // TODO : il faut faire revenuNet = revenuNetEnInput * 1.029 + FormationPro + CFE. La CFE est un problème, donc mettre un warning et peut-être une option pour refiler la CFE.
+    public void Calculer_mes_cotisations_2023_correctement_bis()
+    {
+        const decimal revenuNet = 67648m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet, 2023);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4468m, 5m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(598m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(7967m, 1m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(5211m, 5m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(572m, 1m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(2181m, 3m);
+        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(21007m, 15m);
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(2190m, 1m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6207m, 1m);
+        Check.That(convergeur.CRDS.Valeur).IsCloseTo(456m, 1m);
+        Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(109.98m);
+        Check.That(convergeur.GrandTotal).IsCloseTo(29881m, 80m);
     }
 
     [Test]

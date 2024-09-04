@@ -20,4 +20,10 @@ public class CotisationsApi : BaseApi<Program>
     {
         return await HttpClient.GetAsync($"/cotisations/precises/{revenuNet}");
     }
+
+    public async Task<HttpResponseMessage> CalculeCotisationsPrecisesAvecExplications(decimal revenuNet, int annee)
+    {
+        var requestUri = $"/cotisations/v2/precises/{revenuNet}?annee={annee}";
+        return await HttpClient.GetAsync(requestUri);
+    }
 }

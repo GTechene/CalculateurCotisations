@@ -9,8 +9,8 @@ public class CotisationsApiHttpClient
         _httpClient = httpClient;
     }
 
-    public Task<ResultatPrecisDeCotisationsAvecExplications?> GetCotisations(decimal revenuNet)
+    public Task<ResultatPrecisDeCotisationsAvecExplications?> GetCotisations(decimal revenuNet, int annee)
     {
-        return _httpClient.GetFromJsonAsync<ResultatPrecisDeCotisationsAvecExplications>($"/cotisations/v2/precises/{revenuNet}");
+        return _httpClient.GetFromJsonAsync<ResultatPrecisDeCotisationsAvecExplications>($"/cotisations/v2/precises/{revenuNet}?annee={annee}");
     }
 }
