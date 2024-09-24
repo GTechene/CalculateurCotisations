@@ -8,6 +8,7 @@ namespace CotisationsApi.Controllers;
 [Route("[controller]")]
 public class CotisationsController : ControllerBase
 {
+    [Obsolete("Utilisez la v2 svp.")]
     [HttpGet("precises/{revenuNet}")]
     [SwaggerOperation("Calcule les cotisations en convergeant à 1 € près pour la CSG/CRDS", "Cette méthode calcule les cotisations en faisant converger les 2 assiettes (estimée et calculée) par dichotomie jusqu'à l'euro près.")]
     public ResultatPrecisDeCotisations CalculeAvecConvergence([FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.")] decimal revenuNet)
@@ -32,12 +33,15 @@ public class CotisationsController : ControllerBase
     }
 
     [HttpGet("v2/precises/{revenuNet}")]
+    // TODO : checker que l'année est >= 2023
     [SwaggerOperation("Calcule les cotisations en convergeant à 1 € près pour la CSG/CRDS", "Cette méthode calcule les cotisations en faisant converger les 2 assiettes (estimée et calculée) par dichotomie jusqu'à l'euro près.")]
     public ResultatPrecisDeCotisationsAvecExplications CalculeAvecConvergenceV2(
         [FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)] decimal revenuNet,
-        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)] int? annee)
+        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)] int? annee,
+        [FromQuery][SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)] decimal? cotisationsFacultatives
+        )
     {
-        var calculateur = new CalculateurAvecConvergence(revenuNet, annee.GetValueOrDefault(DateTime.Today.Year));
+        var calculateur = new CalculateurAvecConvergence(revenuNet, annee.GetValueOrDefault(DateTime.Today.Year), cotisationsFacultatives.GetValueOrDefault());
         calculateur.Calcule();
 
         return new ResultatPrecisDeCotisationsAvecExplications(

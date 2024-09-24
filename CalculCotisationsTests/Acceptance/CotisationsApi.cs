@@ -16,14 +16,15 @@ public class CotisationsApi : BaseApi<Program>
     {
     }
 
+    [Obsolete($"Utiliser {nameof(CalculeCotisationsPrecisesAvecExplications)}")]
     public async Task<HttpResponseMessage> CalculeCotisationsPrecises(decimal revenuNet)
     {
         return await HttpClient.GetAsync($"/cotisations/precises/{revenuNet}");
     }
 
-    public async Task<HttpResponseMessage> CalculeCotisationsPrecisesAvecExplications(decimal revenuNet, int annee)
+    public async Task<HttpResponseMessage> CalculeCotisationsPrecisesAvecExplications(decimal revenuNet, int annee, decimal cotisationsFacultatives)
     {
-        var requestUri = $"/cotisations/v2/precises/{revenuNet}?annee={annee}";
+        var requestUri = $"/cotisations/v2/precises/{revenuNet}?annee={annee}&cotisationsFacultatives={cotisationsFacultatives}";
         return await HttpClient.GetAsync(requestUri);
     }
 }

@@ -12,6 +12,9 @@
 </p>
 <EditForm Model="Form" FormName="Name" OnValidSubmit="@SubmitForm">
     <DataAnnotationsValidator />
+    <a data-bs-content="Il s'agit du revenu annuel effectivement versé, à ne pas confondre avec le revenu fiscal qui comprend aussi la CRDS et la CSG non déductible." class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Revenu net réellement versé" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem;">
+        <span class="info-icon"></span>
+    </a>
     <label for="revenuNet" class="form-label fs-4">Revenu net annuel :</label>
     <div class="input-group mb-3">
         <span class="input-group-text">€</span>
@@ -21,6 +24,26 @@
             <option value="2023" checked="@Form.Annee == 2023">2023</option>
         </InputSelect>
     </div>
+    
+    <div class="accordion mb-3" id="accordionFacultatif">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button btn-secondary collapsed p-2" type="button" data-bs-toggle="collapse" data-bs-target="#accordionCollapse" aria-expanded="@(Form.CotisationsFacultatives > 0)" aria-controls="accordionCollapse">
+                    Options
+                </button>
+            </h2>
+            <div id="accordionCollapse" class="accordion-collapse collapse @(Form.CotisationsFacultatives > 0 ? "show" : "")" data-bs-parent="#accordionFacultatif">
+                <div class="accordion-body" id="facultatif">
+                    <label for="cotisationsFacultatives" class="form-label">Cotisations facultatives (optionnel) :</label>
+                    <div class="input-group ms-1" id="inputGroupFacultatif">
+                        <span class="input-group-text">€</span>
+                        <InputNumber @bind-Value="Form!.CotisationsFacultatives" ParsingErrorMessage="Merci d'entrer un nombre entier positif." id="cotisationsFacultatives" class="form-control" title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <input type="submit" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" value="Lancer le calcul"/>
 </EditForm>
 @if (Cotisations is not null)
@@ -29,6 +52,20 @@
         <CotisationsTable Cotisations="@Cotisations" RevenuNet="@Form!.RevenuNet" Annee="@Form.Annee"></CotisationsTable>
     </div>
 }
+
+<script>
+    document.querySelectorAll('input[type="number"]')
+        .forEach(input => {
+            input.addEventListener('focusin', (event) => {
+                if (event.target.value == "0")
+                    event.target.value = "";
+            })
+            input.addEventListener('focusout', (event) => {
+                if (event.target.value == "")
+                    event.target.value = "0";
+            })
+        })
+</script>
 
 @code
 {
@@ -50,13 +87,15 @@
 
         [Required]
         public int Annee { get; set; }
+
+        public int CotisationsFacultatives { get; set; }
     }
 
     private async Task SubmitForm()
     {
         if (Form!.RevenuNet > 0)
         {
-            Cotisations = await ApiHttpClient.GetCotisations(Form.RevenuNet, Form.Annee);
+            Cotisations = await ApiHttpClient.GetCotisations(Form.RevenuNet, Form.Annee, Form.CotisationsFacultatives);
         }
     }
 }
