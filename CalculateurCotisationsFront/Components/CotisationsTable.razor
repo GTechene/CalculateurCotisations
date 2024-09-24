@@ -1,7 +1,7 @@
 ﻿@using CalculateurCotisationsFront.Components.Data
 
 <div class="h4 pb-2 mb-4 border-bottom border-dark">
-    Cotisations @DateTime.UtcNow.Year
+    Cotisations @Annee
 </div>
 
 <div class="table-responsive">
@@ -114,4 +114,5 @@
 @code {
     [Parameter] public ResultatPrecisDeCotisationsAvecExplications Cotisations { get; set; } = null!;
     [Parameter] public decimal RevenuNet { get; set; }
+    [Parameter] public int Annee { get; set; }
 }

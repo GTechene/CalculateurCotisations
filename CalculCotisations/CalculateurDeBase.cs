@@ -1,4 +1,6 @@
-﻿namespace CalculCotisations;
+﻿using System.Globalization;
+
+namespace CalculCotisations;
 
 /// <summary>
 /// Le but de cette classe est d'exposer une factory method qui appelle les méthodes virtuelles que les classes dérivées devront implémenter. Pour l'instant, seules certaines cotisations se calculent différemment d'année en année, donc seules ces méthodes sont exposées comme virtuelles pures, les autres sont implémentées ici.
@@ -24,6 +26,8 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
 
     public void CalculeLesCotisations(decimal assiette)
     {
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
+
         CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(assiette);
         CalculeLesCotisationsPourIndemnitesMaladie(assiette);
 
@@ -162,6 +166,6 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
     private void CalculeLaFormationProfessionnelle()
     {
         var valeur = PASS.Valeur * Taux.CotisationsFormationProfessionnelle;
-        FormationProfessionnelle = new ResultatAvecExplication(valeur, $"Le taux de {Taux.CotisationsFormationProfessionnelle * 100:F2} est appliqué sur la valeur d'un PASS complet qui vaut {PASS.Valeur:C0}, soit {valeur:C0} de cotisations.");
+        FormationProfessionnelle = new ResultatAvecExplication(valeur, $"Un taux fixe de {Taux.CotisationsFormationProfessionnelle * 100:F2}% est appliqué sur la valeur d'un PASS complet qui vaut {PASS.Valeur:C0}, soit {valeur:C0} de cotisations.");
     }
 }

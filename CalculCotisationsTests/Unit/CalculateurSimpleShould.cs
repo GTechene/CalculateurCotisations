@@ -218,12 +218,12 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_cotisations_pour_2023_pour_un_revenu_superieur_a_110_pct_du_PASS()
     {
-        const decimal revenuNet = 70295m;
+        const decimal revenuNet = 70358m;
         var calculateur = Calculateurs.TrouveUnCalculateur(2023);
         calculateur.CalculeLesCotisations(revenuNet);
 
         Check.That(calculateur.InvaliditeDeces.Valeur).IsCloseTo(572m, 1m);
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4463m, 1m);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4468m, 1m);
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(598m, 1m);
     }
 

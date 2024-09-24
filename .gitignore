@@ -354,3 +354,4 @@ MigrationBackup/
 /*.DotSettings
 /*.DotSettings.user
 /CalculateurCotisationsFront/appsettings.Development.json
+/docs/Cotisations URSSAF 2023.png
