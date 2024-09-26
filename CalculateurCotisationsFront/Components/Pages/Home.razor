@@ -8,7 +8,7 @@
 <h1>Bienvenue</h1>
 
 <p class="intro">
-    Ce calculateur est à destination des travailleuses et travailleurs indépendant·e·s se trouvant en métropole et ayant un statut de profession libérale non réglementée. D'autres cas pourront être implémentés à l'avenir mais ce n'est pas prévu pour l'instant.
+    Ce calculateur est à destination des travailleuses et travailleurs indépendant·e·s se trouvant en métropole et ayant un statut de profession libérale non réglementée, artisan ou commerçant depuis plus d'un an. D'autres cas pourront être implémentés à l'avenir mais ce n'est pas prévu pour l'instant.
 </p>
 <EditForm Model="Form" FormName="Name" OnValidSubmit="@SubmitForm">
     <DataAnnotationsValidator />
@@ -18,8 +18,8 @@
     <label for="revenuNet" class="form-label fs-4">Revenu net annuel :</label>
     <div class="input-group mb-3">
         <span class="input-group-text">€</span>
-        <InputNumber @bind-Value="Form!.RevenuNet" ParsingErrorMessage="Merci d'entrer un nombre entier positif." id="revenuNet" class="form-control" title="Entrez ici votre revenu net pour l'année choisie" required/>
-        <InputSelect @bind-Value="Form.Annee" id="annee" class="form-control form-select">
+        <InputNumber @bind-Value="Form!.RevenuNet" ParsingErrorMessage="Merci d'entrer un nombre entier positif." id="revenuNet" class="form-control" title="Revenu effectivement versé (ou prévu) pour l'année choisie, hors charges, CSG, etc..." required/>
+        <InputSelect @bind-Value="Form.Annee" id="annee" class="form-control form-select" title="Année à laquelle vous souhaitez calculer vos cotisations">
             <option value="2024" checked="@Form.Annee == 2024">2024</option>
             <option value="2023" checked="@Form.Annee == 2023">2023</option>
         </InputSelect>
@@ -34,7 +34,7 @@
             </h2>
             <div id="accordionCollapse" class="accordion-collapse collapse @(Form.CotisationsFacultatives > 0 ? "show" : "")" data-bs-parent="#accordionFacultatif">
                 <div class="accordion-body" id="facultatif">
-                    <label for="cotisationsFacultatives" class="form-label">Cotisations facultatives (optionnel) :</label>
+                    <label for="cotisationsFacultatives" class="form-label" title="Cotisations type Madelin, PER...">Cotisations facultatives :</label>
                     <div class="input-group ms-1" id="inputGroupFacultatif">
                         <span class="input-group-text">€</span>
                         <InputNumber @bind-Value="Form!.CotisationsFacultatives" ParsingErrorMessage="Merci d'entrer un nombre entier positif." id="cotisationsFacultatives" class="form-control" title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie" />
