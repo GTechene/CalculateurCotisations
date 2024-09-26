@@ -37,14 +37,14 @@
                     <label for="cotisationsFacultatives" class="form-label">Cotisations facultatives (optionnel) :</label>
                     <div class="input-group ms-1" id="inputGroupFacultatif">
                         <span class="input-group-text">€</span>
-                        <InputNumber @bind-Value="Form!.CotisationsFacultatives" ParsingErrorMessage="Merci d'entrer un nombre entier positif." id="cotisationsFacultatives" class="form-control" title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie"/>
+                        <InputNumber @bind-Value="Form!.CotisationsFacultatives" ParsingErrorMessage="Merci d'entrer un nombre entier positif." id="cotisationsFacultatives" class="form-control" title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <input type="submit" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" value="Lancer le calcul"/>
+    <input type="submit" id="submitButton" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" value="Lancer le calcul" disabled/>
 </EditForm>
 @if (Cotisations is not null)
 {
@@ -64,7 +64,16 @@
                 if (event.target.value == "")
                     event.target.value = "0";
             })
-        })
+        });
+
+    document.getElementById("revenuNet").addEventListener("input", (event) => {
+        if (event.target.value == "0" || event.target.value == "") {
+            document.getElementById("submitButton").disabled = true;
+        }
+        else {
+            document.getElementById("submitButton").disabled = false;
+        }
+    });
 </script>
 
 @code
