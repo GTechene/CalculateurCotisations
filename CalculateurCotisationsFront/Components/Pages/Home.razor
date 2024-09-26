@@ -44,7 +44,7 @@
         </div>
     </div>
     
-    <input type="submit" id="submitButton" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" value="Lancer le calcul" disabled/>
+    <input type="submit" id="submitButton" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" value="Lancer le calcul" disabled="@(Form.RevenuNet <= 0)"/>
 </EditForm>
 @if (Cotisations is not null)
 {
