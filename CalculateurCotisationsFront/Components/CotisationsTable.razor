@@ -102,8 +102,21 @@
             </td>
         </tr>
         <tr>
-            <td class="fw-bold">Total</td>
-            <td class="fw-bold text-end">@Math.Round(Cotisations.GrandTotal) €<br/>@Math.Round(100 * Cotisations.GrandTotal / RevenuNet, 1)% du revenu</td>
+            <td class="fw-bold">
+                Total @if (CotisationsFacultatives > 0)
+                {
+                    @:hors cotisations facultatives
+                }
+            </td>
+            <td class="text-end"><strong>@Math.Round(Cotisations.GrandTotal) €</strong><br />@Math.Round(100 * Cotisations.GrandTotal / RevenuNet, 1)% du revenu</td>
+            @if (CotisationsFacultatives > 0)
+            {
+                <td class="explication-cell">
+                    <a data-bs-content="Total à payer hors cotisations facultatives renseignées plus haut car on considère qu'elles sont déjà payées. Sinon, il suffit de les ajouter et cela donne @(Math.Round(Cotisations.GrandTotal + CotisationsFacultatives)) €." class="btn btn-primary btn-sm explication" data-bs-placement="bottom" title="Total" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus">
+                        <span class="info-icon"></span>
+                    </a>
+                </td>
+            }
         </tr>
     </table>
     <p class="definitions">
@@ -115,5 +128,6 @@
 @code {
     [Parameter] public ResultatPrecisDeCotisationsAvecExplications Cotisations { get; set; } = null!;
     [Parameter] public decimal RevenuNet { get; set; }
+    [Parameter] public int CotisationsFacultatives { get; set; }
     [Parameter] public int Annee { get; set; }
 }
