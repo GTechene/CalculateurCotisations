@@ -28,4 +28,16 @@
 .explication {
     align-items: center;
     width: fit-content;
+    height: fit-content;
 }
+
+.conteneurFormulairePrincipal {
+    display: flex;
+    width: auto;
+    align-items: baseline;
+}
+
+    .conteneurFormulairePrincipal label {
+        flex-shrink: 0;
+        margin: 0 1rem 0 0.25rem;
+    }
