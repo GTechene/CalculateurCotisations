@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculCotisations", "CalculCotisations\CalculCotisations.csproj", "{1CB79669-822D-4185-8642-6FED1569B5D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cotisations", "Cotisations\Cotisations.csproj", "{1CB79669-822D-4185-8642-6FED1569B5D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculCotisationsTests", "CalculCotisationsTests\CalculCotisationsTests.csproj", "{EF7BA1EB-1C5A-4E57-8705-A1F0E4952868}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cotisations.Tests", "Cotisations.Tests\Cotisations.Tests.csproj", "{EF7BA1EB-1C5A-4E57-8705-A1F0E4952868}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CotisationsApi", "CotisationsApi\CotisationsApi.csproj", "{2854D1EC-4C01-4982-8C7C-4414CFE74BE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cotisations.Api", "Cotisations.Api\Cotisations.Api.csproj", "{2854D1EC-4C01-4982-8C7C-4414CFE74BE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateurCotisationsFront", "CalculateurCotisationsFront\CalculateurCotisationsFront.csproj", "{940C263B-6BF4-4792-8F23-6291903FC31B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cotisations.Front", "Cotisations.Front\Cotisations.Front.csproj", "{940C263B-6BF4-4792-8F23-6291903FC31B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

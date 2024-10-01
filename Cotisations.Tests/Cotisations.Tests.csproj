@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="NFluent" Version="3.0.4" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="sas" Version="1.0.0" />
+    <PackageReference Include="sas.nfluent" Version="1.0.0" />
+    <PackageReference Include="sas.simulators.http" Version="1.0.0" />
+    <PackageReference Include="sas.simulators.nsubstitute" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cotisations.Api\Cotisations.Api.csproj" />
+    <ProjectReference Include="..\Cotisations\Cotisations.csproj" />
+  </ItemGroup>
+
+</Project>
