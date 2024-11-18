@@ -28,7 +28,7 @@ public class CalculateurAvecConvergenceShould
         Check.That(convergeur.GrandTotal).IsCloseTo(28785m, 5m);
 
         // Teste que la culture est bien appliquée explicitement dans le code et ne dépend pas de la machine qui le fait tourner.
-        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Explication).IsEqualTo("L'assiette de 64 915 € est comprise entre 51 005 € (110% du PASS) et 231 840 € (500% du PASS), donc le taux fixe de 6,7% est appliqué, soit 4 349 € de cotisations.");
+        Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Explication).IsEqualTo("L'assiette de 64 914 € est comprise entre 51 005 € (110% du PASS) et 231 840 € (500% du PASS), donc le taux fixe de 6,7% est appliqué, soit 4 349 € de cotisations.");
     }
 
     [Test]
@@ -41,11 +41,11 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(revenuNet, 2023, cotisationsFacultatives);
         convergeur.Calcule();
 
-        // On ne converge pas comme l'URSSAF (on a 70451) mais c'est normal car on ne part pas du même net imposable puisque Numbr a oublié les cotises facultatives.
-        Check.That(convergeur.AssietteDeCalculDesCotisations).IsCloseTo(70358m, 100m);
+        // On ne converge pas comme l'URSSAF (on a 70548) mais c'est normal car on ne part pas du même net imposable puisque Numbr a oublié les cotises facultatives.
+        Check.That(convergeur.AssietteDeCalculDesCotisations).IsCloseTo(70358m, 191m);
 
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4468m, 22m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(598m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(598m, 2m);
         Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(7967m, 1m);
         Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(5211m, 26m);
         Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(572m, 1m);
@@ -55,7 +55,7 @@ public class CalculateurAvecConvergenceShould
         Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6207m, 31m);
         Check.That(convergeur.CRDS.Valeur).IsCloseTo(456m, 2m);
         Check.That(convergeur.FormationProfessionnelle.Valeur).IsEqualTo(109.98m);
-        Check.That(convergeur.GrandTotal).IsCloseTo(29881m, 149m);
+        Check.That(convergeur.GrandTotal).IsCloseTo(29881m, 156m);
     }
 
     [Test]
@@ -69,33 +69,33 @@ public class CalculateurAvecConvergenceShould
         convergeur.Calcule();
 
         // Le simulateur donne 70561 et on a 70451.
-        Check.That(convergeur.AssietteDeCalculDesCotisations).IsCloseTo(70561m, 110m);
+        Check.That(convergeur.AssietteDeCalculDesCotisations).IsCloseTo(70561m, 20m);
 
         // On retrouve le bug ici : le simulateur officiel prend 0.5% pour les cotisations indemnités ; or c'était 0.85% en 2023. Cela donne un total de 5080 pour le simulateur et comme il fait (TotalMaladie - Indemnités) pour calculer les autres cotises, on a bien 5080 - 598 = 4482.
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4482m, 22m);
-        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(598m, 1m);
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(598m, 2m);
 
         // Là encore le simulateur se plante et prend le PASS 2024 (46368) alors qu'on doit prendre le 2023 (43992). J'ai donc 7808 + 159 = 7967 de mon côté là où le simulateur trouve 8230 + 145 = 8375.
         Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(8375m, 408m);
 
-        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(5215m, 26m);
+        Check.That(convergeur.RetraiteComplementaire.Valeur).IsCloseTo(5215m, 22m);
 
         // Idem ici, PASS 2024 au lieu de 2023
         Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(603m, 32m);
 
-        Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(2187m, 4m);
-        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(21007m, 17m);
+        Check.That(convergeur.AllocationsFamiliales.Valeur).IsCloseTo(2187m, 1m);
+        Check.That(convergeur.TotalCotisationsObligatoires).IsCloseTo(21007m, 36m);
 
-        // Assiette CSG/CRDS pour le simulateur = 92020. On a 91475.
-        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(2208m, 13m);
-        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6257m, 37m);
+        // Assiette CSG/CRDS pour le simulateur = 92020. On a 91590.
+        Check.That(convergeur.CSGNonDeductible.Valeur).IsCloseTo(2208m, 10m);
+        Check.That(convergeur.CSGDeductible.Valeur).IsCloseTo(6257m, 29m);
         Check.That(convergeur.CRDS.Valeur).IsCloseTo(460m, 3m);
 
         // Là encore un bug
         Check.That(convergeur.FormationProfessionnelle.Valeur).IsCloseTo(134m, 25m);
 
         // Donc le total s'en trouve forcément affecté.
-        Check.That(convergeur.GrandTotal).IsCloseTo(30520m, 513m);
+        Check.That(convergeur.GrandTotal).IsCloseTo(30520m, 495m);
     }
 
     [Test]

@@ -9,8 +9,8 @@ public class CalculateurAvecConvergence(decimal revenuNet, int year = 2024, deci
     private readonly CalculateurDeBase _calculateur = Calculateurs.TrouveUnCalculateur(year);
 
     public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
-    public ResultatAvecExplication MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
-    public ResultatAvecExplication MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
+    public ResultatAvecTauxEtExplication MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
+    public ResultatAvecTauxEtExplication MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
     public ResultatAvecExplication RetraiteDeBase => _calculateur.RetraiteDeBase;
     public ResultatAvecExplication RetraiteComplementaire => _calculateur.RetraiteComplementaire;
     public ResultatAvecExplication InvaliditeDeces => _calculateur.InvaliditeDeces;
@@ -21,6 +21,9 @@ public class CalculateurAvecConvergence(decimal revenuNet, int year = 2024, deci
     public ResultatAvecExplication FormationProfessionnelle => _calculateur.FormationProfessionnelle;
     public decimal GrandTotal => _calculateur.GrandTotal;
     public decimal AssietteDeCalculDesCotisations { get; private set; }
+    public decimal RevenuNet => revenuNet;
+    public decimal CotisationsFacultatives => cotisationsFacultatives;
+    public int Annee => year;
 
 
     public void Calcule()
@@ -28,14 +31,16 @@ public class CalculateurAvecConvergence(decimal revenuNet, int year = 2024, deci
         var ratioMin = 1m;
         var ratioMax = 1.25m;
         var ratio = ratioMin + (ratioMax - ratioMin) / 2;
-        var assietteDeBase = revenuNet * ratio;
+        var revenuAPrendreEnCompte = revenuNet + cotisationsFacultatives;
+
+        var assietteDeBase = revenuAPrendreEnCompte * ratio;
         AssietteDeCalculDesCotisations = 0m;
         var diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
         while (Math.Abs(diffAssiettes) > 1)
         {
             _calculateur.CalculeLesCotisations(assietteDeBase);
 
-            AssietteDeCalculDesCotisations = revenuNet + _calculateur.CSGNonDeductible.Valeur + _calculateur.CRDSNonDeductible.Valeur;
+            AssietteDeCalculDesCotisations = revenuAPrendreEnCompte + _calculateur.CSGNonDeductible.Valeur + _calculateur.CRDSNonDeductible.Valeur;
             diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
             if (AssietteDeCalculDesCotisations <= assietteDeBase)
             {
@@ -48,10 +53,7 @@ public class CalculateurAvecConvergence(decimal revenuNet, int year = 2024, deci
                 ratio += (ratioMax - ratioMin) / 2;
             }
 
-            assietteDeBase = revenuNet * ratio;
+            assietteDeBase = revenuAPrendreEnCompte * ratio;
         }
-
-        AssietteDeCalculDesCotisations += cotisationsFacultatives;
-        _calculateur.CalculeLesCotisations(AssietteDeCalculDesCotisations);
     }
 }
