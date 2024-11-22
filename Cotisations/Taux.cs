@@ -8,7 +8,7 @@
 public static class Taux
 {
     public const decimal CotisationsMaladiePourRevenusInferieursA60PctDuPass = 0.04m;
-    public const decimal CotisationsRetraiteBaseRevenusSuperieurAuPass = 0.006m;
+    public const decimal CotisationsRetraiteBaseRevenusSuperieursAuPass = 0.006m;
     public const decimal CotisationsRetraiteBaseRevenusInferieursAuPass = 0.1775m;
     public const decimal RetraiteComplementairePremiereTrancheArtisansCommercants = 0.07m;
     public const decimal RetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.08m;

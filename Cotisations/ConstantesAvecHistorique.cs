@@ -26,3 +26,16 @@ public class Constantes2023 : IConstantesAvecHistorique
     public decimal CotisationsIndemnitesMaladiePourRevenusSuperieursA110PctDuPass => 0.0085m; 
     public int PlafondsRetraiteComplementaireArtisansCommercants => 40784;
 }
+
+public static class ConstantesAvecHistorique
+{
+    public static IConstantesAvecHistorique PourLAnnee(int annee)
+    {
+        return annee switch
+        {
+            2023 => new Constantes2023(),
+            2024 => new Constantes2024(),
+            _ => new Constantes2024()
+        };
+    }
+}
