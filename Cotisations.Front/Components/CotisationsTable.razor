@@ -1,11 +1,15 @@
-﻿@using Cotisations.Front.Components.Data
+﻿@rendermode InteractiveAuto
+@using Cotisations.Front.Components.Data
+@inject CotisationsApiHttpClient ApiHttpClient
+@inject IJSRuntime JS
+
 <div class="h4 pb-2 mb-4 border-bottom border-dark">
     Cotisations @Annee
 </div>
 
 <!-- TODO : afficher l'assiette de calcul / le revenu net imposable -->
-<div class="table-responsive">
-    <table id="cotisationsDetaillees" class="table table-sm table-striped">
+<div class="table-responsive" id="table-container">
+    <table class="table table-sm table-striped">
         <tr>
             <td>Cotisations maladie (hors indemnités)</td>
             <td class="text-end">@Math.Round(Cotisations.MaladieHorsIndemnitesJournalieres.Valeur) €</td>
@@ -103,9 +107,9 @@
         <tr>
             <td class="fw-bold">
                 Total @if (CotisationsFacultatives > 0)
-                {
-                    @:hors cotisations facultatives
-                }
+                      {
+                          @:hors cotisations facultatives
+                      }
             </td>
             <td class="text-end"><strong>@Math.Round(Cotisations.GrandTotal) €</strong><br />@Math.Round(100 * Cotisations.GrandTotal / RevenuNet, 1)% du revenu</td>
             @if (CotisationsFacultatives > 0)
@@ -118,15 +122,40 @@
             }
         </tr>
     </table>
+    <p>@(OperatingSystem.IsBrowser() ? "WASM" : "SRV")</p>
+    <button class="btn btn-success" @onclick="Clic">Export Excel <img src="/icons8-excel.svg" width="32" alt="Icône Excel"/></button>
     <p class="definitions">
         PASS = Plafond Annuel de la Sécurité Sociale.<br />
-        Assiette = nombre retenu pour la base de la plupart des calculs. Pour la majorité des cotisations c'est la somme du revenu imposable et des cotisations facultatives. Le revenu imposable est la somme du revenu net (effectivement versé), de la CSG non déductible et de la CRDS. Pour calculer CSG et CRDS, l'assiette est la somme du revenu imposable et des cotisations obligatoires. Il en résulte une dépendance circulaire entre CSG/CRDS et revenu imposable, que ce simulateur résoud par convergence.
+        Assiette = nombre retenu pour la base de la plupart des calculs. Pour la majorité des cotisations c'est la somme du revenu imposable et des cotisations facultatives. Le revenu imposable est la somme du revenu net (effectivement versé), de la CSG non déductible et de la CRDS. Pour calculer CSG et CRDS, l'assiette est la somme du revenu imposable et des cotisations obligatoires. Il en résulte une dépendance circulaire entre CSG/CRDS et revenu imposable, que ce simulateur résout par convergence.
     </p>
 </div>
+
+<script>
+    window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+      const arrayBuffer = await contentStreamReference.arrayBuffer();
+      const blob = new Blob([arrayBuffer]);
+      const url = URL.createObjectURL(blob);
+      const anchorElement = document.createElement('a');
+      anchorElement.href = url;
+      anchorElement.download = fileName ?? '';
+      anchorElement.click();
+      anchorElement.remove();
+      URL.revokeObjectURL(url);
+    }
+</script>
+
 
 @code {
     [Parameter] public ResultatPrecisDeCotisationsAvecExplications Cotisations { get; set; } = null!;
     [Parameter] public decimal RevenuNet { get; set; }
     [Parameter] public int CotisationsFacultatives { get; set; }
     [Parameter] public int Annee { get; set; }
+
+    private async Task Clic()
+    {
+        var stream = await ApiHttpClient.GetExcelFile(RevenuNet, Annee, CotisationsFacultatives);
+        using var streamRef = new DotNetStreamReference(stream: stream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", "Export cotisations.xlsx", streamRef);
+    }
 }
