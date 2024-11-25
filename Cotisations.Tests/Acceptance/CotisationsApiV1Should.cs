@@ -1,6 +1,5 @@
 ﻿using Cotisations.Api.Controllers;
 using NFluent;
-using NUnit.Framework;
 
 namespace Cotisations.Tests.Acceptance;
 
@@ -12,7 +11,7 @@ public class CotisationsApiV1Should
         var scenario = new ScenarioDeCotisationsPrecises().AvecRevenuNetDe(62441m);
         var api = CotisationsApi.CreeUneInstance(scenario);
 
-        var reponseHttp = await api.CalculeCotisationsPrecises(scenario.RevenuNet);
+        var reponseHttp = await api.CalculeCotisationsPrecises();
 
         Check.That(reponseHttp).IsOk<ResultatPrecisDeCotisations>()
             .WhichPayload(resultat =>

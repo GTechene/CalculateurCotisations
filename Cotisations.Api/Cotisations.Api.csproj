@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cotisations.Excel\Cotisations.Excel.csproj" />
     <ProjectReference Include="..\Cotisations\Cotisations.csproj" />
   </ItemGroup>
 

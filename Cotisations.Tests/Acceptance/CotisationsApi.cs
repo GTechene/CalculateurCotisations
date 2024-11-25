@@ -1,30 +1,38 @@
 ﻿using sas.Api;
 using sas.Configurations;
-using sas.Scenario;
 using sas.Simulators;
 
 namespace Cotisations.Tests.Acceptance;
 
 public class CotisationsApi : BaseApi<Program>
 {
+    private readonly ScenarioDeCotisationsPrecises _scenario;
+
     public static CotisationsApi CreeUneInstance(ScenarioDeCotisationsPrecises scenario)
     {
         return new CotisationsApi(scenario, [], []);
     }
 
-    protected CotisationsApi(BaseScenario scenario, ISimulateBehaviour[] simulators, IEnrichConfiguration[] configurations) : base(scenario, simulators, configurations)
+    protected CotisationsApi(ScenarioDeCotisationsPrecises scenario, ISimulateBehaviour[] simulators, IEnrichConfiguration[] configurations) : base(scenario, simulators, configurations)
     {
+        _scenario = scenario;
     }
 
     [Obsolete($"Utiliser {nameof(CalculeCotisationsPrecisesAvecExplications)}")]
-    public async Task<HttpResponseMessage> CalculeCotisationsPrecises(decimal revenuNet)
+    public async Task<HttpResponseMessage> CalculeCotisationsPrecises()
     {
-        return await HttpClient.GetAsync($"/cotisations/precises/{revenuNet}");
+        return await HttpClient.GetAsync($"/cotisations/precises/{_scenario.RevenuNet}");
     }
 
-    public async Task<HttpResponseMessage> CalculeCotisationsPrecisesAvecExplications(decimal revenuNet, int annee, decimal cotisationsFacultatives)
+    public async Task<HttpResponseMessage> CalculeCotisationsPrecisesAvecExplications()
     {
-        var requestUri = $"/cotisations/v2/precises/{revenuNet}?annee={annee}&cotisationsFacultatives={cotisationsFacultatives}";
+        var requestUri = $"/cotisations/v2/precises/{_scenario.RevenuNet}?annee={_scenario.Annee}&cotisationsFacultatives={_scenario.CotisationsFacultatives}";
+        return await HttpClient.GetAsync(requestUri);
+    }
+
+    public async Task<HttpResponseMessage> TelechargeExportExcel()
+    {
+        var requestUri = $"/cotisations/export/{_scenario.RevenuNet}?annee={_scenario.Annee}&cotisationsFacultatives={_scenario.CotisationsFacultatives}";
         return await HttpClient.GetAsync(requestUri);
     }
 }

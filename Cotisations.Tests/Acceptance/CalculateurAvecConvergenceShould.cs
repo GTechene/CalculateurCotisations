@@ -1,5 +1,4 @@
 ﻿using NFluent;
-using NUnit.Framework;
 
 namespace Cotisations.Tests.Acceptance;
 

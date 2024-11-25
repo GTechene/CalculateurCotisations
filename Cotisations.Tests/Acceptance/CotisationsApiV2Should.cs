@@ -1,6 +1,7 @@
-﻿using Cotisations.Api.Controllers;
+﻿using System.Net.Http.Headers;
+using ClosedXML.Excel;
+using Cotisations.Api.Controllers;
 using NFluent;
-using NUnit.Framework;
 
 namespace Cotisations.Tests.Acceptance;
 
@@ -16,7 +17,7 @@ public class CotisationsApiV2Should
 
         var api = CotisationsApi.CreeUneInstance(scenario);
 
-        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications(scenario.RevenuNet, scenario.Annee, scenario.CotisationsFacultatives);
+        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
         Check.That(reponseHttp).IsOk<ResultatPrecisDeCotisationsAvecExplications>()
             .WhichPayload(resultat =>
@@ -51,7 +52,7 @@ public class CotisationsApiV2Should
 
         var api = CotisationsApi.CreeUneInstance(scenario);
 
-        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications(scenario.RevenuNet, scenario.Annee, scenario.CotisationsFacultatives);
+        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
         Check.That(reponseHttp).IsOk<ResultatPrecisDeCotisationsAvecExplications>()
             .WhichPayload(resultat =>
@@ -70,5 +71,25 @@ public class CotisationsApiV2Should
                 Check.That(resultat.FormationProfessionnelle.Valeur).IsCloseTo(116m, 1m);
                 Check.That(resultat.GrandTotal).IsCloseTo(28273m, 1m);
             });
+    }
+
+    [Test]
+    public async Task Telecharger_un_fichier_Excel_contenant_les_cotisations_2024()
+    {
+        var scenario = new ScenarioDeCotisationsPrecises()
+            .AvecRevenuNetDe(60371)
+            .AvecCotisationsFacultativesDe(1000m)
+            .En(2024);
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.TelechargeExportExcel();
+
+        Check.That(reponseHttp).IsOk();
+        Check.That(reponseHttp.Content.Headers.ContentType).IsEqualTo(MediaTypeHeaderValue.Parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+
+        var stream = await reponseHttp.Content.ReadAsStreamAsync();
+        var workbook = new XLWorkbook(stream);
+        Check.That(workbook.Worksheet("Cotisations")).IsNotNull();
     }
 }
