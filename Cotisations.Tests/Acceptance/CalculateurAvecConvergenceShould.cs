@@ -8,7 +8,7 @@ public class CalculateurAvecConvergenceShould
     [SetCulture("en-US")]
     public void Calculer_mes_cotisations_2024_correctement_en_convergeant_malgre_la_dependance_circulaire_de_la_CSG_et_CRDS()
     {
-        const decimal revenuNet = 62441m;
+        const decimal revenuNet = 62_441m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
@@ -34,7 +34,7 @@ public class CalculateurAvecConvergenceShould
     // Ce test est presque raccord (à 99.5%) avec les cotisations réelles demandées par l'URSSAF. C'est normal car le net imposable donné par Numbr (67648) n'est pas bon car basé sur un calcul du simulateur sans filer les cotisations facultatives de 2710.
     public void Calculer_mes_cotisations_2023_à_peu_près_correctement()
     {
-        const decimal revenuNet = 65182m;
+        const decimal revenuNet = 65_182m;
         const decimal cotisationsFacultatives = 2710m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet, 2023, cotisationsFacultatives);
@@ -61,7 +61,7 @@ public class CalculateurAvecConvergenceShould
     // En fait, le simulateur 2023 de l'URSSAF est buggé. Si on répond aux questions pour y mettre Madelin, date de création et statut de l'entreprise (libéral, artisan/commerçant), alors le simulateur prend les taux et plafonds 2024, pas 2023.
     public void Calculer_mes_cotisations_2023_correctement_vis_a_vis_du_simulateur()
     {
-        const decimal revenuNet = 65182m;
+        const decimal revenuNet = 65_182m;
         const decimal cotisationsFacultatives = 2710m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet, 2023, cotisationsFacultatives);
@@ -105,7 +105,7 @@ public class CalculateurAvecConvergenceShould
     // * inférieur à 42946 (retraite complémentaire artisans/commerçants : uniquement la tranche à 7%)
     public void Calculer_les_cotisations_correctement_pour_un_revenu_de_40k()
     {
-        const decimal revenuNet = 40000m;
+        const decimal revenuNet = 40_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
@@ -130,7 +130,7 @@ public class CalculateurAvecConvergenceShould
     // C'est visible dans le simulateur (https://mon-entreprise.urssaf.fr/simulateurs/ind%C3%A9pendant).
     public void Calculer_les_cotisations_correctement_pour_un_revenu_inferieur_a_40_pct_du_PASS()
     {
-        const decimal revenuNet = 12000m;
+        const decimal revenuNet = 12_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
@@ -157,7 +157,7 @@ public class CalculateurAvecConvergenceShould
     // * retraite complémentaire artisans/commerçants plafonnée car revenu > 4 PASS
     public void Calculer_les_cotisations_correctement_pour_un_revenu_de_plus_de_5_fois_le_PASS()
     {
-        const decimal revenuNet = 300000m;
+        const decimal revenuNet = 300_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
@@ -180,7 +180,7 @@ public class CalculateurAvecConvergenceShould
     // Pour tester que les cotises maladie prennent l'assiette en compte et non le revenu net en direct (bug première implem).
     public void Calculer_les_cotisations_maladie_correctement_pour_un_revenu_inferieur_a_40_pct_du_PASS_mais_avec_une_assiette_superieure()
     {
-        const decimal revenuNet = 18000m;
+        const decimal revenuNet = 18_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
@@ -192,7 +192,7 @@ public class CalculateurAvecConvergenceShould
     [Test]
     public void Calculer_les_cotisations_maladie_correctement_pour_un_revenu_inferieur_a_60_pct_du_PASS_mais_avec_une_assiette_superieure()
     {
-        const decimal revenuNet = 27000m;
+        const decimal revenuNet = 27_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
@@ -204,12 +204,20 @@ public class CalculateurAvecConvergenceShould
     [Test]
     public void Calculer_les_cotisations_maladie_correctement_pour_un_revenu_inferieur_a_110_pct_du_PASS_mais_avec_une_assiette_superieure()
     {
-        const decimal revenuNet = 51000m;
+        const decimal revenuNet = 51_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
         convergeur.Calcule();
 
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(3553, 1m);
         Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(265m, 1m);
+    }
+
+    // Scénario un peu tiré par les cheveux mais si jamais je rate un autre truc, il faut pouvoir sortir en erreur plutôt que de "converger" éternellement dans une boucle infinie.
+    [Test]
+    public void Sortir_en_erreur_lorsque_la_convergence_ne_se_fait_pas()
+    {
+        var convergeur = new CalculateurAvecConvergence(50_000m, 2024, -50_001m);
+        Check.ThatCode(() => convergeur.Calcule()).Throws<InvalidOperationException>();
     }
 }

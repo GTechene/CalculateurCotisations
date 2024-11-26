@@ -9,7 +9,7 @@ public class ExportExcelShould
     [Test]
     public Task Creer_un_fichier_Excel_a_partir_d_un_resultat_de_calcul()
     {
-        var calculateur = new CalculateurAvecConvergence(50000, 2024);
+        var calculateur = new CalculateurAvecConvergence(50_000, 2024);
         calculateur.Calcule();
         var exporteurExcel = new ExporteurExcel(calculateur);
 

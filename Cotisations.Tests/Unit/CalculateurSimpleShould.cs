@@ -10,7 +10,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Renvoyer_0_euro_de_cotises_maladie_avec_revenu_inferieur_a_40_pct_du_PASS()
     {
-        const decimal revenuNet = 17000m;
+        const decimal revenuNet = 17_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -26,7 +26,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_cotises_maladie_avec_revenu_entre_40_pct_et_60_pct_du_PASS()
     {
-        const decimal revenuNet = 25000m;
+        const decimal revenuNet = 25_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -39,7 +39,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_cotises_maladie_avec_revenu_entre_60_pct_et_110_pct_du_PASS()
     {
-        const decimal revenuNet = 40000m;
+        const decimal revenuNet = 40_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -52,7 +52,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_cotises_maladie_avec_revenu_entre_110_pct_du_PASS_et_500_pct_du_PASS()
     {
-        const int revenuNet = 60000;
+        const int revenuNet = 60_000;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -66,7 +66,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_cotisations_maladie_avec_un_revenu_superieur_a_5_PASS()
     {
-        const int revenuNet = 300000;
+        const int revenuNet = 300_000;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -83,7 +83,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_la_retraite_de_base_avec_un_revenu_depassant_le_PASS()
     {
-        const int revenuNet = 64913;
+        const int revenuNet = 64_913;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -95,7 +95,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_la_retraite_complementaire_des_artisans_avec_un_revenu_inferieur_a_42946_euros()
     {
-        const decimal revenuNet = 40000m;
+        const decimal revenuNet = 40_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -106,7 +106,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_la_retraite_complementaire_des_artisans_avec_un_revenu_depassant_42946_euros_mais_inferieur_a_4_PASS()
     {
-        const decimal revenuNet = 64913m;
+        const decimal revenuNet = 64_913m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -118,7 +118,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_la_retraite_complementaire_des_artisans_avec_un_revenu_superieur_a_4_PASS()
     {
-        const decimal revenuNet = 190000m;
+        const decimal revenuNet = 190_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -130,7 +130,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_l_invalidite_deces_pour_un_revenu_inferieur_a_1_PASS()
     {
-        const decimal revenuNet = 40000m;
+        const decimal revenuNet = 40_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -143,7 +143,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_l_invalidite_deces_pour_un_revenu_superieur_a_1_PASS()
     {
-        const decimal revenuNet = 64913m;
+        const decimal revenuNet = 64_913m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -156,7 +156,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Renvoyer_0_euro_pour_les_cotisations_des_allocations_familiales_avec_un_revenu_inferieur_a_110_pct_du_PASS()
     {
-        const decimal revenuNet = 50000m;
+        const decimal revenuNet = 50_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -167,7 +167,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_allocations_familiales_avec_un_revenu_entre_110_pct_et_140_pct_du_PASS()
     {
-        const decimal revenuNet = 60000m;
+        const decimal revenuNet = 60_000m;
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
 
@@ -179,7 +179,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_allocations_familiales_avec_un_revenu_depassant_140_pct_du_PASS()
     {
-        const decimal revenuNet = 70000m;
+        const decimal revenuNet = 70_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -190,7 +190,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_la_CSG_et_la_CRDS()
     {
-        const decimal revenuNet = 70000m;
+        const decimal revenuNet = 70_000m;
 
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
@@ -205,7 +205,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_la_formation_professionnelle()
     {
-        var revenuNet = new Random().Next(10000, 300000);
+        var revenuNet = new Random().Next(10_000, 300_000);
         var calculateur = Calculateurs.TrouveUnCalculateur(2024);
         calculateur.CalculeLesCotisations(revenuNet);
 
@@ -217,7 +217,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_cotisations_pour_2023_pour_un_revenu_superieur_a_110_pct_du_PASS()
     {
-        const decimal revenuNet = 70358m;
+        const decimal revenuNet = 70_358m;
         var calculateur = Calculateurs.TrouveUnCalculateur(2023);
         calculateur.CalculeLesCotisations(revenuNet);
 
@@ -229,7 +229,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_cotisations_pour_2023_pour_un_revenu_inferieur_a_40_pct_du_PASS()
     {
-        const decimal revenuNet = 15000m;
+        const decimal revenuNet = 15_000m;
         var calculateur = Calculateurs.TrouveUnCalculateur(2023);
         calculateur.CalculeLesCotisations(revenuNet);
 
@@ -241,7 +241,7 @@ public class CalculateurSimpleShould
     [Test]
     public void Calculer_les_cotisations_pour_2023_pour_un_revenu_superieur_a_500_pct_du_PASS()
     {
-        const decimal revenuNet = 250000m;
+        const decimal revenuNet = 250_000m;
         var calculateur = Calculateurs.TrouveUnCalculateur(2023);
         calculateur.CalculeLesCotisations(revenuNet);
 
@@ -252,7 +252,7 @@ public class CalculateurSimpleShould
     // Bug du simulateur officiel ? Les textes officiels parlent d'un taux progressif entre 40% et 110% du PASS (entre 0.5% et 0.85% de l'assiette) mais le simulateur reste bloqué sur 0.85%.
     public void Calculer_les_cotisations_pour_2023_pour_un_revenu_entre_40_pct_et_110_pct_du_PASS()
     {
-        const decimal revenuNet = 36391m;
+        const decimal revenuNet = 36_391m;
         var calculateur = Calculateurs.TrouveUnCalculateur(2023);
         calculateur.CalculeLesCotisations(revenuNet);
 

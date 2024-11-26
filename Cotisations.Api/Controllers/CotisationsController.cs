@@ -1,4 +1,5 @@
-﻿using Cotisations.Excel;
+﻿using System.ComponentModel.DataAnnotations;
+using Cotisations.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,15 +9,14 @@ namespace Cotisations.Api.Controllers;
 [Route("[controller]")]
 public class CotisationsController : ControllerBase
 {
+    private const decimal RevenuMaximal = 5_000_000;
+
     [HttpGet("v2/precises/{revenuNet}")]
-    // TODO: checker que l'année est >= 2023
-    // TODO: checker que le revenuNet est > 0
-    // TODO: checker que les cotisations facultatices sont >= 0
     [SwaggerOperation("Calcule les cotisations en convergeant à 1 € près pour la CSG/CRDS", "Cette méthode calcule les cotisations en faisant converger les 2 assiettes (estimée et calculée) par dichotomie jusqu'à l'euro près.")]
-    public ResultatPrecisDeCotisationsAvecExplications CalculeAvecConvergenceV2(
-        [FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)] decimal revenuNet,
-        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)] int? annee,
-        [FromQuery][SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)] decimal? cotisationsFacultatives
+    public ActionResult<ResultatPrecisDeCotisationsAvecExplications> CalculeAvecConvergenceV2(
+        [FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)][Range(1, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner un revenu de valeur positive et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal revenuNet,
+        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)][Range(2023, 2024)] int? annee,
+        [FromQuery][SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)][Range(0, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner des cotisations facultatives de valeur positive ou nulle et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal? cotisationsFacultatives
         )
     {
         var calculateur = new CalculateurAvecConvergence(revenuNet, annee.GetValueOrDefault(DateTime.Today.Year), cotisationsFacultatives.GetValueOrDefault());

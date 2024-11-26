@@ -4,7 +4,7 @@ namespace Cotisations.Tests.Acceptance;
 
 public class ScenarioDeCotisationsPrecises : BaseScenario
 {
-    public decimal RevenuNet { private set; get; }
+    public decimal RevenuNet { private set; get; } = 50_000m;
     public decimal CotisationsFacultatives { private set; get; }
     public int Annee { get; private set; } = DateTime.Today.Year;
 

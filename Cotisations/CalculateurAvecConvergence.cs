@@ -7,6 +7,7 @@
 public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, decimal cotisationsFacultatives = 0m)
 {
     private readonly CalculateurDeBase _calculateur = Calculateurs.TrouveUnCalculateur(annee);
+    private const int NombreDIterationsMaximal = 100;
 
     public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
     public ResultatAvecTauxEtExplication MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
@@ -28,6 +29,7 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
 
     public void Calcule()
     {
+        var nombreDIterations = 0;
         var ratioMin = 1m;
         var ratioMax = 1.25m;
         var ratio = ratioMin + (ratioMax - ratioMin) / 2;
@@ -54,6 +56,9 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
             }
 
             assietteDeBase = revenuAPrendreEnCompte * ratio;
+            nombreDIterations++;
+            if (nombreDIterations > NombreDIterationsMaximal)
+                throw new InvalidOperationException($"On tente de converger depuis trop longtemps ! Revenu = {revenuNet}, année = {annee}, cotisations facultatives = {cotisationsFacultatives}");
         }
     }
 }
