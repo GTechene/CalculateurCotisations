@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Cotisations\Cotisations.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>
