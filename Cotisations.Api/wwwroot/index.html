@@ -107,8 +107,7 @@
                     <button id="submitButton" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" :disabled="formData.revenuNet <= 0">Lancer le calcul</button>
                 </form>
 
-                <template x-if="formWasSubmitted">
-                    <div class="mt-5">
+                    <div class="mt-5" x-show="formWasSubmitted">
                         <div class="h4 pb-2 mb-4 border-bottom border-dark">
                             Cotisations <span x-text="formData.annee"></span>
                         </div>
@@ -231,7 +230,6 @@
                             </p>
                         </div>
                     </div>
-                </template>
             </article>
 
             <footer class="border-top footer text-muted mt-auto">
