@@ -40,9 +40,9 @@ public class CotisationsController : ControllerBase
 
     [HttpGet("export/{revenuNet}")]
     public IActionResult TelechargeFichierExcel(
-        [FromRoute] [SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)] decimal revenuNet,
-        [FromQuery] [SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)] int? annee,
-        [FromQuery] [SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)] decimal? cotisationsFacultatives = 0
+        [FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)][Range(1, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner un revenu de valeur positive et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal revenuNet,
+        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)][Range(2023, 2024)] int? annee,
+        [FromQuery][SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)][Range(0, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner des cotisations facultatives de valeur positive ou nulle et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal? cotisationsFacultatives
     )
     {
         var valeurAnnee = annee.GetValueOrDefault(DateTime.Today.Year);

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using ClosedXML.Excel;
 using Cotisations.Api.Controllers;
 using Diverse;
@@ -106,7 +105,7 @@ public class CotisationsApiV2Should
 
         var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
-        Check.That(reponseHttp).HasStatus(HttpStatusCode.BadRequest);
+        Check.That(reponseHttp).IsBadRequest();
     }
 
     [Test]
@@ -120,7 +119,7 @@ public class CotisationsApiV2Should
 
         var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
-        Check.That(reponseHttp).HasStatus(HttpStatusCode.BadRequest);
+        Check.That(reponseHttp).IsBadRequest();
     }
 
     [Test]
@@ -137,7 +136,7 @@ public class CotisationsApiV2Should
 
         var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
-        Check.That(reponseHttp).HasStatus(HttpStatusCode.BadRequest);
+        Check.That(reponseHttp).IsBadRequest();
     }
 
     [Test]
@@ -151,6 +150,67 @@ public class CotisationsApiV2Should
 
         var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
-        Check.That(reponseHttp).HasStatus(HttpStatusCode.BadRequest);
+        Check.That(reponseHttp).IsBadRequest();
+    }
+
+    [Test]
+    public async Task Renvoyer_une_erreur_400_si_le_revenu_net_est_superieur_ou_egal_a_5_millions_quand_on_exporte()
+    {
+        var fuzzer = new Fuzzer();
+        var scenario = new ScenarioDeCotisationsPrecises()
+            .AvecRevenuNetDe(fuzzer.GenerateInteger(5_000_000));
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.TelechargeExportExcel();
+
+        Check.That(reponseHttp).IsBadRequest();
+    }
+
+    [Test]
+    public async Task Renvoyer_une_erreur_400_si_le_revenu_net_est_inferieur_ou_egal_a_0_quand_on_exporte()
+    {
+        var fuzzer = new Fuzzer();
+        var scenario = new ScenarioDeCotisationsPrecises()
+            .AvecRevenuNetDe(fuzzer.GenerateInteger(null, 0));
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.TelechargeExportExcel();
+
+        Check.That(reponseHttp).IsBadRequest();
+    }
+
+    [Test]
+    public async Task Renvoyer_une_erreur_400_si_l_annee_est_differente_de_2023_ou_2024_quand_on_exporte()
+    {
+        var fuzzer = new Fuzzer();
+        var annee = fuzzer.GenerateInteger(1);
+        while (annee >= 2023 && annee <= DateTime.Today.Year)
+        {
+            annee = fuzzer.GenerateInteger(1);
+        }
+
+        var scenario = new ScenarioDeCotisationsPrecises().En(annee);
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.TelechargeExportExcel();
+
+        Check.That(reponseHttp).IsBadRequest();
+    }
+
+    [Test]
+    public async Task Renvoyer_une_erreur_400_si_les_cotisations_facultatives_sont_strictement_negatives_quand_on_exporte()
+    {
+        var fuzzer = new Fuzzer();
+        var scenario = new ScenarioDeCotisationsPrecises()
+            .AvecCotisationsFacultativesDe(fuzzer.GenerateInteger(null, 0));
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.TelechargeExportExcel();
+
+        Check.That(reponseHttp).IsBadRequest();
     }
 }
