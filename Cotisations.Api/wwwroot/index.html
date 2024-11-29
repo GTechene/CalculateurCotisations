@@ -110,6 +110,8 @@
                   id="revenuNet"
                   class="form-control"
                   title="Revenu effectivement versé (ou prévu) pour l'année choisie, hors charges, CSG, etc..."
+                  @focusin="if($event.target.value == '0') event.target.value = ''"
+                  @focusout="if($event.target.value == '') event.target.value = '0'"
                   required
                 />
                 <select
@@ -151,6 +153,8 @@
                         id="cotisationsFacultatives"
                         class="form-control"
                         title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie"
+                        @focusin="if($event.target.value == '0') event.target.value = ''"
+                        @focusout="if($event.target.value == '') event.target.value = '0'"
                       />
                     </div>
                   </div>
@@ -428,7 +432,7 @@
                 la somme du revenu imposable et des cotisations facultatives. Le revenu imposable est la somme du revenu
                 net (effectivement versé), de la CSG non déductible et de la CRDS. Pour calculer CSG et CRDS, l'assiette
                 est la somme du revenu imposable et des cotisations obligatoires. Il en résulte une dépendance
-                circulaire entre CSG/CRDS et revenu imposable, que ce simulateur résoud par convergence.
+                circulaire entre CSG/CRDS et revenu imposable, que ce simulateur résout par convergence.
               </p>
             </div>
           </div>
@@ -448,23 +452,6 @@
             container: "body",
           })
       );
-
-      document.querySelectorAll('input[type="number"]').forEach((input) => {
-        input.addEventListener("focusin", (event) => {
-          if (event.target.value == "0") event.target.value = "";
-        });
-        input.addEventListener("focusout", (event) => {
-          if (event.target.value == "") event.target.value = "0";
-        });
-      });
-
-      document.getElementById("revenuNet").addEventListener("input", (event) => {
-        if (event.target.value == "0" || event.target.value == "") {
-          document.getElementById("submitButton").disabled = true;
-        } else {
-          document.getElementById("submitButton").disabled = false;
-        }
-      });
     </script>
   </body>
 </html>
