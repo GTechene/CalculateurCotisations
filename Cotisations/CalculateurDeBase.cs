@@ -5,7 +5,7 @@ namespace Cotisations;
 /// <summary>
 /// Le but de cette classe est d'exposer une factory method qui appelle les méthodes virtuelles que les classes dérivées devront implémenter. Pour l'instant, seules certaines cotisations se calculent différemment d'année en année, donc seules ces méthodes sont exposées comme virtuelles pures, les autres sont implémentées ici.
 /// </summary>
-public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHistoriques, PlafondAnnuelSecuriteSociale pass)
+public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHistoriques, PlafondAnnuelSecuriteSociale pass) : ICalculateur
 {
     protected readonly IConstantesAvecHistorique ConstantesHistoriques = constantesHistoriques;
     protected readonly PlafondAnnuelSecuriteSociale PASS = pass;

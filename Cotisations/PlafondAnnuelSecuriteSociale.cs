@@ -5,7 +5,8 @@ public class PlafondAnnuelSecuriteSociale(int year)
     private static readonly Dictionary<int, decimal> HistoriquePASS = new()
     {
         { 2023, 43992m },
-        { 2024, 46368m }
+        { 2024, 46368m },
+        { 2025, 47100m }
     };
     
     public decimal Valeur { init; get; } = HistoriquePASS[year];

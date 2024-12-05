@@ -6,7 +6,7 @@
 /// </summary>
 public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, decimal cotisationsFacultatives = 0m)
 {
-    private readonly CalculateurDeBase _calculateur = Calculateurs.TrouveUnCalculateur(annee);
+    private readonly ICalculateur _calculateur = Calculateurs.TrouveUnCalculateur(annee);
     private const int NombreDIterationsMaximal = 100;
 
     public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
@@ -25,7 +25,6 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
     public decimal RevenuNet => revenuNet;
     public decimal CotisationsFacultatives => cotisationsFacultatives;
     public int Annee => annee;
-
 
     public void Calcule()
     {
