@@ -6,6 +6,7 @@ internal class Calculateur2025Should
 {
     // TODO: REFACTO pour que CalculeLesCotisations renvoie un objet de type Cotisations ? Voir si ça passe avec le CalculateurAvecConvergence (y a pas de raison)
     // TODO: REFACTO pour avoir un CalculateurCommun qui soit un objet utilisé par composition dans les Calculateurs202* plutôt que de l'héritage
+    // TODO: fuzzer
 
     [Test]
     public void Utiliser_une_assiette_egale_a_74_pct_du_revenu_net_quand_le_revenu_net_est_entre_3188_et_235500_euros()
