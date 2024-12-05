@@ -109,4 +109,8 @@ main {
     padding-left: 2rem !important;
     padding-right: 1.5rem !important;
   }
+
+  .intro {
+    margin-top: 2em;
+  }
 }
