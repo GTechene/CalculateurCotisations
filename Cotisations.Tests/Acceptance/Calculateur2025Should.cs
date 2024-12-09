@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NFluent;
+﻿using NFluent;
 
 namespace Cotisations.Tests.Acceptance;
 
@@ -16,8 +11,9 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(50_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(37000m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(37000m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(3153m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(250m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
@@ -32,8 +28,9 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(9_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(6660m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(6660m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsEqualTo(0m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(94.2m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
@@ -48,8 +45,9 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(15_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(11100m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(11100m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(133m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(94.2m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
@@ -64,8 +62,9 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(25_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(18500m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(18500m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(784m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(125m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
@@ -80,8 +79,9 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(60_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(44400m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(44400m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4039m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(300m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
@@ -96,8 +96,9 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(120_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(88800m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(88800m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(9766m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(600m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
@@ -112,8 +113,26 @@ public class Calculateur2025Should
 
         calculateur.CalculeLesCotisations(200_000m);
 
-        Check.That(calculateur.Assiette).IsEqualTo(148000m);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(148000m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(15826m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(1000m);
+        //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
+        //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
+        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
+        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
+        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+    }
+
+    [Test]
+    public void Calculer_les_cotisations_selon_un_exemple_simple_pour_des_revenus_au_dela_de_500_pct_du_PASS()
+    {
+        var calculateur = new Calculateur2025();
+
+        calculateur.CalculeLesCotisations(250_000m);
+
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(188770m);
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(19076m, 1m);
+        Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(1177.5m);
         //Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8328m);
         //Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4996m);
         //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);

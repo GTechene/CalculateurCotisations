@@ -16,7 +16,7 @@ internal class Calculateur2025Should
         const decimal revenu = 50_000m;
         calculateur.CalculeLesCotisations(revenu);
 
-        Check.That(calculateur.Assiette).IsEqualTo(0.74m * revenu);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(0.74m * revenu);
     }
 
     [Test]
@@ -30,7 +30,7 @@ internal class Calculateur2025Should
         // C'est 1.76% du PASS, 1.76% de 47 100 en 2025
         const decimal abattementPlancher = 828.96m;
         const decimal assietteAttendue = revenu - abattementPlancher;
-        Check.That(calculateur.Assiette).IsEqualTo(assietteAttendue);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(assietteAttendue);
     }
 
     [Test]
@@ -44,6 +44,6 @@ internal class Calculateur2025Should
         // C'est 130% du PASS, 130% de 47 100 en 2025
         const decimal abattementPlafond = 61_230m;
         const decimal assietteAttendue = revenu - abattementPlafond;
-        Check.That(calculateur.Assiette).IsEqualTo(assietteAttendue);
+        Check.That(calculateur.AssietteCsgCrds).IsEqualTo(assietteAttendue);
     }
 }

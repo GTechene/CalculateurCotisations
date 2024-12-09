@@ -10,16 +10,16 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
     private const int NombreDIterationsMaximal = 100;
 
     public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
-    public ResultatAvecTauxEtExplication MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
-    public ResultatAvecTauxEtExplication MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
+    public ResultatAvecExplicationEtTaux MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
+    public ResultatAvecTauxUniqueEtExplication MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
     public ResultatAvecTauxMultiplesEtExplication RetraiteDeBase => _calculateur.RetraiteDeBase;
     public ResultatAvecTauxMultiplesEtExplication RetraiteComplementaire => _calculateur.RetraiteComplementaire;
-    public ResultatAvecTauxEtExplication InvaliditeDeces => _calculateur.InvaliditeDeces;
-    public ResultatAvecTauxEtExplication AllocationsFamiliales => _calculateur.AllocationsFamiliales;
-    public ResultatAvecTauxEtExplication CSGNonDeductible => _calculateur.CSGNonDeductible;
-    public ResultatAvecTauxEtExplication CSGDeductible => _calculateur.CSGDeductible;
-    public ResultatAvecTauxEtExplication CRDS => _calculateur.CRDSNonDeductible;
-    public ResultatAvecTauxEtExplication FormationProfessionnelle => _calculateur.FormationProfessionnelle;
+    public ResultatAvecTauxUniqueEtExplication InvaliditeDeces => _calculateur.InvaliditeDeces;
+    public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales => _calculateur.AllocationsFamiliales;
+    public ResultatAvecTauxUniqueEtExplication CSGNonDeductible => _calculateur.CSGNonDeductible;
+    public ResultatAvecTauxUniqueEtExplication CSGDeductible => _calculateur.CSGDeductible;
+    public ResultatAvecTauxUniqueEtExplication CRDS => _calculateur.CRDSNonDeductible;
+    public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle => _calculateur.FormationProfessionnelle;
     public decimal GrandTotal => _calculateur.GrandTotal;
     public decimal AssietteDeCalculDesCotisations { get; private set; }
     public decimal RevenuNet => revenuNet;

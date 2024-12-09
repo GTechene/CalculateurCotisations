@@ -77,14 +77,15 @@ public class ExporteurExcel
         worksheet.Cell("A8").Value = "Cotisations maladie hors indemnités";
         const string celluleCotisationsMaladie = "B8";
         worksheet.Cell(celluleCotisationsMaladie)
-            .WithImportantFormula($"=B4*{_calculateur.MaladieHorsIndemnitesJournalieres.Taux}")
+            // TODO: Cotisation 2025, il y aura plusieurs taux si revenu > 3 PASS :) Il faudra un formatage différent
+            .WithImportantFormula($"=B4*{_calculateur.MaladieHorsIndemnitesJournalieres.Taux.Single()}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.MaladieHorsIndemnitesJournalieres.Explication);
 
         worksheet.Cell("A9").Value = "Cotisations indemnités maladie";
         const string celluleIndemnites = "B9";
         worksheet.Cell(celluleIndemnites)
-            .WithImportantFormula($"=B4*{_calculateur.MaladieIndemnitesJournalieres.Taux}")
+            .WithImportantFormula($"=B4*{_calculateur.MaladieIndemnitesJournalieres.TauxUnique}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.MaladieIndemnitesJournalieres.Explication);
 
@@ -140,7 +141,7 @@ public class ExporteurExcel
         worksheet.Cell("A15").Value = "Cotisations invalidité/décès";
         const string celluleResultat = "B15";
         worksheet.Cell(celluleResultat)
-            .WithImportantFormula($"=MIN(B4,B5)*{_calculateur.InvaliditeDeces.Taux}")
+            .WithImportantFormula($"=MIN(B4,B5)*{_calculateur.InvaliditeDeces.TauxUnique}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.InvaliditeDeces.Explication);
 
@@ -152,7 +153,7 @@ public class ExporteurExcel
         worksheet.Cell("A16").Value = "Cotisations allocations familiales";
         const string celluleResultat = "B16";
         worksheet.Cell(celluleResultat)
-            .WithImportantFormula($"=B4*{_calculateur.AllocationsFamiliales.Taux}")
+            .WithImportantFormula($"=B4*{_calculateur.AllocationsFamiliales.TauxUnique}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.AllocationsFamiliales.Explication);
 
@@ -164,7 +165,7 @@ public class ExporteurExcel
         worksheet.Cell("A20").Value = "Formation professionnelle";
         const string celluleResultat = "B20";
         worksheet.Cell(celluleResultat)
-            .WithImportantFormula($"=B5*{_calculateur.FormationProfessionnelle.Taux}")
+            .WithImportantFormula($"=B5*{_calculateur.FormationProfessionnelle.TauxUnique}")
             .WithPlainNumberFormat()
             .WithShortComment(_calculateur.FormationProfessionnelle.Explication);
 
@@ -181,21 +182,21 @@ public class ExporteurExcel
         worksheet.Cell("A24").Value = "CSG déductible";
         const string celluleCsgDeductible = "B24";
         worksheet.Cell(celluleCsgDeductible)
-            .WithImportantFormula($"=B22*{_calculateur.CSGDeductible.Taux}")
+            .WithImportantFormula($"=B22*{_calculateur.CSGDeductible.TauxUnique}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.CSGDeductible.Explication);
 
         worksheet.Cell("A25").Value = "CSG non déductible";
         const string celluleCsgNonDeductible = "B25";
         worksheet.Cell(celluleCsgNonDeductible)
-            .WithImportantFormula($"=B22*{_calculateur.CSGNonDeductible.Taux}")
+            .WithImportantFormula($"=B22*{_calculateur.CSGNonDeductible.TauxUnique}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.CSGNonDeductible.Explication);
 
         worksheet.Cell("A26").Value = "CRDS";
         const string celluleCrds = "B26";
         worksheet.Cell(celluleCrds)
-            .WithImportantFormula($"=B22*{_calculateur.CRDS.Taux}")
+            .WithImportantFormula($"=B22*{_calculateur.CRDS.TauxUnique}")
             .WithPlainNumberFormat()
             .WithLargeComment(_calculateur.CRDS.Explication);
 

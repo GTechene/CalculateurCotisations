@@ -14,19 +14,19 @@ public class Calculateur2024 : CalculateurDeBase
         if (assiette < PASS.Valeur40Pct)
         {
             var cotisations = _tauxDeCotisationsIndemnitesMaladie * PASS.Valeur40Pct;
-            MaladieIndemnitesJournalieres = new ResultatAvecTauxEtExplication(cotisations, _tauxDeCotisationsIndemnitesMaladie, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur40Pct:C0} (40% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plancher de 40% du PASS, soit {cotisations:C0} de cotisations.");
+            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur40Pct:C0} (40% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plancher de 40% du PASS, soit {cotisations:C0} de cotisations.", _tauxDeCotisationsIndemnitesMaladie);
             return;
         }
 
         if (assiette < PASS.Valeur500Pct)
         {
             var cotisations = _tauxDeCotisationsIndemnitesMaladie * assiette;
-            MaladieIndemnitesJournalieres = new ResultatAvecTauxEtExplication(cotisations, _tauxDeCotisationsIndemnitesMaladie, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à cette assiette, soit {cotisations:C0} de cotisations.");
+            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à cette assiette, soit {cotisations:C0} de cotisations.", _tauxDeCotisationsIndemnitesMaladie);
         }
         else
         {
             var cotisations = _tauxDeCotisationsIndemnitesMaladie * PASS.Valeur500Pct;
-            MaladieIndemnitesJournalieres = new ResultatAvecTauxEtExplication(cotisations, _tauxDeCotisationsIndemnitesMaladie, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plafond de 500% du PASS, soit {cotisations:C0} de cotisations.");
+            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plafond de 500% du PASS, soit {cotisations:C0} de cotisations.", _tauxDeCotisationsIndemnitesMaladie);
         }
     }
 
@@ -35,7 +35,7 @@ public class Calculateur2024 : CalculateurDeBase
         if (assiette <= ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants)
         {
             var valeur = assiette * Taux.RetraiteComplementairePremiereTrancheArtisansCommercants;
-            RetraiteComplementaire = new ResultatAvecTauxMultiplesEtExplication(valeur, Taux.RetraiteComplementairePremiereTrancheArtisansCommercants, 0m, $"L'assiette de {assiette:C0} est inférieure à {ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.");
+            RetraiteComplementaire = new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", Taux.RetraiteComplementairePremiereTrancheArtisansCommercants, 0m);
         }
         else
         {
@@ -43,7 +43,7 @@ public class Calculateur2024 : CalculateurDeBase
             var cotisationDeuxiemeTranche = Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * (Math.Min(assiette, PASS.Valeur400Pct) - ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants);
 
             var cotisations = cotisationPremiereTranche + cotisationDeuxiemeTranche;
-            RetraiteComplementaire = new ResultatAvecTauxMultiplesEtExplication(cotisations, Taux.RetraiteComplementairePremiereTrancheArtisansCommercants, Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants, $"L'assiette de {assiette:C0} est supérieure à {ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.");
+            RetraiteComplementaire = new ResultatAvecTauxMultiplesEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {Taux.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.", Taux.RetraiteComplementairePremiereTrancheArtisansCommercants, Taux.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants);
         }
     }
 }
