@@ -16,9 +16,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(250m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(8625.57m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(4120.54m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsEqualTo(2516m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsEqualTo(888m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsEqualTo(185m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(612.3m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
         Check.That(calculateur.FormationProfessionnelle.Valeur).IsEqualTo(117.75m);
@@ -36,9 +36,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(94.2m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(1608.3m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(729m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsEqualTo(452.88m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(160m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsEqualTo(33.3m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(117m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
     }
@@ -55,9 +55,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(94.2m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(2680.5m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(1215m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(755m, 1m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(266m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(55.5m, 1m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(195m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
     }
@@ -74,9 +74,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(125m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(4467.5m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(2025m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(1258m, 1m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(444m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(92.5m, 1m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsCloseTo(325m, 1m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
     }
@@ -93,9 +93,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(300m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(9345.57m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(5030.54m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(3019.2m, 1m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1065.6m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(222m, 1m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(612.3m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsCloseTo(1078m, 1m);
     }
@@ -112,9 +112,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(600m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(13665.57m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(10490.54m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(6038.4m, 1m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(2131.2m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(444m, 1m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(612.3m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(3720m);
     }
@@ -131,9 +131,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(1000m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(19425.57m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(16714.94m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(10064m, 1m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(3552m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(740m, 1m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(612.3m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(6200m);
     }
@@ -150,9 +150,9 @@ public class Calculateur2025Should
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(1177.5m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsEqualTo(23025.57m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsEqualTo(16714.94m);
-        //Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(2905m, 1m);
-        //Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(1025m, 1m);
-        //Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(214m, 1m);
+        Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(12836.36m, 1m);
+        Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(4530.48m, 1m);
+        Check.That(calculateur.CRDSNonDeductible.Valeur).IsCloseTo(943.85m, 1m);
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(612.3m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(7750m);
     }

@@ -30,6 +30,7 @@ public class Calculateur2025 : ICalculateur
         InvaliditeDeces = CalculeLaCotisationInvaliditeDeces(revenu);
         AllocationsFamiliales = CalculeLesAllocationsFamiliales(revenu);
         FormationProfessionnelle = CalculeLaFormationProfessionnelle();
+        CalculeCSGEtCRDS(AssietteCsgCrds);
     }
 
     private ResultatAvecExplicationEtTaux CalculeLesCotisationsMaladieHorsIndemnites(decimal revenu)
@@ -181,6 +182,18 @@ public class Calculateur2025 : ICalculateur
         return new ResultatAvecTauxUniqueEtExplication(valeur, $"Un taux fixe de {TauxInchanges.CotisationsFormationProfessionnelle * 100:F2}% est appliqué sur la valeur d'un PASS complet qui vaut {PASS.Valeur:C0}, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsFormationProfessionnelle);
     }
 
+    private void CalculeCSGEtCRDS(decimal revenusPrisEnCompte)
+    {
+        var valeurCsgNonDeductible = revenusPrisEnCompte * TauxInchanges.CSGNonDeductible;
+        CSGNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgNonDeductible, $"L'assiette de calcul de la CSG est égale au revenu moins un abattement de 26% soit {revenusPrisEnCompte:C0}. Le taux fixe de {TauxInchanges.CSGNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCsgNonDeductible:C0} pour la CSG non déductible.", TauxInchanges.CSGNonDeductible);
+
+        var valeurCsgDeductible = revenusPrisEnCompte * TauxInchanges.CSGDeductible;
+        CSGDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgDeductible, $"L'assiette de calcul de la CSG est égale au revenu moins un abattement de 26% soit {revenusPrisEnCompte:C0}. Le taux fixe de {TauxInchanges.CSGDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de une valeur de {valeurCsgDeductible:C0} pour la CSG déductible.", TauxInchanges.CSGDeductible);
+
+        var valeurCrds = revenusPrisEnCompte * TauxInchanges.CRDSNonDeductible;
+        CRDSNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCrds, $"L'assiette de calcul de la CRDS est égale au revenu moins un abattement de 26% soit {revenusPrisEnCompte:C0}. Le taux fixe de {TauxInchanges.CRDSNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCrds:C0} pour la CRDS.", TauxInchanges.CRDSNonDeductible);
+    }
+
     // TODO: bouger dans un helper ? Genre une méthode d'extension sur le decimal en 1er param
     private static decimal CalculeLeTauxProgressif(decimal assiette, decimal valeurPlancher, decimal valeurPlafond, decimal tauxPlancher, decimal tauxPlafond)
     {
@@ -197,9 +210,9 @@ public class Calculateur2025 : ICalculateur
     public ResultatAvecTauxMultiplesEtExplication RetraiteComplementaire { get; private set; } = new ResultatVideAvecTauxMultiplesEtSansExplication();
     public ResultatAvecTauxUniqueEtExplication InvaliditeDeces { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales { get; private set; } = new ResultatVideSansExplication();
-    public ResultatAvecTauxUniqueEtExplication CSGNonDeductible { get; }
-    public ResultatAvecTauxUniqueEtExplication CSGDeductible { get; }
-    public ResultatAvecTauxUniqueEtExplication CRDSNonDeductible { get; }
+    public ResultatAvecTauxUniqueEtExplication CSGNonDeductible { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication CSGDeductible { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication CRDSNonDeductible { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; private set; } = new ResultatVideSansExplication();
     public decimal AssietteCsgCrds { get; private set; }
 }
