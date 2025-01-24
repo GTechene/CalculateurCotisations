@@ -1,15 +1,39 @@
-﻿namespace Cotisations;
+﻿using System.Globalization;
 
-public class Calculateur2024 : CalculateurDeBase
+namespace Cotisations;
+
+public class Calculateur2024 : ICalculateur
 {
     private readonly decimal _tauxDeCotisationsIndemnitesMaladie;
+    private readonly CalculateurCommun _calculateurCommun;
+    private readonly Constantes2024 _constantes;
+    private readonly PlafondAnnuelSecuriteSociale PASS;
 
-    public Calculateur2024() : base(new Constantes2024(), new PlafondAnnuelSecuriteSociale(2024))
+    public Calculateur2024()
     {
-        _tauxDeCotisationsIndemnitesMaladie = ConstantesHistoriques.CotisationsIndemnitesMaladiePourRevenusInferieursA40PctDuPass;
+        PASS = new PlafondAnnuelSecuriteSociale(2024);
+        _constantes = new Constantes2024();
+        _tauxDeCotisationsIndemnitesMaladie = _constantes.CotisationsIndemnitesMaladiePourRevenusInferieursA40PctDuPass;
+        _calculateurCommun = new CalculateurCommun(PASS);
     }
 
-    protected override void CalculeLesCotisationsPourIndemnitesMaladie(decimal assiette)
+    public void CalculeLesCotisations(decimal revenu)
+    {
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
+
+        MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(revenu, _constantes.CotisationsMaladiePourRevenusSupA60PctPass, _constantes.CotisationsMaladiePourRevenusSupA5Pass);
+        CalculeLesCotisationsPourIndemnitesMaladie(revenu);
+        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass);
+        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
+        InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(revenu);
+        AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(revenu);
+        FormationProfessionnelle = _calculateurCommun.CalculeLaFormationProfessionnelle();
+
+        var totalCotisationsObligatoires = MaladieHorsIndemnitesJournalieres.Valeur + MaladieIndemnitesJournalieres.Valeur + RetraiteDeBase.Valeur + RetraiteComplementaire.Valeur + InvaliditeDeces.Valeur + AllocationsFamiliales.Valeur;
+        (CSGNonDeductible, CSGDeductible, CRDSNonDeductible) = _calculateurCommun.CalculeCSGEtCRDSAvant2025(revenu, totalCotisationsObligatoires);
+    }
+
+    private void CalculeLesCotisationsPourIndemnitesMaladie(decimal assiette)
     {
         if (assiette < PASS.Valeur40Pct)
         {
@@ -30,20 +54,14 @@ public class Calculateur2024 : CalculateurDeBase
         }
     }
 
-    protected override void CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(decimal assiette)
-    {
-        if (assiette <= ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants)
-        {
-            var valeur = assiette * TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants;
-            RetraiteComplementaire = new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, 0m);
-        }
-        else
-        {
-            var cotisationPremiereTranche = TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants * ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants;
-            var cotisationDeuxiemeTranche = TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * (Math.Min(assiette, PASS.Valeur400Pct) - ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants);
-
-            var cotisations = cotisationPremiereTranche + cotisationDeuxiemeTranche;
-            RetraiteComplementaire = new ResultatAvecTauxMultiplesEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {ConstantesHistoriques.PlafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.", TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants);
-        }
-    }
+    public ResultatAvecExplicationEtTaux MaladieHorsIndemnitesJournalieres { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication MaladieIndemnitesJournalieres { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxMultiplesEtExplication RetraiteDeBase { get; private set; } = new ResultatVideAvecTauxMultiplesEtSansExplication();
+    public ResultatAvecTauxMultiplesEtExplication RetraiteComplementaire { get; private set; } = new ResultatVideAvecTauxMultiplesEtSansExplication();
+    public ResultatAvecTauxUniqueEtExplication InvaliditeDeces { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication CSGNonDeductible { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication CSGDeductible { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication CRDSNonDeductible { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; private set; } = new ResultatVideSansExplication();
 }

@@ -36,7 +36,14 @@ public class Constantes2025
     public decimal TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass => 0.085m;
     public decimal TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass => 0.065m;
     public decimal TauxCotisationsIndemnitesMaladie => 0.005m;
+
+    // TODO : va probablement changer en 2025 mais pas défini encore au 24/01/2025
     public int PlafondsRetraiteComplementaireArtisansCommercants => 42946;
+
+    public const decimal CotisationsRetraiteBaseRevenusSuperieursAuPass = 0.006m;
+    public const decimal CotisationsRetraiteBaseRevenusInferieursAuPass = 0.1775m;
+    public const decimal RetraiteComplementairePremiereTrancheArtisansCommercants = 0.07m;
+    public const decimal RetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.08m;
 }
 
 public static class ConstantesAvecHistorique

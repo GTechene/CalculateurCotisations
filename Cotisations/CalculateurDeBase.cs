@@ -172,6 +172,46 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
 
 public class CalculateurCommun(PlafondAnnuelSecuriteSociale pass)
 {
+    public ResultatAvecTauxUniqueEtExplication CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(decimal assiette, decimal cotisationsMaladiePourRevenusSupA60PctPass, decimal cotisationsMaladiePourRevenusSupA5Pass)
+    {
+        if (assiette <= pass.Valeur40Pct)
+        {
+            return new ResultatAvecTauxUniqueEtExplication(0m, $"L'assiette de {assiette:C0} est inférieure à {pass.Valeur40Pct:C0} (40% du PASS). Il n'y a donc pas de cotisation maladie à payer.", 0m);
+        }
+
+        if (assiette > pass.Valeur40Pct && assiette <= pass.Valeur60Pct)
+        {
+            var difference = assiette - pass.Valeur40Pct;
+            var differenceEntrePlafondEtPlancher = pass.Valeur60Pct - pass.Valeur40Pct;
+            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass;
+            var valeur = tauxApplicable * assiette;
+
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {pass.Valeur40Pct:C0} (40% du PASS) et {pass.Valeur60Pct:C0} (60% du PASS), donc un taux progressif entre 0% et {TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass * 100:N0}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+        }
+
+        if (assiette > pass.Valeur60Pct && assiette <= pass.Valeur110Pct)
+        {
+            var difference = assiette - pass.Valeur60Pct;
+            var differenceEntrePlafondEtPlancher = pass.Valeur110Pct - pass.Valeur60Pct;
+            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * (cotisationsMaladiePourRevenusSupA60PctPass - TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass) + TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass;
+            var valeur = tauxApplicable * assiette;
+
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {pass.Valeur60Pct:C0} (60% du PASS) et {pass.Valeur110Pct:C0} (110% du PASS), donc un taux progressif entre 4% et {cotisationsMaladiePourRevenusSupA60PctPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+        }
+
+        if (assiette > pass.Valeur110Pct && assiette <= pass.Valeur500Pct)
+        {
+            var valeur = cotisationsMaladiePourRevenusSupA60PctPass * assiette;
+
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {pass.Valeur110Pct:C0} (110% du PASS) et {pass.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {cotisationsMaladiePourRevenusSupA60PctPass * 100:F1}% est appliqué, soit {valeur:C0} de cotisations.", cotisationsMaladiePourRevenusSupA60PctPass);
+        }
+
+        var differenceEntreAssietteEt5Pass = assiette - pass.Valeur500Pct;
+        var valeurMax = cotisationsMaladiePourRevenusSupA60PctPass * pass.Valeur500Pct + cotisationsMaladiePourRevenusSupA5Pass * differenceEntreAssietteEt5Pass;
+
+        return new ResultatAvecTauxUniqueEtExplication(valeurMax, $"L'assiette de {assiette:C0} est supérieure à {pass.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {cotisationsMaladiePourRevenusSupA60PctPass * 100:F1}% est appliqué à la tranche de revenus inférieure à cette valeur et le taux fixe de {cotisationsMaladiePourRevenusSupA5Pass * 100:F1}% est appliqué au reste. Soit {valeurMax:C0} de cotisations.", cotisationsMaladiePourRevenusSupA5Pass);
+    }
+
     public ResultatAvecTauxMultiplesEtExplication CalculeLaRetraiteDeBase(decimal assiette, decimal tauxPourRevenusInferieursAuPass, decimal tauxPourRevenusSuperieursAuPass)
     {
         if (assiette <= pass.Valeur)
