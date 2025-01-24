@@ -5,15 +5,21 @@ namespace Cotisations.Excel;
 
 public class ExporteurExcel
 {
-    private readonly CalculateurAvecConvergence _calculateur;
+    private readonly ICalculateur _calculateur;
     private readonly IConstantesAvecHistorique _constantesAvecHistorique;
     private readonly PlafondAnnuelSecuriteSociale _pass;
+    private readonly int _annee;
+    private readonly decimal _revenu;
+    private readonly decimal _cotisationsFacultatives;
 
-    public ExporteurExcel(CalculateurAvecConvergence calculateur)
+    public ExporteurExcel(ICalculateur calculateur, int annee, decimal revenu, decimal cotisationsFacultatives)
     {
         _calculateur = calculateur;
-        _constantesAvecHistorique = ConstantesAvecHistorique.PourLAnnee(_calculateur.Annee);
-        _pass = new PlafondAnnuelSecuriteSociale(_calculateur.Annee);
+        _annee = annee;
+        _revenu = revenu;
+        _cotisationsFacultatives = cotisationsFacultatives;
+        _constantesAvecHistorique = ConstantesAvecHistorique.PourLAnnee(_annee);
+        _pass = new PlafondAnnuelSecuriteSociale(_annee);
 
         CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
     }
@@ -24,21 +30,32 @@ public class ExporteurExcel
         var worksheet = workbook.Worksheets.Add("Cotisations");
         
         worksheet.Cell("A1").Value = "Revenu net";
-        worksheet.Cell("B1").WithImportantValue(_calculateur.RevenuNet);
+        worksheet.Cell("B1").WithImportantValue(_revenu);
 
         worksheet.Cell("A2").Value = "Cotisations facultatives";
-        worksheet.Cell("B2").Value = _calculateur.CotisationsFacultatives;
+        worksheet.Cell("B2").Value = _cotisationsFacultatives;
 
-        worksheet.Cell("A4").Value = "Assiette (obtenue par convergence)";
-        worksheet.Cell("B4")
-            .WithImportantValue(_calculateur.AssietteDeCalculDesCotisations)
-            .WithPlainNumberFormat()
-            .WithLargeComment("Cette valeur est calculée en calculant d'une part les cotisations sur une assiette approximative puis, après calcul de la CSG et la CRDS, de la comparaison entre cette première assiette et une deuxième qui est la somme entre le revenu net, la CSG non déductible et la CRDS. En cas d'écart, on modifie la première assiette pour se rapprocher de la seconde et on itère jusqu'à ce que la différence entre les deux soit inférieure à 1 €.");
+        if (_annee < 2025)
+        {
+            worksheet.Cell("A4").Value = "Assiette (obtenue par convergence)";
+            worksheet.Cell("B4")
+                .WithImportantValue(_calculateur.AssietteDeCalculDesCotisations)
+                .WithPlainNumberFormat()
+                .WithLargeComment("Cette valeur est calculée en calculant d'une part les cotisations sur une assiette approximative puis, après calcul de la CSG et la CRDS, de la comparaison entre cette première assiette et une deuxième qui est la somme entre le revenu net, la CSG non déductible et la CRDS. En cas d'écart, on modifie la première assiette pour se rapprocher de la seconde et on itère jusqu'à ce que la différence entre les deux soit inférieure à 1 €.");
+        }
+        else
+        {
+            worksheet.Cell("A4").Value = "Assiette";
+            worksheet.Cell("B4")
+                .WithImportantValue(_calculateur.AssietteDeCalculDesCotisations)
+                .WithPlainNumberFormat();
+        }
+        
 
         worksheet.Cell("A5").Value = "PASS";
         worksheet.Cell("B5")
             .SetValue(_pass.Valeur)
-            .WithShortComment($"Plafond Annuel de la Sécurité Sociale pour l'année {_calculateur.Annee}");
+            .WithShortComment($"Plafond Annuel de la Sécurité Sociale pour l'année {_annee}");
 
         worksheet.Cell("A6").Value = "Plafond retraite complémentaire";
         worksheet.Cell("B6").Value = _constantesAvecHistorique.PlafondsRetraiteComplementaireArtisansCommercants;
@@ -173,10 +190,22 @@ public class ExporteurExcel
 
     private (string celluleCsgDeductible, string celluleCsgNonDeductible, string celluleCrds) ExporteCsgEtCrds(IXLWorksheet worksheet)
     {
-        worksheet.Cell("A22").Value = "Revenus pris en compte pour CSG/CRDS";
-        worksheet.Cell("B22")
-            .SetFormulaA1("=B4+B18")
-            .WithPlainNumberFormat();
+        if(_annee < 2025)
+        {
+            worksheet.Cell("A22").Value = "Revenus pris en compte pour CSG/CRDS";
+            worksheet.Cell("B22")
+                .SetFormulaA1("=B4+B18")
+                .WithPlainNumberFormat();
+        }
+        else
+        {
+            worksheet.Cell("A22").Value = "Assiette CSG/CRDS";
+            worksheet.Cell("B22")
+                .SetFormulaA1("=B1-MIN(MAX(B1*0.26,0.0176*B5),1.3*B5)")
+                .WithPlainNumberFormat()
+                .WithShortComment("Revenus moins abattement de 26% (avec plancher et plafond)");
+        }
+
 
         worksheet.Cell("A24").Value = "CSG déductible";
         const string celluleCsgDeductible = "B24";
@@ -195,9 +224,9 @@ public class ExporteurExcel
         worksheet.Cell("A26").Value = "CRDS";
         const string celluleCrds = "B26";
         worksheet.Cell(celluleCrds)
-            .WithImportantFormula($"=B22*{_calculateur.CRDS.TauxUnique}")
+            .WithImportantFormula($"=B22*{_calculateur.CRDSNonDeductible.TauxUnique}")
             .WithPlainNumberFormat()
-            .WithLargeComment(_calculateur.CRDS.Explication);
+            .WithLargeComment(_calculateur.CRDSNonDeductible.Explication);
 
         return (celluleCsgDeductible, celluleCsgNonDeductible, celluleCrds);
     }

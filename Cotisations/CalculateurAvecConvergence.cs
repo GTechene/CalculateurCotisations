@@ -8,25 +8,23 @@
 // TODO: limiter l'année à 2024 maximum
 public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, decimal cotisationsFacultatives = 0m)
 {
-    private readonly ICalculateur _calculateur = Calculateurs.TrouveUnCalculateur(annee);
+    public ICalculateur Calculateur { get; } = Calculateurs.TrouveUnCalculateur(annee);
+
     private const int NombreDIterationsMaximal = 100;
 
-    public decimal TotalCotisationsObligatoires => _calculateur.TotalCotisationsObligatoires;
-    public ResultatAvecExplicationEtTaux MaladieHorsIndemnitesJournalieres => _calculateur.MaladieHorsIndemnitesJournalieres;
-    public ResultatAvecTauxUniqueEtExplication MaladieIndemnitesJournalieres => _calculateur.MaladieIndemnitesJournalieres;
-    public ResultatAvecTauxMultiplesEtExplication RetraiteDeBase => _calculateur.RetraiteDeBase;
-    public ResultatAvecTauxMultiplesEtExplication RetraiteComplementaire => _calculateur.RetraiteComplementaire;
-    public ResultatAvecTauxUniqueEtExplication InvaliditeDeces => _calculateur.InvaliditeDeces;
-    public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales => _calculateur.AllocationsFamiliales;
-    public ResultatAvecTauxUniqueEtExplication CSGNonDeductible => _calculateur.CSGNonDeductible;
-    public ResultatAvecTauxUniqueEtExplication CSGDeductible => _calculateur.CSGDeductible;
-    public ResultatAvecTauxUniqueEtExplication CRDS => _calculateur.CRDSNonDeductible;
-    public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle => _calculateur.FormationProfessionnelle;
-    public decimal GrandTotal => _calculateur.GrandTotal;
+    public decimal TotalCotisationsObligatoires => Calculateur.TotalCotisationsObligatoires;
+    public ResultatAvecExplicationEtTaux MaladieHorsIndemnitesJournalieres => Calculateur.MaladieHorsIndemnitesJournalieres;
+    public ResultatAvecTauxUniqueEtExplication MaladieIndemnitesJournalieres => Calculateur.MaladieIndemnitesJournalieres;
+    public ResultatAvecTauxMultiplesEtExplication RetraiteDeBase => Calculateur.RetraiteDeBase;
+    public ResultatAvecTauxMultiplesEtExplication RetraiteComplementaire => Calculateur.RetraiteComplementaire;
+    public ResultatAvecTauxUniqueEtExplication InvaliditeDeces => Calculateur.InvaliditeDeces;
+    public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales => Calculateur.AllocationsFamiliales;
+    public ResultatAvecTauxUniqueEtExplication CSGNonDeductible => Calculateur.CSGNonDeductible;
+    public ResultatAvecTauxUniqueEtExplication CSGDeductible => Calculateur.CSGDeductible;
+    public ResultatAvecTauxUniqueEtExplication CRDS => Calculateur.CRDSNonDeductible;
+    public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle => Calculateur.FormationProfessionnelle;
+    public decimal GrandTotal => Calculateur.GrandTotal;
     public decimal AssietteDeCalculDesCotisations { get; private set; }
-    public decimal RevenuNet => revenuNet;
-    public decimal CotisationsFacultatives => cotisationsFacultatives;
-    public int Annee => annee;
 
     public void Calcule()
     {
@@ -41,9 +39,9 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
         var diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
         while (Math.Abs(diffAssiettes) > 1)
         {
-            _calculateur.CalculeLesCotisations(assietteDeBase);
+            Calculateur.CalculeLesCotisations(assietteDeBase);
 
-            AssietteDeCalculDesCotisations = revenuAPrendreEnCompte + _calculateur.CSGNonDeductible.Valeur + _calculateur.CRDSNonDeductible.Valeur;
+            AssietteDeCalculDesCotisations = revenuAPrendreEnCompte + Calculateur.CSGNonDeductible.Valeur + Calculateur.CRDSNonDeductible.Valeur;
             diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
             if (AssietteDeCalculDesCotisations <= assietteDeBase)
             {

@@ -14,6 +14,7 @@ public interface ICalculateur
     public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; }
     public decimal TotalCotisationsObligatoires => MaladieHorsIndemnitesJournalieres.Valeur + MaladieIndemnitesJournalieres.Valeur + RetraiteDeBase.Valeur + RetraiteComplementaire.Valeur + InvaliditeDeces.Valeur + AllocationsFamiliales.Valeur;
     public decimal GrandTotal => TotalCotisationsObligatoires + CSGDeductible.Valeur + CSGNonDeductible.Valeur + CRDSNonDeductible.Valeur + FormationProfessionnelle.Valeur;
+    public decimal AssietteDeCalculDesCotisations { get; }
 
     void CalculeLesCotisations(decimal revenu);
 }

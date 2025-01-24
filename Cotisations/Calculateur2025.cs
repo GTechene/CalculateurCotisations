@@ -19,6 +19,7 @@ public class Calculateur2025 : ICalculateur
 
     public void CalculeLesCotisations(decimal revenu)
     {
+        AssietteDeCalculDesCotisations = revenu;
         MaladieHorsIndemnitesJournalieres = CalculeLesCotisationsMaladieHorsIndemnites(revenu);
         MaladieIndemnitesJournalieres = CalculeLesCotisationsPourIndemnitesMaladie(revenu);
         RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, 0.1787m, 0.072m);
@@ -139,4 +140,5 @@ public class Calculateur2025 : ICalculateur
     public ResultatAvecTauxUniqueEtExplication CRDSNonDeductible { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; private set; } = new ResultatVideSansExplication();
     public decimal AssietteCsgCrds { get; private set; }
+    public decimal AssietteDeCalculDesCotisations { get; private set; }
 }

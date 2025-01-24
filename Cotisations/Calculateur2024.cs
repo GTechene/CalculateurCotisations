@@ -19,6 +19,7 @@ public class Calculateur2024 : ICalculateur
     {
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
 
+        AssietteDeCalculDesCotisations = revenu;
         MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieresAvant2025(revenu, _constantes.CotisationsMaladiePourRevenusSupA60PctPass, _constantes.CotisationsMaladiePourRevenusSupA5Pass);
         CalculeLesCotisationsPourIndemnitesMaladie(revenu);
         RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass);
@@ -63,4 +64,5 @@ public class Calculateur2024 : ICalculateur
     public ResultatAvecTauxUniqueEtExplication CSGDeductible { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxUniqueEtExplication CRDSNonDeductible { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; private set; } = new ResultatVideSansExplication();
+    public decimal AssietteDeCalculDesCotisations { get; private set; }
 }

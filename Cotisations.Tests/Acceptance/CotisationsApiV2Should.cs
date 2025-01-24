@@ -1,5 +1,7 @@
-﻿using System.Net.Http.Headers;
-using ClosedXML.Excel;
+﻿using System.IO.Compression;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Text;
 using Cotisations.Api.Controllers;
 using Diverse;
 using NFluent;
@@ -8,6 +10,13 @@ namespace Cotisations.Tests.Acceptance;
 
 public class CotisationsApiV2Should
 {
+    private readonly VerifySettings _verifySettings = new();
+
+    public CotisationsApiV2Should()
+    {
+        _verifySettings.UseDirectory("Snapshots");
+    }
+
     [Test]
     public async Task Renvoyer_les_resultats_adequats_pour_mes_cotisations_2023()
     {
@@ -90,8 +99,37 @@ public class CotisationsApiV2Should
         Check.That(reponseHttp.Content.Headers.ContentType).IsEqualTo(MediaTypeHeaderValue.Parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
 
         var stream = await reponseHttp.Content.ReadAsStreamAsync();
-        var workbook = new XLWorkbook(stream);
-        Check.That(workbook.Worksheet("Cotisations")).IsNotNull();
+        var xml = ExtractXmlWorksheet(stream);
+        await Verify(xml, _verifySettings);
+    }
+
+    [Test]
+    public async Task Telecharger_un_fichier_Excel_contenant_les_cotisations_2025()
+    {
+        var scenario = new ScenarioDeCotisationsPrecises()
+            .AvecRevenuNetDe(60371)
+            .AvecCotisationsFacultativesDe(1000m)
+            .En(2025);
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.TelechargeExportExcel();
+
+        Check.That(reponseHttp).IsOk();
+        Check.That(reponseHttp.Content.Headers.ContentType).IsEqualTo(MediaTypeHeaderValue.Parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+
+        var stream = await reponseHttp.Content.ReadAsStreamAsync();
+        var xml = ExtractXmlWorksheet(stream);
+        await Verify(xml, _verifySettings);
+    }
+
+    private static string ExtractXmlWorksheet(Stream stream)
+    {
+        var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+        var sheetEntry = archive.Entries.Single(entry => entry.FullName == "xl/worksheets/sheet1.xml");
+        var sheetStream = sheetEntry.Open();
+        var xml = new StreamReader(sheetStream, Encoding.UTF8).ReadToEnd();
+        return xml;
     }
 
     [Test]
@@ -213,4 +251,11 @@ public class CotisationsApiV2Should
 
         Check.That(reponseHttp).IsBadRequest();
     }
+}
+
+public static class ModuleInitializer
+{
+    [ModuleInitializer]
+    public static void Initialize() =>
+        VerifierSettings.InitializePlugins();
 }
