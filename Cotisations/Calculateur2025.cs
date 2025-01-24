@@ -27,6 +27,9 @@ public class Calculateur2025 : ICalculateur
         MaladieIndemnitesJournalieres = CalculeLesCotisationsPourIndemnitesMaladie(revenu);
         RetraiteDeBase = CalculeLaRetraiteDeBase(revenu);
         RetraiteComplementaire = CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu);
+        InvaliditeDeces = CalculeLaCotisationInvaliditeDeces(revenu);
+        AllocationsFamiliales = CalculeLesAllocationsFamiliales(revenu);
+        FormationProfessionnelle = CalculeLaFormationProfessionnelle();
     }
 
     private ResultatAvecExplicationEtTaux CalculeLesCotisationsMaladieHorsIndemnites(decimal revenu)
@@ -138,6 +141,46 @@ public class Calculateur2025 : ICalculateur
         return new ResultatAvecTauxMultiplesEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {plafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {tauxPremiereTranche * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {tauxDeuxiemeTranche * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.", tauxPremiereTranche, tauxDeuxiemeTranche);
     }
 
+    private ResultatAvecTauxUniqueEtExplication CalculeLaCotisationInvaliditeDeces(decimal assiette)
+    {
+        var valeur = Math.Min(assiette, PASS.Valeur) * TauxInchanges.InvaliditeDeces;
+        if (assiette <= PASS.Valeur)
+        {
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure ou égale au PASS ({PASS.Valeur:C0}). Le taux de {TauxInchanges.InvaliditeDeces * 100} % est donc directement appliqué à cette assiette, soit {valeur:C0} de cotisations.", TauxInchanges.InvaliditeDeces);
+        }
+
+        return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure au PASS ({PASS.Valeur:C0}). Le taux de {TauxInchanges.InvaliditeDeces * 100:F1} % est donc appliqué au PASS, soit {valeur:C0} de cotisations.", TauxInchanges.InvaliditeDeces);
+    }
+
+    private ResultatAvecTauxUniqueEtExplication CalculeLesAllocationsFamiliales(decimal assiette)
+    {
+        if (assiette <= PASS.Valeur110Pct)
+        {
+            return new ResultatAvecTauxUniqueEtExplication(0m, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur110Pct:C0} (110% du PASS). Il n'y a donc pas de cotisation à payer pour les allocations familiales.", 0m);
+        }
+
+        if (assiette > PASS.Valeur110Pct && assiette <= PASS.Valeur140Pct)
+        {
+            var difference = assiette - PASS.Valeur110Pct;
+            var differenceEntrePlafondsEtPlancher = PASS.Valeur140Pct - PASS.Valeur110Pct;
+            var tauxApplicable = difference / differenceEntrePlafondsEtPlancher * TauxInchanges.CotisationsAllocationsFamiliales;
+
+            var valeur = assiette * tauxApplicable;
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur110Pct:C0} (110% du PASS) et {PASS.Valeur140Pct:C0} (140% du PASS). Un taux progressif entre 0% et {TauxInchanges.CotisationsAllocationsFamiliales * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F2}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+        }
+        else
+        {
+            var valeur = assiette * TauxInchanges.CotisationsAllocationsFamiliales;
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur140Pct:C0} (140% du PASS) donc un taux fixe de {TauxInchanges.CotisationsAllocationsFamiliales * 100:F1}% est appliqué, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsAllocationsFamiliales);
+        }
+    }
+
+    private ResultatAvecTauxUniqueEtExplication CalculeLaFormationProfessionnelle()
+    {
+        var valeur = PASS.Valeur * TauxInchanges.CotisationsFormationProfessionnelle;
+        return new ResultatAvecTauxUniqueEtExplication(valeur, $"Un taux fixe de {TauxInchanges.CotisationsFormationProfessionnelle * 100:F2}% est appliqué sur la valeur d'un PASS complet qui vaut {PASS.Valeur:C0}, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsFormationProfessionnelle);
+    }
+
     // TODO: bouger dans un helper ? Genre une méthode d'extension sur le decimal en 1er param
     private static decimal CalculeLeTauxProgressif(decimal assiette, decimal valeurPlancher, decimal valeurPlafond, decimal tauxPlancher, decimal tauxPlafond)
     {
@@ -152,11 +195,11 @@ public class Calculateur2025 : ICalculateur
     public ResultatAvecTauxUniqueEtExplication MaladieIndemnitesJournalieres { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxMultiplesEtExplication RetraiteDeBase { get; private set; } = new ResultatVideAvecTauxMultiplesEtSansExplication();
     public ResultatAvecTauxMultiplesEtExplication RetraiteComplementaire { get; private set; } = new ResultatVideAvecTauxMultiplesEtSansExplication();
-    public ResultatAvecTauxUniqueEtExplication InvaliditeDeces { get; }
-    public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales { get; }
+    public ResultatAvecTauxUniqueEtExplication InvaliditeDeces { get; private set; } = new ResultatVideSansExplication();
+    public ResultatAvecTauxUniqueEtExplication AllocationsFamiliales { get; private set; } = new ResultatVideSansExplication();
     public ResultatAvecTauxUniqueEtExplication CSGNonDeductible { get; }
     public ResultatAvecTauxUniqueEtExplication CSGDeductible { get; }
     public ResultatAvecTauxUniqueEtExplication CRDSNonDeductible { get; }
-    public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; }
+    public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; private set; } = new ResultatVideSansExplication();
     public decimal AssietteCsgCrds { get; private set; }
 }

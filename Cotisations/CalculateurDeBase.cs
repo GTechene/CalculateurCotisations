@@ -56,10 +56,10 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
         {
             var difference = assiette - PASS.Valeur40Pct;
             var differenceEntrePlafondEtPlancher = PASS.Valeur60Pct - PASS.Valeur40Pct;
-            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * Taux.CotisationsMaladiePourRevenusInferieursA60PctDuPass;
+            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass;
             var valeur = tauxApplicable * assiette;
 
-            MaladieHorsIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur60Pct:C0} (60% du PASS), donc un taux progressif entre 0% et {Taux.CotisationsMaladiePourRevenusInferieursA60PctDuPass * 100:N0}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+            MaladieHorsIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur60Pct:C0} (60% du PASS), donc un taux progressif entre 0% et {TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass * 100:N0}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
             return;
         }
 
@@ -67,7 +67,7 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
         {
             var difference = assiette - PASS.Valeur60Pct;
             var differenceEntrePlafondEtPlancher = PASS.Valeur110Pct - PASS.Valeur60Pct;
-            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * (ConstantesHistoriques.CotisationsMaladiePourRevenusSupA60PctPass - Taux.CotisationsMaladiePourRevenusInferieursA60PctDuPass) + Taux.CotisationsMaladiePourRevenusInferieursA60PctDuPass;
+            var tauxApplicable = difference / differenceEntrePlafondEtPlancher * (ConstantesHistoriques.CotisationsMaladiePourRevenusSupA60PctPass - TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass) + TauxInchanges.CotisationsMaladiePourRevenusInferieursA60PctDuPass;
             var valeur = tauxApplicable * assiette;
 
             MaladieHorsIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur60Pct:C0} (60% du PASS) et {PASS.Valeur110Pct:C0} (110% du PASS), donc un taux progressif entre 4% et {ConstantesHistoriques.CotisationsMaladiePourRevenusSupA60PctPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
@@ -95,18 +95,18 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
     {
         if (assiette <= PASS.Valeur)
         {
-            var valeur = assiette * Taux.CotisationsRetraiteBaseRevenusInferieursAuPass;
-            RetraiteDeBase = new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur:C0} (PASS), donc le taux fixe de {Taux.CotisationsRetraiteBaseRevenusInferieursAuPass * 100:F2}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", Taux.CotisationsRetraiteBaseRevenusInferieursAuPass, 0m);
+            var valeur = assiette * TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass;
+            RetraiteDeBase = new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur:C0} (PASS), donc le taux fixe de {TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass * 100:F2}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, 0m);
         }
         else
         {
             var depassementDuPass = assiette - PASS.Valeur;
 
-            var cotisationsSurPass = PASS.Valeur * Taux.CotisationsRetraiteBaseRevenusInferieursAuPass;
-            var cotisationsSurDepassement = depassementDuPass * Taux.CotisationsRetraiteBaseRevenusSuperieursAuPass;
+            var cotisationsSurPass = PASS.Valeur * TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass;
+            var cotisationsSurDepassement = depassementDuPass * TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass;
 
             var valeur = cotisationsSurPass + cotisationsSurDepassement;
-            RetraiteDeBase = new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur:C0} (PASS), donc le taux fixe de {Taux.CotisationsRetraiteBaseRevenusInferieursAuPass * 100:F2}% est appliqué à la part des revenus inférieure au PASS et le taux de {Taux.CotisationsRetraiteBaseRevenusSuperieursAuPass * 100:F1}% est appliqué à la part des revenus qui y est supérieure, soit {valeur:C0} de cotisations.", Taux.CotisationsRetraiteBaseRevenusInferieursAuPass, Taux.CotisationsRetraiteBaseRevenusSuperieursAuPass);
+            RetraiteDeBase = new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur:C0} (PASS), donc le taux fixe de {TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass * 100:F2}% est appliqué à la part des revenus inférieure au PASS et le taux de {TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass * 100:F1}% est appliqué à la part des revenus qui y est supérieure, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass);
         }
     }
 
@@ -114,14 +114,14 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
 
     private void CalculeLaCotisationInvaliditeDeces(decimal assiette)
     {
-        var valeur = Math.Min(assiette, PASS.Valeur) * Taux.InvaliditeDeces;
+        var valeur = Math.Min(assiette, PASS.Valeur) * TauxInchanges.InvaliditeDeces;
         if (assiette <= PASS.Valeur)
         {
-            InvaliditeDeces = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure ou égale au PASS ({PASS.Valeur:C0}). Le taux de {Taux.InvaliditeDeces * 100} % est donc directement appliqué à cette assiette, soit {valeur:C0} de cotisations.", Taux.InvaliditeDeces);
+            InvaliditeDeces = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure ou égale au PASS ({PASS.Valeur:C0}). Le taux de {TauxInchanges.InvaliditeDeces * 100} % est donc directement appliqué à cette assiette, soit {valeur:C0} de cotisations.", TauxInchanges.InvaliditeDeces);
         }
         else
         {
-            InvaliditeDeces = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure au PASS ({PASS.Valeur:C0}). Le taux de {Taux.InvaliditeDeces * 100:F1} % est donc appliqué au PASS, soit {valeur:C0} de cotisations.", Taux.InvaliditeDeces);
+            InvaliditeDeces = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure au PASS ({PASS.Valeur:C0}). Le taux de {TauxInchanges.InvaliditeDeces * 100:F1} % est donc appliqué au PASS, soit {valeur:C0} de cotisations.", TauxInchanges.InvaliditeDeces);
         }
     }
 
@@ -137,15 +137,15 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
         {
             var difference = assiette - PASS.Valeur110Pct;
             var differenceEntrePlafondsEtPlancher = PASS.Valeur140Pct - PASS.Valeur110Pct;
-            var tauxApplicable = difference / differenceEntrePlafondsEtPlancher * Taux.CotisationsAllocationsFamiliales;
+            var tauxApplicable = difference / differenceEntrePlafondsEtPlancher * TauxInchanges.CotisationsAllocationsFamiliales;
 
             var valeur = assiette * tauxApplicable;
-            AllocationsFamiliales = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur110Pct:C0} (110% du PASS) et {PASS.Valeur140Pct:C0} (140% du PASS). Un taux progressif entre 0% et {Taux.CotisationsAllocationsFamiliales * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F2}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+            AllocationsFamiliales = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur110Pct:C0} (110% du PASS) et {PASS.Valeur140Pct:C0} (140% du PASS). Un taux progressif entre 0% et {TauxInchanges.CotisationsAllocationsFamiliales * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F2}%, soit {valeur:C0} de cotisations.", tauxApplicable);
         }
         else
         {
-            var valeur = assiette * Taux.CotisationsAllocationsFamiliales;
-            AllocationsFamiliales = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur140Pct:C0} (140% du PASS) donc un taux fixe de {Taux.CotisationsAllocationsFamiliales * 100:F1}% est appliqué, soit {valeur:C0} de cotisations.", Taux.CotisationsAllocationsFamiliales);
+            var valeur = assiette * TauxInchanges.CotisationsAllocationsFamiliales;
+            AllocationsFamiliales = new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur140Pct:C0} (140% du PASS) donc un taux fixe de {TauxInchanges.CotisationsAllocationsFamiliales * 100:F1}% est appliqué, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsAllocationsFamiliales);
         }
     }
 
@@ -153,19 +153,19 @@ public abstract class CalculateurDeBase(IConstantesAvecHistorique constantesHist
     {
         var revenusPrisEnCompte = assiette + TotalCotisationsObligatoires;
 
-        var valeurCsgNonDeductible = revenusPrisEnCompte * Taux.CSGNonDeductible;
-        CSGNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgNonDeductible, $"L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Le taux fixe de {Taux.CSGNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCsgNonDeductible:C0} pour la CSG non déductible.", Taux.CSGNonDeductible);
+        var valeurCsgNonDeductible = revenusPrisEnCompte * TauxInchanges.CSGNonDeductible;
+        CSGNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgNonDeductible, $"L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Le taux fixe de {TauxInchanges.CSGNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCsgNonDeductible:C0} pour la CSG non déductible.", TauxInchanges.CSGNonDeductible);
 
-        var valeurCsgDeductible = revenusPrisEnCompte * Taux.CSGDeductible;
-        CSGDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgDeductible, $"L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Le taux fixe de {Taux.CSGDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de une valeur de {valeurCsgDeductible:C0} pour la CSG déductible.", Taux.CSGDeductible);
+        var valeurCsgDeductible = revenusPrisEnCompte * TauxInchanges.CSGDeductible;
+        CSGDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgDeductible, $"L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Le taux fixe de {TauxInchanges.CSGDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de une valeur de {valeurCsgDeductible:C0} pour la CSG déductible.", TauxInchanges.CSGDeductible);
 
-        var valeurCrds = revenusPrisEnCompte * Taux.CRDSNonDeductible;
-        CRDSNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCrds, $"L'assiette de calcul de la CRDS est égale à l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Le taux fixe de {Taux.CRDSNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCrds:C0} pour la CRDS.", Taux.CRDSNonDeductible);
+        var valeurCrds = revenusPrisEnCompte * TauxInchanges.CRDSNonDeductible;
+        CRDSNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCrds, $"L'assiette de calcul de la CRDS est égale à l'assiette retenue pour les cotisations obligatoires ({assiette:C0}) + les cotisations obligatoires elles-mêmes ({TotalCotisationsObligatoires:C0}), soit un total de {revenusPrisEnCompte:C0}. Le taux fixe de {TauxInchanges.CRDSNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCrds:C0} pour la CRDS.", TauxInchanges.CRDSNonDeductible);
     }
 
     private void CalculeLaFormationProfessionnelle()
     {
-        var valeur = PASS.Valeur * Taux.CotisationsFormationProfessionnelle;
-        FormationProfessionnelle = new ResultatAvecTauxUniqueEtExplication(valeur, $"Un taux fixe de {Taux.CotisationsFormationProfessionnelle * 100:F2}% est appliqué sur la valeur d'un PASS complet qui vaut {PASS.Valeur:C0}, soit {valeur:C0} de cotisations.", Taux.CotisationsFormationProfessionnelle);
+        var valeur = PASS.Valeur * TauxInchanges.CotisationsFormationProfessionnelle;
+        FormationProfessionnelle = new ResultatAvecTauxUniqueEtExplication(valeur, $"Un taux fixe de {TauxInchanges.CotisationsFormationProfessionnelle * 100:F2}% est appliqué sur la valeur d'un PASS complet qui vaut {PASS.Valeur:C0}, soit {valeur:C0} de cotisations.", TauxInchanges.CotisationsFormationProfessionnelle);
     }
 }
