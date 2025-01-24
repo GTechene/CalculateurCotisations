@@ -8,7 +8,7 @@ function initFormulaireCotisations() {
     cotisationsFacultativesValidees: 0,
     formWasSubmitted: false,
     cotisationsDetaillees: {
-      maladieHorsIndemnitesJournalieres: { valeur: 0, explication: "MICHEL" },
+      maladieHorsIndemnitesJournalieres: { valeur: 0, explication: "" },
       maladieIndemnitesJournalieres: { valeur: 0, explication: "" },
       retraiteDeBase: { valeur: 0, explication: "" },
       retraiteComplementaire: { valeur: 0, explication: "" },

@@ -1,0 +1,52 @@
+﻿{
+  Status: 200 OK,
+  Content: {
+    Headers: {
+      Content-Type: application/json; charset=utf-8
+    },
+    Value: {
+      maladieHorsIndemnitesJournalieres: {
+        valeur: 3153.927813163482,
+        explication: Le montant de 50 000 € est compris entre 28 260 € (60% du PASS) et 51 810 € (110% du PASS), donc un taux progressif entre 4% et 6,5% est appliqué. Ici il s'agit de 6,3%, soit 3 154 € de cotisations.
+      },
+      maladieIndemnitesJournalieres: {
+        valeur: 250.0,
+        explication: L'assiette de 50 000 € est comprise entre 18 840 € (40% du PASS) et 235 500 € (500% du PASS), donc le taux fixe de 0,5% est appliqué à cette assiette, soit 250 € de cotisations.
+      },
+      retraiteDeBase: {
+        valeur: 8625.57,
+        explication: L'assiette de 50 000 € est supérieure à 47 100 € (PASS), donc le taux fixe de 17,87% est appliqué à la part des revenus inférieure au PASS et le taux de 7,2% est appliqué à la part des revenus qui y est supérieure, soit 8 626 € de cotisations.
+      },
+      retraiteComplementaire: {
+        valeur: 4120.54,
+        explication: L'assiette de 50 000 € est supérieure à 42 946 €, donc le taux fixe de 8% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 9% est appliqué à la part des revenus qui y est supérieure, soit 4 121 € de cotisations.
+      },
+      invaliditeDeces: {
+        valeur: 612.3,
+        explication: L'assiette de 50 000 € est supérieure au PASS (47 100 €). Le taux de 1,3 % est donc appliqué au PASS, soit 612 € de cotisations.
+      },
+      allocationsFamiliales: {
+        valeur: 0,
+        explication: L'assiette de 50 000 € est inférieure à 51 810 € (110% du PASS). Il n'y a donc pas de cotisation à payer pour les allocations familiales.
+      },
+      totalCotisationsObligatoires: 16762.33781316348,
+      csgNonDeductible: {
+        valeur: 888.0,
+        explication: L'assiette de calcul de la CSG est égale au revenu moins un abattement de 26% soit 37 000 €. Le taux fixe de 2,4% est appliqué à cette assiette, ce qui donne une valeur de 888 € pour la CSG non déductible.
+      },
+      csgDeductible: {
+        valeur: 2516.0,
+        explication: L'assiette de calcul de la CSG est égale au revenu moins un abattement de 26% soit 37 000 €. Le taux fixe de 6,8% est appliqué à cette assiette, ce qui donne une valeur de une valeur de 2 516 € pour la CSG déductible.
+      },
+      crds: {
+        valeur: 185.0,
+        explication: L'assiette de calcul de la CRDS est égale au revenu moins un abattement de 26% soit 37 000 €. Le taux fixe de 0,5% est appliqué à cette assiette, ce qui donne une valeur de 185 € pour la CRDS.
+      },
+      formationProfessionnelle: {
+        valeur: 117.75,
+        explication: Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 47 100 €, soit 118 € de cotisations.
+      },
+      grandTotal: 20469.08781316348
+    }
+  }
+}

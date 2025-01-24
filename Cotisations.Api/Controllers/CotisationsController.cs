@@ -15,27 +15,50 @@ public class CotisationsController : ControllerBase
     [SwaggerOperation("Calcule les cotisations en convergeant à 1 € près pour la CSG/CRDS", "Cette méthode calcule les cotisations en faisant converger les 2 assiettes (estimée et calculée) par dichotomie jusqu'à l'euro près.")]
     public ActionResult<ResultatPrecisDeCotisationsAvecExplications> CalculeAvecConvergenceV2(
         [FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)][Range(1, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner un revenu de valeur positive et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal revenuNet,
-        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)][Range(2023, 2024)] int? annee,
+        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)][Range(2023, 2025)] int? annee,
         [FromQuery][SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)][Range(0, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner des cotisations facultatives de valeur positive ou nulle et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal? cotisationsFacultatives
         )
     {
-        var calculateur = new CalculateurAvecConvergence(revenuNet, annee.GetValueOrDefault(DateTime.Today.Year), cotisationsFacultatives.GetValueOrDefault());
-        calculateur.Calcule();
+        var valeurAnnee = annee.GetValueOrDefault(DateTime.Today.Year);
+        var valeurCotisationsFacultatives = cotisationsFacultatives.GetValueOrDefault();
 
-        return new ResultatPrecisDeCotisationsAvecExplications(
-            calculateur.MaladieHorsIndemnitesJournalieres,
-            calculateur.MaladieIndemnitesJournalieres,
-            calculateur.RetraiteDeBase,
-            calculateur.RetraiteComplementaire,
-            calculateur.InvaliditeDeces,
-            calculateur.AllocationsFamiliales,
-            calculateur.TotalCotisationsObligatoires,
-            calculateur.CSGNonDeductible,
-            calculateur.CSGDeductible,
-            calculateur.CRDS,
-            calculateur.FormationProfessionnelle,
-            calculateur.GrandTotal
-        );
+        if (annee < 2025)
+        {
+            var calculateurAvecConvergence = new CalculateurAvecConvergence(revenuNet, valeurAnnee, valeurCotisationsFacultatives);
+            calculateurAvecConvergence.Calcule();
+            return new ResultatPrecisDeCotisationsAvecExplications(
+                calculateurAvecConvergence.MaladieHorsIndemnitesJournalieres,
+                calculateurAvecConvergence.MaladieIndemnitesJournalieres,
+                calculateurAvecConvergence.RetraiteDeBase,
+                calculateurAvecConvergence.RetraiteComplementaire,
+                calculateurAvecConvergence.InvaliditeDeces,
+                calculateurAvecConvergence.AllocationsFamiliales,
+                calculateurAvecConvergence.TotalCotisationsObligatoires,
+                calculateurAvecConvergence.CSGNonDeductible,
+                calculateurAvecConvergence.CSGDeductible,
+                calculateurAvecConvergence.CRDS,
+                calculateurAvecConvergence.FormationProfessionnelle,
+                calculateurAvecConvergence.GrandTotal
+            );
+        }
+
+        var calculateur = Calculateurs.TrouveUnCalculateur(valeurAnnee);
+        calculateur.CalculeLesCotisations(revenuNet + valeurCotisationsFacultatives);
+
+        return Ok(new ResultatPrecisDeCotisationsAvecExplications(
+                calculateur.MaladieHorsIndemnitesJournalieres,
+                calculateur.MaladieIndemnitesJournalieres,
+                calculateur.RetraiteDeBase,
+                calculateur.RetraiteComplementaire,
+                calculateur.InvaliditeDeces,
+                calculateur.AllocationsFamiliales,
+                calculateur.TotalCotisationsObligatoires,
+                calculateur.CSGNonDeductible,
+                calculateur.CSGDeductible,
+                calculateur.CRDSNonDeductible,
+                calculateur.FormationProfessionnelle,
+                calculateur.GrandTotal
+            ));
     }
 
     [HttpGet("export/{revenuNet}")]

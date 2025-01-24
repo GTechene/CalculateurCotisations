@@ -2,7 +2,6 @@
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Cotisations.Api.Controllers;
 using Diverse;
 using NFluent;
 
@@ -29,23 +28,7 @@ public class CotisationsApiV2Should
 
         var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
-        Check.That(reponseHttp).IsOk<ResultatPrecisDeCotisationsAvecExplications>()
-            .WhichPayload(resultat =>
-            {
-                Check.That(resultat).IsNotNull();
-                Check.That(resultat!.InvaliditeDeces.Valeur).IsCloseTo(572m, 1m);
-                Check.That(resultat.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4479m, 1m);
-                Check.That(resultat.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(600m, 1m);
-                Check.That(resultat.RetraiteDeBase.Valeur).IsCloseTo(7967m, 1m);
-                Check.That(resultat.RetraiteComplementaire.Valeur).IsCloseTo(5236m, 1m);
-                Check.That(resultat.AllocationsFamiliales.Valeur).IsCloseTo(2187m, 1m);
-                Check.That(resultat.TotalCotisationsObligatoires).IsCloseTo(21042m, 1m);
-                Check.That(resultat.CSGNonDeductible.Valeur).IsCloseTo(2198m, 1m);
-                Check.That(resultat.CSGDeductible.Valeur).IsCloseTo(6228m, 1m);
-                Check.That(resultat.CRDS.Valeur).IsCloseTo(457m, 1m);
-                Check.That(resultat.FormationProfessionnelle.Valeur).IsCloseTo(110m, 1m);
-                Check.That(resultat.GrandTotal).IsCloseTo(30037m, 1m);
-            });
+        await Verify(reponseHttp, _verifySettings);
     }
 
     [Test]
@@ -64,23 +47,21 @@ public class CotisationsApiV2Should
 
         var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
 
-        Check.That(reponseHttp).IsOk<ResultatPrecisDeCotisationsAvecExplications>()
-            .WhichPayload(resultat =>
-            {
-                Check.That(resultat).IsNotNull();
-                Check.That(resultat!.InvaliditeDeces.Valeur).IsCloseTo(603m, 1m);
-                Check.That(resultat.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(4275m, 1m);
-                Check.That(resultat.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(319m, 1m);
-                Check.That(resultat.RetraiteDeBase.Valeur).IsCloseTo(8335m, 1m);
-                Check.That(resultat.RetraiteComplementaire.Valeur).IsCloseTo(4675m, 1m);
-                Check.That(resultat.AllocationsFamiliales.Valeur).IsCloseTo(1820m, 1m);
-                Check.That(resultat.TotalCotisationsObligatoires).IsCloseTo(20026m, 1m);
-                Check.That(resultat.CSGNonDeductible.Valeur).IsCloseTo(2012m, 1m);
-                Check.That(resultat.CSGDeductible.Valeur).IsCloseTo(5700m, 1m);
-                Check.That(resultat.CRDS.Valeur).IsCloseTo(419m, 1m);
-                Check.That(resultat.FormationProfessionnelle.Valeur).IsCloseTo(116m, 1m);
-                Check.That(resultat.GrandTotal).IsCloseTo(28273m, 1m);
-            });
+        await Verify(reponseHttp, _verifySettings);
+    }
+
+    [Test]
+    public async Task Renvoyer_les_resultats_adequats_pour_des_cotisations_2025()
+    {
+        var scenario = new ScenarioDeCotisationsPrecises()
+            .AvecRevenuNetDe(50000)
+            .En(2025);
+
+        var api = CotisationsApi.CreeUneInstance(scenario);
+
+        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
+
+        await Verify(reponseHttp, _verifySettings);
     }
 
     [Test]

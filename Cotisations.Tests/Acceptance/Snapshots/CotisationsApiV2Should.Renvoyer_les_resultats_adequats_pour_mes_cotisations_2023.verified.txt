@@ -1,0 +1,52 @@
+﻿{
+  Status: 200 OK,
+  Content: {
+    Headers: {
+      Content-Type: application/json; charset=utf-8
+    },
+    Value: {
+      maladieHorsIndemnitesJournalieres: {
+        valeur: 4479.809115600586,
+        explication: L'assiette de 70 548 € est comprise entre 48 391 € (110% du PASS) et 219 960 € (500% du PASS), donc le taux fixe de 6,4% est appliqué, soit 4 480 € de cotisations.
+      },
+      maladieIndemnitesJournalieres: {
+        valeur: 599.6594879150391,
+        explication: L'assiette de 70 548 € est comprise entre 48 391 € (110% du PASS) et 219 960 € (500% du PASS), donc le taux fixe de 0,85% est appliqué à cette assiette, soit 600 € de cotisations.
+      },
+      retraiteDeBase: {
+        valeur: 7967.917050292969,
+        explication: L'assiette de 70 548 € est supérieure à 43 992 € (PASS), donc le taux fixe de 17,75% est appliqué à la part des revenus inférieure au PASS et le taux de 0,6% est appliqué à la part des revenus qui y est supérieure, soit 7 968 € de cotisations.
+      },
+      retraiteComplementaire: {
+        valeur: 5236.01400390625,
+        explication: L'assiette de 70 548 € est supérieure à 40 784 €, donc le taux fixe de 7% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 8% est appliqué à la part des revenus qui y est supérieure, soit 5 236 € de cotisations.
+      },
+      invaliditeDeces: {
+        valeur: 571.896,
+        explication: L'assiette de 70 548 € est supérieure au PASS (43 992 €). Le taux de 1,3 % est donc appliqué au PASS, soit 572 € de cotisations.
+      },
+      allocationsFamiliales: {
+        valeur: 2186.9934265136717,
+        explication: L'assiette de 70 548 € est supérieure à 61 589 € (140% du PASS) donc un taux fixe de 3,1% est appliqué, soit 2 187 € de cotisations.
+      },
+      totalCotisationsObligatoires: 21042.289084228516,
+      csgNonDeductible: {
+        valeur: 2198.1711391933595,
+        explication: L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (70 548 €) + les cotisations obligatoires elles-mêmes (21 042 €), soit un total de 91 590 €. Le taux fixe de 2,4% est appliqué à cette assiette, ce qui donne une valeur de 2 198 € pour la CSG non déductible.
+      },
+      csgDeductible: {
+        valeur: 6228.151561047852,
+        explication: L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (70 548 €) + les cotisations obligatoires elles-mêmes (21 042 €), soit un total de 91 590 €. Le taux fixe de 6,8% est appliqué à cette assiette, ce qui donne une valeur de une valeur de 6 228 € pour la CSG déductible.
+      },
+      crds: {
+        valeur: 457.9523206652832,
+        explication: L'assiette de calcul de la CRDS est égale à l'assiette retenue pour les cotisations obligatoires (70 548 €) + les cotisations obligatoires elles-mêmes (21 042 €), soit un total de 91 590 €. Le taux fixe de 0,5% est appliqué à cette assiette, ce qui donne une valeur de 458 € pour la CRDS.
+      },
+      formationProfessionnelle: {
+        valeur: 109.98,
+        explication: Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 43 992 €, soit 110 € de cotisations.
+      },
+      grandTotal: 30036.54410513501
+    }
+  }
+}
