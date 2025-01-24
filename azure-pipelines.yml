@@ -17,27 +17,44 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  displayName: 'Restore'
+- task: DotNetCoreCLI@2
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
 
-- task: VSBuild@1
-  displayName: 'Build'
+# - task: NuGetCommand@2
+#   displayName: 'Restore'
+#   inputs:
+#     restoreSolution: '$(solution)'
+
+# - task: VSBuild@1
+#   displayName: 'Build'
+#   inputs:
+#     solution: '$(solution)'
+#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
+    command: 'build'
+    projects: 'CalculCotisations.sln'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  displayName: 'Test'
+# - task: VSTest@2
+#   displayName: 'Test'
+#   inputs:
+#     testSelector: 'testAssemblies'
+#     testAssemblyVer2: '**\bin\**\*Tests.dll'
+#     searchFolder: '$(System.DefaultWorkingDirectory)'
+#     runInParallel: true
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
   inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: '**\bin\**\*Tests.dll'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    runInParallel: true
-    platform: '$(buildPlatform)'
+    command: 'test'
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
