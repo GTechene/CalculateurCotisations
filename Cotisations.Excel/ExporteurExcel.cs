@@ -18,7 +18,6 @@ public class ExporteurExcel
         CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
     }
 
-
     public void Exporte(Stream output)
     {
         var workbook = new XLWorkbook();

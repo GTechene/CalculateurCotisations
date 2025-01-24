@@ -4,6 +4,8 @@
 /// Calcule les cotisations en faisant converger l'assiette de base (revenu net + CSG non déductible + CRDS) avec l'assiette calculée. En effet, pour calculer CSG et CRDS, il faut connaître le total des cotisations obligatoires. Or celles-ci ne sont calculables qu'en connaissant l'assiette de base... qui dépend de la CSG et de la CRDS.
 /// J'ai donc opté pour un ratio "au doigt mouillé" pour le premier calcul (1.125) puis je fais converger par dichotomie en fonction de l'assiette calculée à partir de ce premier calcul.
 /// </summary>
+
+// TODO: limiter l'année à 2024 maximum
 public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, decimal cotisationsFacultatives = 0m)
 {
     private readonly ICalculateur _calculateur = Calculateurs.TrouveUnCalculateur(annee);

@@ -118,7 +118,7 @@ public class Calculateur2025 : ICalculateur
         CRDSNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCrds, $"L'assiette de calcul de la CRDS est égale au revenu moins un abattement de 26% soit {AssietteCsgCrds:C0}. Le taux fixe de {TauxInchanges.CRDSNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCrds:C0} pour la CRDS.", TauxInchanges.CRDSNonDeductible);
     }
 
-    // TODO: bouger dans un helper ? Genre une méthode d'extension sur le decimal en 1er param
+    // TODO: bouger dans un helper ?
     private static decimal CalculeLeTauxProgressif(decimal assiette, decimal valeurPlancher, decimal valeurPlafond, decimal tauxPlancher, decimal tauxPlafond)
     {
         var diffDeTaux = tauxPlafond - tauxPlancher;

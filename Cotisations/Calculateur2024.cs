@@ -4,16 +4,14 @@ namespace Cotisations;
 
 public class Calculateur2024 : ICalculateur
 {
-    private readonly decimal _tauxDeCotisationsIndemnitesMaladie;
-    private readonly CalculateurCommun _calculateurCommun;
-    private readonly Constantes2024 _constantes;
     private readonly PlafondAnnuelSecuriteSociale PASS;
+    private readonly Constantes2024 _constantes;
+    private readonly CalculateurCommun _calculateurCommun;
 
     public Calculateur2024()
     {
         PASS = new PlafondAnnuelSecuriteSociale(2024);
         _constantes = new Constantes2024();
-        _tauxDeCotisationsIndemnitesMaladie = _constantes.CotisationsIndemnitesMaladiePourRevenusInferieursA40PctDuPass;
         _calculateurCommun = new CalculateurCommun(PASS);
     }
 
@@ -21,7 +19,7 @@ public class Calculateur2024 : ICalculateur
     {
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
 
-        MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieres(revenu, _constantes.CotisationsMaladiePourRevenusSupA60PctPass, _constantes.CotisationsMaladiePourRevenusSupA5Pass);
+        MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieresAvant2025(revenu, _constantes.CotisationsMaladiePourRevenusSupA60PctPass, _constantes.CotisationsMaladiePourRevenusSupA5Pass);
         CalculeLesCotisationsPourIndemnitesMaladie(revenu);
         RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass);
         RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
@@ -30,27 +28,28 @@ public class Calculateur2024 : ICalculateur
         FormationProfessionnelle = _calculateurCommun.CalculeLaFormationProfessionnelle();
 
         var totalCotisationsObligatoires = MaladieHorsIndemnitesJournalieres.Valeur + MaladieIndemnitesJournalieres.Valeur + RetraiteDeBase.Valeur + RetraiteComplementaire.Valeur + InvaliditeDeces.Valeur + AllocationsFamiliales.Valeur;
-        (CSGNonDeductible, CSGDeductible, CRDSNonDeductible) = _calculateurCommun.CalculeCSGEtCRDSAvant2025(revenu, totalCotisationsObligatoires);
+        (CSGNonDeductible, CSGDeductible, CRDSNonDeductible) = CalculateurCommun.CalculeCSGEtCRDSAvant2025(revenu, totalCotisationsObligatoires);
     }
 
     private void CalculeLesCotisationsPourIndemnitesMaladie(decimal assiette)
     {
+        var tauxDeCotisationsIndemnitesMaladie = _constantes.CotisationsIndemnitesMaladiePourRevenusInferieursA40PctDuPass;
         if (assiette < PASS.Valeur40Pct)
         {
-            var cotisations = _tauxDeCotisationsIndemnitesMaladie * PASS.Valeur40Pct;
-            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur40Pct:C0} (40% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plancher de 40% du PASS, soit {cotisations:C0} de cotisations.", _tauxDeCotisationsIndemnitesMaladie);
+            var cotisations = tauxDeCotisationsIndemnitesMaladie * PASS.Valeur40Pct;
+            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur40Pct:C0} (40% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plancher de 40% du PASS, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
             return;
         }
 
         if (assiette < PASS.Valeur500Pct)
         {
-            var cotisations = _tauxDeCotisationsIndemnitesMaladie * assiette;
-            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à cette assiette, soit {cotisations:C0} de cotisations.", _tauxDeCotisationsIndemnitesMaladie);
+            var cotisations = tauxDeCotisationsIndemnitesMaladie * assiette;
+            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à cette assiette, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
         }
         else
         {
-            var cotisations = _tauxDeCotisationsIndemnitesMaladie * PASS.Valeur500Pct;
-            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {_tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plafond de 500% du PASS, soit {cotisations:C0} de cotisations.", _tauxDeCotisationsIndemnitesMaladie);
+            var cotisations = tauxDeCotisationsIndemnitesMaladie * PASS.Valeur500Pct;
+            MaladieIndemnitesJournalieres = new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plafond de 500% du PASS, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
         }
     }
 
