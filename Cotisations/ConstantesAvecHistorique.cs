@@ -36,7 +36,6 @@ public class Constantes2025
     public decimal TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass => 0.085m;
     public decimal TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass => 0.065m;
     public decimal TauxCotisationsIndemnitesMaladie => 0.005m;
-    public decimal CotisationsIndemnitesMaladiePourRevenusSuperieursA110PctDuPass => throw new InvalidOperationException("Ce taux n'existe pas pour l'année 2024");
     public int PlafondsRetraiteComplementaireArtisansCommercants => 42946;
 }
 
