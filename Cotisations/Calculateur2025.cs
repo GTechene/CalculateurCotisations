@@ -1,4 +1,6 @@
-﻿namespace Cotisations;
+﻿using System.Globalization;
+
+namespace Cotisations;
 
 public class Calculateur2025 : ICalculateur
 {
@@ -19,6 +21,8 @@ public class Calculateur2025 : ICalculateur
 
     public void CalculeLesCotisations(decimal revenu)
     {
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
+
         AssietteDeCalculDesCotisations = revenu;
         MaladieHorsIndemnitesJournalieres = CalculeLesCotisationsMaladieHorsIndemnites(revenu);
         MaladieIndemnitesJournalieres = CalculeLesCotisationsPourIndemnitesMaladie(revenu);

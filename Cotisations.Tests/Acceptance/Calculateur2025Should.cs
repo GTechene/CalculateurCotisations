@@ -5,6 +5,7 @@ namespace Cotisations.Tests.Acceptance;
 public class Calculateur2025Should
 {
     [Test]
+    [SetCulture("en-US")]
     public void Calculer_les_cotisations_selon_un_exemple_simple_pour_des_revenus_entre_60_pct_et_110_pct_du_PASS()
     {
         var calculateur = new Calculateur2025();
@@ -22,6 +23,9 @@ public class Calculateur2025Should
         Check.That(calculateur.InvaliditeDeces.Valeur).IsEqualTo(612.3m);
         Check.That(calculateur.AllocationsFamiliales.Valeur).IsEqualTo(0m);
         Check.That(calculateur.FormationProfessionnelle.Valeur).IsEqualTo(117.75m);
+
+        // Teste que la culture est bien appliquée explicitement dans le code et ne dépend pas de la machine qui le fait tourner.
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Explication).IsEqualTo("Le montant de 50 000 € est compris entre 28 260 € (60% du PASS) et 51 810 € (110% du PASS), donc un taux progressif entre 4% et 6,5% est appliqué. Ici il s'agit de 6,3%, soit 3 154 € de cotisations.");
     }
 
     [Test]
