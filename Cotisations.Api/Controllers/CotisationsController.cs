@@ -97,27 +97,15 @@ public class CotisationsController : ControllerBase
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Export cotisations {valeurAnnee}.xlsx");
     }
 
-    [Obsolete("Utilisez la v2 svp.")]
-    [HttpGet("precises/{revenuNet}")]
-    [SwaggerOperation("Calcule les cotisations en convergeant à 1 € près pour la CSG/CRDS", "Cette méthode calcule les cotisations en faisant converger les 2 assiettes (estimée et calculée) par dichotomie jusqu'à l'euro près.")]
-    public ResultatPrecisDeCotisations CalculeAvecConvergence([FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.")] decimal revenuNet)
+    [HttpGet("/test/separator")]
+    public ActionResult<string> RenvoieUnDecimalFormateAvecC0()
     {
-        var calculateur = new CalculateurAvecConvergence(revenuNet);
-        calculateur.Calcule();
+        return Ok($"{1000.31m:C0}");
+    }
 
-        return new ResultatPrecisDeCotisations(
-            calculateur.MaladieHorsIndemnitesJournalieres.Valeur,
-            calculateur.MaladieIndemnitesJournalieres.Valeur,
-            calculateur.RetraiteDeBase.Valeur,
-            calculateur.RetraiteComplementaire.Valeur,
-            calculateur.InvaliditeDeces.Valeur,
-            calculateur.AllocationsFamiliales.Valeur,
-            calculateur.TotalCotisationsObligatoires,
-            calculateur.CSGNonDeductible.Valeur,
-            calculateur.CSGDeductible.Valeur,
-            calculateur.CRDS.Valeur,
-            calculateur.FormationProfessionnelle.Valeur,
-            calculateur.GrandTotal
-        );
+    [HttpGet("/test/separator/json")]
+    public ActionResult RenvoieUnDecimalFormateAvecC0DansUnPayloadJson()
+    {
+        return Ok(new {Machin = $"{1000.31m:C0}"});
     }
 }
