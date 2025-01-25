@@ -96,16 +96,4 @@ public class CotisationsController : ControllerBase
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Export cotisations {valeurAnnee}.xlsx");
     }
-
-    [HttpGet("/test/separator")]
-    public ActionResult<string> RenvoieUnDecimalFormateAvecC0()
-    {
-        return Ok($"{1000.31m:C0}");
-    }
-
-    [HttpGet("/test/separator/json")]
-    public ActionResult RenvoieUnDecimalFormateAvecC0DansUnPayloadJson()
-    {
-        return Ok(new {Machin = $"{1000.31m:C0}"});
-    }
 }
