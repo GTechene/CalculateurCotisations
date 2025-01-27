@@ -26,8 +26,8 @@ public class Calculateur2025 : ICalculateur
         AssietteDeCalculDesCotisations = revenu;
         MaladieHorsIndemnitesJournalieres = CalculeLesCotisationsMaladieHorsIndemnites(revenu);
         MaladieIndemnitesJournalieres = CalculeLesCotisationsPourIndemnitesMaladie(revenu);
-        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, 0.1787m, 0.072m, 5346m);
-        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, 0.081m, 0.091m, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
+        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, _constantes.TauxCotisationsRetraiteBaseRevenusInferieursAuPass, _constantes.TauxCotisationsRetraiteBaseRevenusSuperieursAuPass, 5346m);
+        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, _constantes.TauxRetraiteComplementairePremiereTrancheArtisansCommercants, _constantes.TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
         InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(revenu);
         AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(revenu);
         FormationProfessionnelle = _calculateurCommun.CalculeLaFormationProfessionnelle();

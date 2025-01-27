@@ -25,6 +25,7 @@ public class Constantes2024 : IConstantesAvecHistorique
     public decimal CotisationsIndemnitesMaladiePourRevenusInferieursA40PctDuPass => 0.005m;
     public decimal CotisationsIndemnitesMaladiePourRevenusSuperieursA110PctDuPass => throw new InvalidOperationException("Ce taux n'existe pas pour l'année 2024");
     public int PlafondsRetraiteComplementaireArtisansCommercants => 42946;
+    public decimal PlancherRetraite450HeuresDeSmic = 5242.5m;
 }
 
 public class Constantes2025
@@ -40,10 +41,10 @@ public class Constantes2025
     // TODO : va probablement changer en 2025 mais pas défini encore au 24/01/2025
     public int PlafondsRetraiteComplementaireArtisansCommercants => 42946;
 
-    public const decimal CotisationsRetraiteBaseRevenusSuperieursAuPass = 0.006m;
-    public const decimal CotisationsRetraiteBaseRevenusInferieursAuPass = 0.1775m;
-    public const decimal RetraiteComplementairePremiereTrancheArtisansCommercants = 0.07m;
-    public const decimal RetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.08m;
+    public decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;
+    public decimal TauxCotisationsRetraiteBaseRevenusInferieursAuPass = 0.1787m;
+    public decimal TauxRetraiteComplementairePremiereTrancheArtisansCommercants = 0.081m;
+    public decimal TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.091m;
 }
 
 public static class ConstantesAvecHistorique
