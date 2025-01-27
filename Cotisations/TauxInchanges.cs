@@ -9,6 +9,8 @@ public static class TauxInchanges
 {
     public const decimal CotisationsMaladiePourRevenusInferieursA60PctDuPass = 0.04m;
     public const decimal InvaliditeDeces = 0.013m;
+    public const decimal PlancherInvaliditeDeces = 0.115m;
+    public const decimal PlancherRetraiteDeBase = 0.115m;
     public const decimal CotisationsAllocationsFamiliales = 0.031m;
     public const decimal CSGNonDeductible = 0.024m;
     public const decimal CSGDeductible = 0.068m;

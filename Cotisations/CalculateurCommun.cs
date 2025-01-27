@@ -45,10 +45,15 @@ public class CalculateurCommun(PlafondAnnuelSecuriteSociale pass)
         return new ResultatAvecTauxUniqueEtExplication(valeurMax, $"L'assiette de {assiette:C0} est supérieure à {pass.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {cotisationsMaladiePourRevenusSupA60PctPass * 100:F1}% est appliqué à la tranche de revenus inférieure à cette valeur et le taux fixe de {cotisationsMaladiePourRevenusSupA5Pass * 100:F1}% est appliqué au reste. Soit {valeurMax:C0} de cotisations.", cotisationsMaladiePourRevenusSupA5Pass);
     }
 
-    public ResultatAvecTauxMultiplesEtExplication CalculeLaRetraiteDeBase(decimal assiette, decimal tauxPourRevenusInferieursAuPass, decimal tauxPourRevenusSuperieursAuPass)
+    public ResultatAvecTauxMultiplesEtExplication CalculeLaRetraiteDeBase(decimal assiette, decimal tauxPourRevenusInferieursAuPass, decimal tauxPourRevenusSuperieursAuPass, decimal plancher)
     {
         if (assiette <= pass.Valeur)
         {
+            if (assiette < plancher)
+            {
+                var valeurPlancher = plancher * tauxPourRevenusInferieursAuPass;
+                return new ResultatAvecTauxMultiplesEtExplication(valeurPlancher, $"L'assiette de {assiette:C0} est inférieure au plancher ({TauxInchanges.PlancherRetraiteDeBase * 100}% du PASS, soit {plancher:C0}). Le taux de {tauxPourRevenusInferieursAuPass * 100} % est donc directement appliqué à ce plancher, soit {valeurPlancher:C0} de cotisations.", tauxPourRevenusInferieursAuPass, 0m);
+            }
             var valeur = assiette * tauxPourRevenusInferieursAuPass;
             return new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {pass.Valeur:C0} (PASS), donc le taux fixe de {tauxPourRevenusInferieursAuPass * 100:F2}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", tauxPourRevenusInferieursAuPass, 0m);
         }
@@ -84,6 +89,13 @@ public class CalculateurCommun(PlafondAnnuelSecuriteSociale pass)
         var valeur = Math.Min(assiette, pass.Valeur) * TauxInchanges.InvaliditeDeces;
         if (assiette <= pass.Valeur)
         {
+            var plancherInvaliditeDeces = TauxInchanges.PlancherInvaliditeDeces * pass.Valeur;
+            if (assiette < plancherInvaliditeDeces)
+            {
+                valeur = plancherInvaliditeDeces * TauxInchanges.InvaliditeDeces;
+                return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure au plancher ({TauxInchanges.PlancherInvaliditeDeces * 100}% du PASS, soit {plancherInvaliditeDeces:C0}). Le taux de {TauxInchanges.InvaliditeDeces * 100} % est donc directement appliqué à ce plancher, soit {valeur:C0} de cotisations.", TauxInchanges.InvaliditeDeces);
+            }
+
             return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure ou égale au PASS ({pass.Valeur:C0}). Le taux de {TauxInchanges.InvaliditeDeces * 100} % est donc directement appliqué à cette assiette, soit {valeur:C0} de cotisations.", TauxInchanges.InvaliditeDeces);
         }
 

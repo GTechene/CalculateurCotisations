@@ -220,4 +220,30 @@ public class CalculateurAvecConvergenceShould
         var convergeur = new CalculateurAvecConvergence(50_000m, 2024, -50_001m);
         Check.ThatCode(() => convergeur.Calcule()).Throws<InvalidOperationException>();
     }
+
+    [Test]
+    public void Calculer_les_cotisations_minimales_correctement_pour_un_revenu_inferieur_a_4000_en_2024()
+    {
+        const decimal revenuNet = 1_000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet, 2024);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(93m, 1m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(69m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(931m, 1m);
+    }
+
+    [Test]
+    public void Calculer_les_cotisations_minimales_correctement_pour_un_revenu_inferieur_a_4000_en_2023()
+    {
+        const decimal revenuNet = 1_000m;
+
+        var convergeur = new CalculateurAvecConvergence(revenuNet, 2023);
+        convergeur.Calcule();
+
+        Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(88m, 1m);
+        Check.That(convergeur.InvaliditeDeces.Valeur).IsCloseTo(66m, 1m);
+        Check.That(convergeur.RetraiteDeBase.Valeur).IsCloseTo(898m, 1m);
+    }
 }

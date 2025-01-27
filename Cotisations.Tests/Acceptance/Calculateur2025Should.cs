@@ -5,7 +5,6 @@ namespace Cotisations.Tests.Acceptance;
 public class Calculateur2025Should
 {
     [Test]
-    [SetCulture("en-US")]
     public void Calculer_les_cotisations_selon_un_exemple_simple_pour_des_revenus_entre_60_pct_et_110_pct_du_PASS()
     {
         var calculateur = new Calculateur2025();

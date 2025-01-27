@@ -22,7 +22,7 @@ public class Calculateur2023 : ICalculateur
         AssietteDeCalculDesCotisations = revenu;
         MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieresAvant2025(revenu, _constantes.CotisationsMaladiePourRevenusSupA60PctPass, _constantes.CotisationsMaladiePourRevenusSupA5Pass);
         CalculeLesCotisationsPourIndemnitesMaladie(revenu);
-        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass);
+        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass, TauxInchanges.PlancherRetraiteDeBase * PASS.Valeur);
         RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
         InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(revenu);
         AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(revenu);
