@@ -85,6 +85,10 @@ public class ExporteurExcel
 
         worksheet.Columns().AdjustToContents();
 
+        worksheet.Cell("A32")
+            .SetValue("Taux et barêmes de cotisations sur le site de l'URSSAF")
+            .SetHyperlink(new XLHyperlink("https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/taux-cotisations-ac-plnr.html"));
+
         workbook.SaveAs(output);
     }
 
