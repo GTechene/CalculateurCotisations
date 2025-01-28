@@ -358,3 +358,4 @@ MigrationBackup/
 
 # Verify
 *.received.*
+/Cotisations.Tests/Cotisations.Tests.v3.ncrunchproject
