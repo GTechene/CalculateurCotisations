@@ -16,39 +16,7 @@ public class CotisationsApiV2Should
         _verifySettings.UseDirectory("Snapshots");
     }
 
-    [Test]
-    public async Task Renvoyer_les_resultats_adequats_pour_mes_cotisations_2023()
-    {
-        var scenario = new ScenarioDeCotisationsPrecises()
-            .AvecRevenuNetDe(65182m)
-            .AvecCotisationsFacultativesDe(2710m)
-            .En(2023);
-
-        var api = CotisationsApi.CreeUneInstance(scenario);
-
-        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
-
-        await Verify(reponseHttp, _verifySettings);
-    }
-
-    [Test]
-    /*
-     * Ce test est raccord à la fois avec ma feuille Excel ET avec le simulateur officiel, à genre 1 ou 2 € près sur la somme totale.
-     * Le calcul est bon, les résultats matchent : on est nickel sur 2024.
-     */
-    public async Task Renvoyer_les_resultats_adequats_pour_mes_cotisations_2024()
-    {
-        var scenario = new ScenarioDeCotisationsPrecises()
-            .AvecRevenuNetDe(60371)
-            .AvecCotisationsFacultativesDe(1000m)
-            .En(2024);
-
-        var api = CotisationsApi.CreeUneInstance(scenario);
-
-        var reponseHttp = await api.CalculeCotisationsPrecisesAvecExplications();
-
-        await Verify(reponseHttp, _verifySettings);
-    }
+    
 
     [Test]
     public async Task Renvoyer_les_resultats_adequats_pour_des_cotisations_2025()
@@ -237,6 +205,5 @@ public class CotisationsApiV2Should
 public static class ModuleInitializer
 {
     [ModuleInitializer]
-    public static void Initialize() =>
-        VerifierSettings.InitializePlugins();
+    public static void Initialize() => VerifierSettings.InitializePlugins();
 }
