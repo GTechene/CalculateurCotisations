@@ -38,7 +38,8 @@ public class CotisationsController : ControllerBase
                 calculateurAvecConvergence.CSGDeductible,
                 calculateurAvecConvergence.CRDS,
                 calculateurAvecConvergence.FormationProfessionnelle,
-                calculateurAvecConvergence.GrandTotal
+                calculateurAvecConvergence.GrandTotal,
+                calculateurAvecConvergence.AssietteDeCalculDesCotisations
             );
         }
 
@@ -57,7 +58,8 @@ public class CotisationsController : ControllerBase
                 calculateur.CSGDeductible,
                 calculateur.CRDSNonDeductible,
                 calculateur.FormationProfessionnelle,
-                calculateur.GrandTotal
+                calculateur.GrandTotal,
+                calculateur.AssietteDeCalculDesCotisations
             ));
     }
 

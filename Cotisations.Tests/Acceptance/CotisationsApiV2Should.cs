@@ -1,6 +1,5 @@
 ﻿using System.IO.Compression;
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Diverse;
 using NFluent;
@@ -15,8 +14,6 @@ public class CotisationsApiV2Should
     {
         _verifySettings.UseDirectory("Snapshots");
     }
-
-    
 
     [Test]
     public async Task Renvoyer_les_resultats_adequats_pour_des_cotisations_2025()
@@ -200,10 +197,4 @@ public class CotisationsApiV2Should
 
         Check.That(reponseHttp).IsBadRequest();
     }
-}
-
-public static class ModuleInitializer
-{
-    [ModuleInitializer]
-    public static void Initialize() => VerifierSettings.InitializePlugins();
 }

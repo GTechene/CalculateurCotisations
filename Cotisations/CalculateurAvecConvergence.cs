@@ -36,13 +36,18 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
 
         var assietteDeBase = revenuAPrendreEnCompte * ratio;
         AssietteDeCalculDesCotisations = 0m;
-        var diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
-        while (Math.Abs(diffAssiettes) > 1)
+        while (nombreDIterations <= NombreDIterationsMaximal)
         {
             Calculateur.CalculeLesCotisations(assietteDeBase);
 
             AssietteDeCalculDesCotisations = revenuAPrendreEnCompte + Calculateur.CSGNonDeductible.Valeur + Calculateur.CRDSNonDeductible.Valeur;
-            diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
+            var diffAssiettes = AssietteDeCalculDesCotisations - assietteDeBase;
+            if (Math.Abs(diffAssiettes) <= 1)
+            {
+                AssietteDeCalculDesCotisations = assietteDeBase;
+                break;
+            }
+
             if (AssietteDeCalculDesCotisations <= assietteDeBase)
             {
                 ratioMax = ratio;
@@ -56,8 +61,9 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
 
             assietteDeBase = revenuAPrendreEnCompte * ratio;
             nombreDIterations++;
-            if (nombreDIterations > NombreDIterationsMaximal)
-                throw new InvalidOperationException($"On tente de converger depuis trop longtemps ! Revenu = {revenuNet}, année = {annee}, cotisations facultatives = {cotisationsFacultatives}");
         }
+
+        if(nombreDIterations > NombreDIterationsMaximal)
+            throw new InvalidOperationException($"On tente de converger depuis trop longtemps ! Revenu = {revenuNet}, année = {annee}, cotisations facultatives = {cotisationsFacultatives}");
     }
 }

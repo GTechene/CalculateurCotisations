@@ -135,7 +135,6 @@
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionCollapse"
-                    aria-expanded="@(Form.CotisationsFacultatives > 0)"
                     aria-controls="accordionCollapse"
                   >
                     Options
@@ -175,6 +174,7 @@
 
           <div class="mt-5" x-show="formWasSubmitted">
             <div class="h4 pb-2 mb-4 border-bottom border-dark">Cotisations <span x-text="formData.annee"></span></div>
+            <div class="intro-resultats">Assiette prise en compte : <span x-text="`${Math.round(cotisationsDetaillees.assietteDeCotisations).toLocaleString('fr-FR')} €`"></span></div>
 
             <div class="table-responsive" x-data="exportExcel()">
               <table id="cotisationsDetailleesTable" class="table table-sm table-striped">

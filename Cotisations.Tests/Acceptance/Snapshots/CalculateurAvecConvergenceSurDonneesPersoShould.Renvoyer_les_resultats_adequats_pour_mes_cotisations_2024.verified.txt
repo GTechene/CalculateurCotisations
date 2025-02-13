@@ -46,7 +46,8 @@
         valeur: 115.92,
         explication: Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 46 368 €, soit 116 € de cotisations.
       },
-      grandTotal: 28272.950469509557
+      grandTotal: 28272.950469509557,
+      assietteDeCotisations: 63802.01678466797
     }
   }
 }
