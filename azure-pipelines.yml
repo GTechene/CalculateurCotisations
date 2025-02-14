@@ -24,6 +24,13 @@ steps:
     projects: 'CalculCotisations.sln'
     arguments: '--configuration $(buildConfiguration) --no-restore'
 
+- task: PowerShell@2
+  displayName: 'Install Playwright'
+  inputs:
+    filePath: 'Cotisations.Tests/bin/$(buildConfiguration)/net8.0/playwright.ps1'
+    arguments: 'install --with-deps'
+    pwsh: true
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
   inputs:
