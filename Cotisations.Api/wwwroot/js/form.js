@@ -5,8 +5,10 @@ function initFormulaireCotisations() {
       annee: 2024,
       cotisationsFacultatives: 0,
     },
+    anneeValidee: 2024,
     cotisationsFacultativesValidees: 0,
-    formWasSubmitted: false,
+    formulaireEnvoye: false,
+    formulaireEnvoyeAuMoinsUneFois: false,
     cotisationsDetaillees: {
       maladieHorsIndemnitesJournalieres: { valeur: 0, explication: "" },
       maladieIndemnitesJournalieres: { valeur: 0, explication: "" },
@@ -22,14 +24,15 @@ function initFormulaireCotisations() {
       grandTotal: 0,
     },
     submitForm() {
-      this.wasFormSubmitted = true;
       const formData = this.formData;
       const url = `/cotisations/v2/precises/${formData.revenuNet}?annee=${formData.annee}&cotisationsFacultatives=${formData.cotisationsFacultatives}`;
       fetch(url)
         .then((response) => (response = response.json()))
         .then((data) => {
           this.cotisationsDetaillees = data;
-          this.formWasSubmitted = true;
+          this.anneeValidee = formData.annee;
+          this.formulaireEnvoye = true;
+          this.formulaireEnvoyeAuMoinsUneFois = true;
           this.cotisationsFacultativesValidees = formData.cotisationsFacultatives;
         })
         .then(() => {
