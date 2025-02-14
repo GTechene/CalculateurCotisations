@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html><html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <meta name="description" content="Calculateur de cotisations pour les travailleuses et travailleurs indépendant·e·s en métropole, relevant de la SSI et ayant un statut de profession libérale non réglementée, artisan ou commerçant depuis plus d'un an (Travailleur·ses Non Salarié·es). Concerne essentiellement les gérant·es d'EURL, de SARL, d'EI ou de SNC.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js" defer=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/js/form.js"></script>
+    <script src="/js/exportExcel.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#9f00a7">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/cotisations-table.css">
+
+    <title>Calculateur de cotisations</title>
+  </head>
+
+  <body>
+    <div class="page">
+      <div class="sidebar">
+        <div class="top-row ps-3 navbar navbar-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="">Calculateur de cotisations</a>
+          </div>
+        </div>
+
+        <input type="checkbox" title="Navigation menu" class="navbar-toggler" style="caret-color: transparent !important;">
+
+        <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+          <nav class="flex-column">
+            <div class="nav-item selected px-3">
+              <a class="nav-link" href="">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Accueil
+              </a>
+            </div>
+
+            <div class="nav-item px-3">
+              <a class="nav-link" href="https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/taux-cotisations-ac-plnr.html">
+                <span class="bi percent-icon" aria-hidden="true"></span> Taux officiels (URSSAF)
+              </a>
+            </div>
+
+            <div class="nav-item px-3">
+              <a class="nav-link" href="https://mon-entreprise.urssaf.fr/simulateurs/ind%C3%A9pendant">
+                <span class="bi urssaf-icon" aria-hidden="true"></span> Simulateur URSSAF
+              </a>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <main class="d-flex flex-column">
+        <article class="pt-4 container-lg" x-data="initFormulaireCotisations()">
+          <h1>Bienvenue</h1>
+
+          <p class="intro">
+              Ce calculateur est à destination des travailleuses et travailleurs indépendant·e·s se trouvant en métropole, relevant de la SSI
+              et ayant un statut de profession libérale non réglementée, artisan ou commerçant depuis plus d'un an (Travailleur·ses Non Salarié·es). Concerne essentiellement les gérant·es d'EURL, de SARL, d'EI ou de SNC.
+              D'autres cas pourront être implémentés à l'avenir mais ce n'est pas prévu pour l'instant.
+          </p>
+
+          <form @submit.prevent="submitForm">
+            <div class="conteneurFormulairePrincipal">
+              <a data-bs-content="Il s'agit du revenu annuel effectivement versé, à ne pas confondre avec le revenu fiscal qui comprend aussi la CRDS et la CSG non déductible." class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" style="--bs-btn-padding-y: 0.25rem; --bs-btn-padding-x: 0.25rem" aria-label="Revenu net réellement versé" data-bs-original-title="Revenu net réellement versé">
+                <span class="info-icon-small"></span>
+              </a>
+              <label for="revenuNet" class="form-label">Revenu net annuel :</label>
+              <div class="input-group mb-3">
+                <span class="input-group-text">€</span>
+                <input type="number" x-model="formData.revenuNet" id="revenuNet" class="form-control" title="Revenu effectivement versé (ou prévu) pour l'année choisie, hors charges, CSG, etc..." @focusin="if($event.target.value == '0') event.target.value = ''" @focusout="if($event.target.value == '') event.target.value = '0'" @input="formulaireEnvoye = false" required="" style="caret-color: transparent !important;">
+                <select id="annee" x-model="formData.annee" class="form-control form-select" title="Année à laquelle vous souhaitez calculer vos cotisations" @change="formulaireEnvoye = false">
+                  <option value="2025">2025 (beta)</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="accordion mb-3" id="accordionFacultatif">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button btn-secondary collapsed p-2" type="button" data-bs-toggle="collapse" data-bs-target="#accordionCollapse" aria-controls="accordionCollapse">
+                    Options
+                  </button>
+                </h2>
+                <div id="accordionCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionFacultatif">
+                  <div class="accordion-body" id="facultatif">
+                    <label for="cotisationsFacultatives" class="form-label" title="Cotisations type Madelin, PER...">Cotisations facultatives :</label>
+                    <div class="input-group ms-1" id="inputGroupFacultatif">
+                      <span class="input-group-text">€</span>
+                      <input type="number" x-model="formData.cotisationsFacultatives" id="cotisationsFacultatives" class="form-control" title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie" @focusin="if($event.target.value == '0') event.target.value = ''" @focusout="if($event.target.value == '') event.target.value = '0'" @input="formulaireEnvoye = false" style="caret-color: transparent !important;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button id="submitButton" class="btn btn-primary" title="Cliquez ici pour lancer le calcul des cotisations" :disabled="formData.revenuNet <= 0 || formulaireEnvoye" disabled="disabled">
+              Lancer le calcul
+            </button>
+          </form>
+
+          <div class="mt-5" x-show="formulaireEnvoyeAuMoinsUneFois">
+            <div class="h4 pb-2 mb-4 border-bottom border-dark">Cotisations <span x-text="anneeValidee">2024</span></div>
+            <div class="intro-resultats">Assiette prise en compte : <span x-text="`${Math.round(cotisationsDetaillees.assietteDeCotisations).toLocaleString('fr-FR')} €`">51 984 €</span></div>
+
+            <div class="table-responsive" x-data="exportExcel()">
+              <table id="cotisationsDetailleesTable" class="table table-sm table-striped">
+                <tbody><tr>
+                  <td>Cotisations maladie (hors indemnités)</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.maladieHorsIndemnitesJournalieres.valeur).toLocaleString('fr-FR')} €`">3 483 €</td>
+                  <td class="explication-cell">
+                    <a id="cotisesMaladiePopover" :data-bs-content="cotisationsDetaillees.maladieHorsIndemnitesJournalieres.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Cotisations maladie (hors indemnités)" data-bs-original-title="Cotisations maladie (hors indemnités)" data-bs-content="L'assiette de 51 984 € est comprise entre 51 005 € (110% du PASS) et 231 840 € (500% du PASS), donc le taux fixe de 6,7% est appliqué, soit 3 483 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Cotisations indemnités maladie</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.maladieIndemnitesJournalieres.valeur).toLocaleString('fr-FR')} €`">260 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.maladieIndemnitesJournalieres.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Cotisations maladie (indemnités)" data-bs-original-title="Cotisations maladie (indemnités)" data-bs-content="L'assiette de 51 984 € est comprise entre 18 547 € (40% du PASS) et 231 840 € (500% du PASS), donc le taux fixe de 0,5% est appliqué à cette assiette, soit 260 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Retraite de base</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.retraiteDeBase.valeur).toLocaleString('fr-FR')} €`">8 264 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.retraiteDeBase.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Retraite de base" data-bs-original-title="Retraite de base" data-bs-content="L'assiette de 51 984 € est supérieure à 46 368 € (PASS), donc le taux fixe de 17,75% est appliqué à la part des revenus inférieure au PASS et le taux de 0,6% est appliqué à la part des revenus qui y est supérieure, soit 8 264 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Retraite complémentaire</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.retraiteComplementaire.valeur).toLocaleString('fr-FR')} €`">3 729 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.retraiteComplementaire.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Retraite complémentaire" data-bs-original-title="Retraite complémentaire" data-bs-content="L'assiette de 51 984 € est supérieure à 42 946 €, donc le taux fixe de 7% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 8% est appliqué à la part des revenus qui y est supérieure, soit 3 729 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Invalidité/décès</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.invaliditeDeces.valeur).toLocaleString('fr-FR')} €`">603 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.invaliditeDeces.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Invalidité/décès" data-bs-original-title="Invalidité/décès" data-bs-content="L'assiette de 51 984 € est supérieure au PASS (46 368 €). Le taux de 1,3 % est donc appliqué au PASS, soit 603 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Allocations familiales</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.allocationsFamiliales.valeur).toLocaleString('fr-FR')} €`">113 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.allocationsFamiliales.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Allocations familiales" data-bs-original-title="Allocations familiales" data-bs-content="L'assiette de 51 984 € est comprise entre 51 005 € (110% du PASS) et 64 915 € (140% du PASS). Un taux progressif entre 0% et 3,1% est appliqué. Ici il s'agit de 0,22%, soit 113 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Total cotisations obligatoires</td>
+                  <td class="fw-bold text-end" x-text="`${Math.round(cotisationsDetaillees.totalCotisationsObligatoires).toLocaleString('fr-FR')} €`">16 452 €</td>
+                </tr>
+                <tr>
+                  <td>CSG déductible</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.csgDeductible.valeur).toLocaleString('fr-FR')} €`">4 654 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.csgDeductible.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="CSG déductible" data-bs-original-title="CSG déductible" data-bs-content="L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (51 984 €) + les cotisations obligatoires elles-mêmes (16 452 €), soit un total de 68 436 €. Le taux fixe de 6,8% est appliqué à cette assiette, ce qui donne une valeur de une valeur de 4 654 € pour la CSG déductible.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>CSG non déductible</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.csgNonDeductible.valeur).toLocaleString('fr-FR')} €`">1 642 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.csgNonDeductible.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="CSG non déductible" data-bs-original-title="CSG non déductible" data-bs-content="L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (51 984 €) + les cotisations obligatoires elles-mêmes (16 452 €), soit un total de 68 436 €. Le taux fixe de 2,4% est appliqué à cette assiette, ce qui donne une valeur de 1 642 € pour la CSG non déductible.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>CRDS</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.crds.valeur).toLocaleString('fr-FR')} €`">342 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.crds.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="CRDS" data-bs-original-title="CRDS" data-bs-content="L'assiette de calcul de la CRDS est égale à l'assiette retenue pour les cotisations obligatoires (51 984 €) + les cotisations obligatoires elles-mêmes (16 452 €), soit un total de 68 436 €. Le taux fixe de 0,5% est appliqué à cette assiette, ce qui donne une valeur de 342 € pour la CRDS.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Formation professionnelle</td>
+                  <td class="text-end" x-text="`${Math.round(cotisationsDetaillees.formationProfessionnelle.valeur).toLocaleString('fr-FR')} €`">116 €</td>
+                  <td class="explication-cell">
+                    <a :data-bs-content="cotisationsDetaillees.formationProfessionnelle.explication" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Formation professionnelle" data-bs-original-title="Formation professionnelle" data-bs-content="Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 46 368 €, soit 116 € de cotisations.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">
+                    Total <span x-show="cotisationsFacultativesValidees > 0" style="display: none;">hors cotisations facultatives</span>
+                  </td>
+                  <td class="text-end">
+                    <strong x-text="`${Math.round(cotisationsDetaillees.grandTotal).toLocaleString('fr-FR')} €`">23 206 €</strong>
+                    <br>
+                    <span x-text="`${(100 * cotisationsDetaillees.grandTotal / formData.revenuNet).toLocaleString('fr-FR', {maximumFractionDigits: 1})} % du revenu`">46,4 % du revenu</span>
+                  </td>
+                  <td class="explication-cell" x-show="cotisationsFacultativesValidees > 0" style="display: none;">
+                    <a :data-bs-content="`Total à payer hors cotisations facultatives renseignées plus haut car on considère qu'elles sont déjà payées. Sinon, il suffit de les ajouter et cela donne ${Math.round(cotisationsDetaillees.grandTotal + +cotisationsFacultativesValidees)} €.`" class="btn btn-primary btn-sm explication" data-bs-placement="bottom" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" aria-label="Total" data-bs-original-title="Total" data-bs-content="Total à payer hors cotisations facultatives renseignées plus haut car on considère qu'elles sont déjà payées. Sinon, il suffit de les ajouter et cela donne 23206 €.">
+                      <span class="info-icon"></span>
+                    </a>
+                  </td>
+                </tr>
+              </tbody></table>
+              <button class="btn btn-success btn-sm btn-export" :class="getClass()" title="Export Excel" @click="exportData(formData.revenuNet, formData.annee, formData.cotisationsFacultatives)" :disabled="isExporting">
+                Export Excel <span class="lds-dual-ring" x-show="isExporting" style="display: none;"></span>
+              </button>
+              <p class="definitions">
+                PASS = Plafond Annuel de la Sécurité Sociale.<br>
+                Assiette = base de calcul. Pour la majorité des cotisations c'est la somme du revenu imposable et des cotisations facultatives. Le revenu imposable est la somme du revenu
+                net (effectivement versé), de la CSG non déductible et de la CRDS. Pour calculer CSG et CRDS avant 2025, l'assiette est la somme du revenu imposable et des cotisations obligatoires.
+                Il en résulte une dépendance circulaire entre CSG/CRDS et revenu imposable, que ce simulateur résout par convergence.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <footer class="border-top footer text-muted mt-auto">
+          <div class="ps-3 pt-1">© 2024-2025 - <a href="https://guillaume.techene.net">Guillaume Téchené</a> - <a href="https://github.com/GTechene/CalculateurCotisations">GitHub</a></div>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+      const popoverList = [...popoverTriggerList].map(
+        (popoverTriggerEl) =>
+          new bootstrap.Popover(popoverTriggerEl, {
+            container: "body",
+          })
+      );
+    </script>
+  
+
+</body></html>

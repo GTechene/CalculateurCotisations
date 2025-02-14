@@ -8,17 +8,19 @@
 
   <ItemGroup>
     <PackageReference Include="Diverse" Version="0.10.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.50.0" />
     <PackageReference Include="NFluent" Version="3.1.0" />
     <PackageReference Include="NUnit" Version="4.3.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageReference Include="sas" Version="1.0.2" />
     <PackageReference Include="sas.nfluent" Version="1.0.2" />
     <PackageReference Include="sas.simulators.http" Version="1.0.2" />
     <PackageReference Include="sas.simulators.nsubstitute" Version="1.0.2" />
-    <PackageReference Include="Verify" Version="28.9.0" />
-    <PackageReference Include="Verify.NUnit" Version="28.9.0" />
+    <PackageReference Include="Verify" Version="28.11.0" />
+    <PackageReference Include="Verify.NUnit" Version="28.11.0" />
     <PackageReference Include="Verify.Http" Version="6.4.1" />
+    <PackageReference Include="Verify.Playwright" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

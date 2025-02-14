@@ -5,5 +5,9 @@ namespace Cotisations.Tests.Acceptance;
 public static class ModuleInitializer
 {
     [ModuleInitializer]
-    public static void Initialize() => VerifierSettings.InitializePlugins();
+    public static void Initialize()
+    {
+        VerifyPlaywright.Initialize(installPlaywright: true);
+        VerifierSettings.InitializePlugins();
+    }
 }
