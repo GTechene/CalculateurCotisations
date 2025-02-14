@@ -15,7 +15,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <script src="https://unpkg.com/alpinejs@3.14.3/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js" defer></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -112,6 +112,7 @@
                   title="Revenu effectivement versé (ou prévu) pour l'année choisie, hors charges, CSG, etc..."
                   @focusin="if($event.target.value == '0') event.target.value = ''"
                   @focusout="if($event.target.value == '') event.target.value = '0'"
+                  @input="wasFormSubmitted = false"
                   required
                 />
                 <select
@@ -119,6 +120,7 @@
                   x-model="formData.annee"
                   class="form-control form-select"
                   title="Année à laquelle vous souhaitez calculer vos cotisations"
+                  @change="wasFormSubmitted = false"
                 >
                   <option value="2025">2025 (beta)</option>
                   <option value="2024">2024</option>
@@ -155,6 +157,7 @@
                         title="Entrez ici les cotisations facultatives (Madelin, PER...) pour l'année choisie"
                         @focusin="if($event.target.value == '0') event.target.value = ''"
                         @focusout="if($event.target.value == '') event.target.value = '0'"
+                        @input="wasFormSubmitted = false"
                       />
                     </div>
                   </div>
@@ -166,7 +169,7 @@
               id="submitButton"
               class="btn btn-primary"
               title="Cliquez ici pour lancer le calcul des cotisations"
-              :disabled="formData.revenuNet <= 0"
+              :disabled="formData.revenuNet <= 0 || wasFormSubmitted"
             >
               Lancer le calcul
             </button>

@@ -22,6 +22,7 @@ function initFormulaireCotisations() {
       grandTotal: 0,
     },
     submitForm() {
+      this.wasFormSubmitted = true;
       const formData = this.formData;
       const url = `/cotisations/v2/precises/${formData.revenuNet}?annee=${formData.annee}&cotisationsFacultatives=${formData.cotisationsFacultatives}`;
       fetch(url)
