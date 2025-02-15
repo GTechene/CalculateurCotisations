@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright.NUnit;
+﻿using Cotisations.Tests.EndToEnd.Extensions;
+using Microsoft.Playwright.NUnit;
 
 namespace Cotisations.Tests.EndToEnd;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Playwright;
 
-namespace Cotisations.Tests.EndToEnd;
+namespace Cotisations.Tests.EndToEnd.Extensions;
 
 public static class PageExtensions
 {
