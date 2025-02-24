@@ -1,4 +1,5 @@
-﻿using Cotisations.Tests.EndToEnd.Extensions;
+﻿using System.Globalization;
+using Cotisations.Tests.EndToEnd.Extensions;
 using Microsoft.Playwright.NUnit;
 using NFluent;
 
@@ -40,7 +41,9 @@ public class CotisationsPageShould : PageTest
     {
         var cellules = await Page.Locator($"tr:has-text('{nomDeLaLigne}')").First.Locator("td").AllAsync();
         var valeurEnTexte = await cellules[1].TextContentAsync();
-        var valeur = decimal.Parse(valeurEnTexte!.Replace("€", "").Replace(" ", ""));
+        var valeurSansLeSigneEuro = valeurEnTexte!.Replace("€", "");
+
+        var valeur = decimal.Parse(valeurSansLeSigneEuro, CultureInfo.GetCultureInfo("fr-FR"));
         return valeur;
     }
 }
