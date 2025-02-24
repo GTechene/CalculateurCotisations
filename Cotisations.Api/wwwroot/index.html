@@ -90,7 +90,7 @@
           <form @submit.prevent="submitForm">
             <div class="conteneurFormulairePrincipal">
               <a
-                data-bs-content="Il s'agit du revenu annuel effectivement versé, à ne pas confondre avec le revenu fiscal qui comprend aussi la CRDS et la CSG non déductible."
+                data-bs-content="Il s'agit du revenu annuel effectivement versé lors de l'année sélectionnée. Ne pas confondre avec le revenu fiscal qui comprend aussi la CRDS et la CSG non déductible. Nombre entier uniquement, n'entrez pas de centimes."
                 class="btn btn-primary btn-sm explication"
                 data-bs-placement="bottom"
                 title="Revenu net réellement versé"
@@ -119,7 +119,7 @@
                   id="annee"
                   x-model="formData.annee"
                   class="form-control form-select"
-                  title="Année à laquelle vous souhaitez calculer vos cotisations"
+                  title="Année à laquelle ce revenu a été versé. Les cotisations seront à payer l'année suivante. Exemple : si vous sélectionnez 2024, les cotisations seront à payer en 2025."
                   @change="formulaireEnvoye = false"
                 >
                   <option value="2025">2025 (beta)</option>
@@ -144,9 +144,19 @@
                 </h2>
                 <div id="accordionCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionFacultatif">
                   <div class="accordion-body" id="facultatif">
-                    <label for="cotisationsFacultatives" class="form-label" title="Cotisations type Madelin, PER..."
-                      >Cotisations facultatives :</label
+                    <a
+                      data-bs-content="Cotisations supplémentaires type Madelin, PER/PERCO... Nombre entier uniquement, n'entrez pas de centimes."
+                      class="btn btn-primary btn-sm explication"
+                      data-bs-placement="bottom"
+                      title="Cotisations facultatives"
+                      tabindex="0"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="focus"
+                      style="--bs-btn-padding-y: 0.25rem; --bs-btn-padding-x: 0.25rem"
                     >
+                      <span class="info-icon-small"></span>
+                    </a>
+                    <label for="cotisationsFacultatives" class="form-label">Cotisations facultatives :</label>
                     <div class="input-group ms-1" id="inputGroupFacultatif">
                       <span class="input-group-text">€</span>
                       <input
