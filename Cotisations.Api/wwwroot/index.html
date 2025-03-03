@@ -186,7 +186,7 @@
           </form>
 
           <div class="mt-5" x-show="formulaireEnvoyeAuMoinsUneFois">
-            <div class="h4 pb-2 mb-4 border-bottom border-dark">Cotisations <span x-text="anneeValidee"></span></div>
+            <div class="h4 pb-2 mb-4 border-bottom border-dark">Cotisations <span x-text="anneeValidee"></span> payables en <span x-text="Number(anneeValidee) + 1"></span></div>
             <div class="intro-resultats">Assiette prise en compte : <span x-text="`${Math.round(cotisationsDetaillees.assietteDeCotisations).toLocaleString('fr-FR')} €`"></span></div>
 
             <div class="table-responsive" x-data="exportExcel()">
