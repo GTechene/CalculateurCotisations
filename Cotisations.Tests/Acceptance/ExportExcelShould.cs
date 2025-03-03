@@ -30,13 +30,14 @@ public class ExportExcelShould
     }
 
     [Test]
-    public Task Creer_un_fichier_Excel_a_partir_d_un_resultat_de_calcul_en_2025()
+    public Task Creer_un_fichier_Excel_a_partir_d_un_resultat_de_calcul_en_2025_incluant_les_cotisations_facultatives()
     {
-        var revenuNet = 50_000;
-        var annee = 2025;
-        var calculateur = new CalculateurAvecConvergence(revenuNet, annee);
-        calculateur.Calcule();
-        var exporteurExcel = new ExporteurExcel(calculateur.Calculateur, annee, revenuNet, 0);
+        const int revenuNet = 50_000;
+        const int annee = 2025;
+        const decimal cotisationsFacultatives = 1000m;
+        var calculateur = new Calculateur2025();
+        calculateur.CalculeLesCotisations(revenuNet + cotisationsFacultatives);
+        var exporteurExcel = new ExporteurExcel(calculateur, annee, revenuNet, cotisationsFacultatives);
 
         using var stream = new MemoryStream();
 

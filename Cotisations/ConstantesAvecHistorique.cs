@@ -1,5 +1,6 @@
 ﻿namespace Cotisations;
 
+// TODO : l'interface n'est utile que pour l'export Excel.
 public interface IConstantesAvecHistorique
 {
     public decimal CotisationsMaladiePourRevenusSupA60PctPass { get; }
@@ -38,7 +39,7 @@ public class Constantes2025
     public decimal TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass => 0.065m;
     public decimal TauxCotisationsIndemnitesMaladie => 0.005m;
 
-    // TODO : va probablement changer en 2025 mais pas défini encore au 24/01/2025
+    // TODO : va probablement changer en 2025 mais pas défini encore au 24/01/2025. Normalement c'est le PMSS * 0.9973 (pro rata temporis, donc 1 année complète - le 1er mai) * 12 mois. cf https://mon-entreprise.urssaf.fr/documentation/entreprise/prorata-temporis
     public int PlafondsRetraiteComplementaireArtisansCommercants => 42946;
 
     public decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;

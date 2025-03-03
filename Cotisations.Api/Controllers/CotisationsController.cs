@@ -84,7 +84,7 @@ public class CotisationsController : ControllerBase
         else
         {
             calculateur = Calculateurs.TrouveUnCalculateur(valeurAnnee);
-            calculateur.CalculeLesCotisations(revenuNet);
+            calculateur.CalculeLesCotisations(revenuNet + valeurCotisationsFacultatives);
         }
 
         var exporteur = new ExporteurExcel(calculateur, valeurAnnee, revenuNet, valeurCotisationsFacultatives);
