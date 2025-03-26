@@ -7,7 +7,7 @@
 /// </summary>
 public static class TauxInchanges
 {
-    public const decimal CotisationsMaladiePourRevenusInferieursA60PctDuPass = 0.04m;
+    public const decimal CotisationsMaladiePourRevenusSupA5Pass = 0.065m;
     public const decimal InvaliditeDeces = 0.013m;
     public const decimal PlancherInvaliditeDeces = 0.115m;
     public const decimal PlancherRetraiteDeBase = 0.115m;
