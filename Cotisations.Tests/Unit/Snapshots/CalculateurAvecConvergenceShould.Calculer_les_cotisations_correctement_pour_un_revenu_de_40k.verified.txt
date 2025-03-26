@@ -1,0 +1,168 @@
+﻿{
+  Calculateur: {
+    MaladieHorsIndemnitesJournalieres: {
+      TauxUnique: 0.0560404948927600931677018634,
+      Taux: [
+        0.0560404948927600931677018634
+      ],
+      Valeur: 2330.9616979686369807083414227,
+      Explication: L'assiette de 41 594 € est comprise entre 27 821 € (60% du PASS) et 51 005 € (110% du PASS), donc un taux progressif entre 4% et 6,70% est appliqué. Ici il s'agit de 5,6%, soit 2 331 € de cotisations.
+    },
+    MaladieIndemnitesJournalieres: {
+      TauxUnique: 0.005,
+      Taux: [
+        0.005
+      ],
+      Valeur: 207.97119140625000000,
+      Explication: L'assiette de 41 594 € est comprise entre 18 547 € (40% du PASS) et 231 840 € (500% du PASS), donc le taux fixe de 0,5% est appliqué à cette assiette, soit 208 € de cotisations.
+    },
+    RetraiteDeBase: {
+      Taux1: 0.1775,
+      Taux: [
+        0.1775,
+        0.0
+      ],
+      Valeur: 7382.977294921875000000,
+      Explication: L'assiette de 41 594 € est inférieure à 46 368 € (PASS), donc le taux fixe de 17,75% est appliqué à cette assiette, soit 7 383 € de cotisations.
+    },
+    RetraiteComplementaire: {
+      Taux1: 0.07,
+      Taux: [
+        0.07,
+        0.0
+      ],
+      Valeur: 2911.5966796875000000,
+      Explication: L'assiette de 41 594 € est inférieure à 42 946 €, donc le taux fixe de 7% est appliqué à cette assiette, soit 2 912 € de cotisations.
+    },
+    InvaliditeDeces: {
+      TauxUnique: 0.013,
+      Taux: [
+        0.013
+      ],
+      Valeur: 540.72509765625000000,
+      Explication: L'assiette de 41 594 € est inférieure ou égale au PASS (46 368 €). Le taux de 1,300 % est donc directement appliqué à cette assiette, soit 541 € de cotisations.
+    },
+    AllocationsFamiliales: {
+      Taux: [
+        0.0
+      ],
+      Explication: L'assiette de 41 594 € est inférieure à 51 005 € (110% du PASS). Il n'y a donc pas de cotisation à payer pour les allocations familiales.
+    },
+    CSGNonDeductible: {
+      TauxUnique: 0.024,
+      Taux: [
+        0.024
+      ],
+      Valeur: 1319.2432858293722875370001942,
+      Explication: L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (41 594 €) + les cotisations obligatoires elles-mêmes (13 374 €), soit un total de 54 968 €. Le taux fixe de 2,4% est appliqué à cette assiette, ce qui donne une valeur de 1 319 € pour la CSG non déductible.
+    },
+    CSGDeductible: {
+      TauxUnique: 0.068,
+      Taux: [
+        0.068
+      ],
+      Valeur: 3737.8559765165548146881672168,
+      Explication: L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (41 594 €) + les cotisations obligatoires elles-mêmes (13 374 €), soit un total de 54 968 €. Le taux fixe de 6,8% est appliqué à cette assiette, ce qui donne une valeur de une valeur de 3 738 € pour la CSG déductible.
+    },
+    CRDSNonDeductible: {
+      TauxUnique: 0.005,
+      Taux: [
+        0.005
+      ],
+      Valeur: 274.84235121445255990354170712,
+      Explication: L'assiette de calcul de la CRDS est égale à l'assiette retenue pour les cotisations obligatoires (41 594 €) + les cotisations obligatoires elles-mêmes (13 374 €), soit un total de 54 968 €. Le taux fixe de 0,5% est appliqué à cette assiette, ce qui donne une valeur de 275 € pour la CRDS.
+    },
+    FormationProfessionnelle: {
+      TauxUnique: 0.0025,
+      Taux: [
+        0.0025
+      ],
+      Valeur: 115.9200,
+      Explication: Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 46 368 €, soit 116 € de cotisations.
+    },
+    AssietteDeCalculDesCotisations: 41594.23828125000000
+  },
+  TotalCotisationsObligatoires: 13374.231961640511980708341423,
+  MaladieHorsIndemnitesJournalieres: {
+    TauxUnique: 0.0560404948927600931677018634,
+    Taux: [
+      0.0560404948927600931677018634
+    ],
+    Valeur: 2330.9616979686369807083414227,
+    Explication: L'assiette de 41 594 € est comprise entre 27 821 € (60% du PASS) et 51 005 € (110% du PASS), donc un taux progressif entre 4% et 6,70% est appliqué. Ici il s'agit de 5,6%, soit 2 331 € de cotisations.
+  },
+  MaladieIndemnitesJournalieres: {
+    TauxUnique: 0.005,
+    Taux: [
+      0.005
+    ],
+    Valeur: 207.97119140625000000,
+    Explication: L'assiette de 41 594 € est comprise entre 18 547 € (40% du PASS) et 231 840 € (500% du PASS), donc le taux fixe de 0,5% est appliqué à cette assiette, soit 208 € de cotisations.
+  },
+  RetraiteDeBase: {
+    Taux1: 0.1775,
+    Taux: [
+      0.1775,
+      0.0
+    ],
+    Valeur: 7382.977294921875000000,
+    Explication: L'assiette de 41 594 € est inférieure à 46 368 € (PASS), donc le taux fixe de 17,75% est appliqué à cette assiette, soit 7 383 € de cotisations.
+  },
+  RetraiteComplementaire: {
+    Taux1: 0.07,
+    Taux: [
+      0.07,
+      0.0
+    ],
+    Valeur: 2911.5966796875000000,
+    Explication: L'assiette de 41 594 € est inférieure à 42 946 €, donc le taux fixe de 7% est appliqué à cette assiette, soit 2 912 € de cotisations.
+  },
+  InvaliditeDeces: {
+    TauxUnique: 0.013,
+    Taux: [
+      0.013
+    ],
+    Valeur: 540.72509765625000000,
+    Explication: L'assiette de 41 594 € est inférieure ou égale au PASS (46 368 €). Le taux de 1,300 % est donc directement appliqué à cette assiette, soit 541 € de cotisations.
+  },
+  AllocationsFamiliales: {
+    Taux: [
+      0.0
+    ],
+    Explication: L'assiette de 41 594 € est inférieure à 51 005 € (110% du PASS). Il n'y a donc pas de cotisation à payer pour les allocations familiales.
+  },
+  CSGNonDeductible: {
+    TauxUnique: 0.024,
+    Taux: [
+      0.024
+    ],
+    Valeur: 1319.2432858293722875370001942,
+    Explication: L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (41 594 €) + les cotisations obligatoires elles-mêmes (13 374 €), soit un total de 54 968 €. Le taux fixe de 2,4% est appliqué à cette assiette, ce qui donne une valeur de 1 319 € pour la CSG non déductible.
+  },
+  CSGDeductible: {
+    TauxUnique: 0.068,
+    Taux: [
+      0.068
+    ],
+    Valeur: 3737.8559765165548146881672168,
+    Explication: L'assiette de calcul de la CSG est égale à l'assiette retenue pour les cotisations obligatoires (41 594 €) + les cotisations obligatoires elles-mêmes (13 374 €), soit un total de 54 968 €. Le taux fixe de 6,8% est appliqué à cette assiette, ce qui donne une valeur de une valeur de 3 738 € pour la CSG déductible.
+  },
+  CRDS: {
+    TauxUnique: 0.005,
+    Taux: [
+      0.005
+    ],
+    Valeur: 274.84235121445255990354170712,
+    Explication: L'assiette de calcul de la CRDS est égale à l'assiette retenue pour les cotisations obligatoires (41 594 €) + les cotisations obligatoires elles-mêmes (13 374 €), soit un total de 54 968 €. Le taux fixe de 0,5% est appliqué à cette assiette, ce qui donne une valeur de 275 € pour la CRDS.
+  },
+  FormationProfessionnelle: {
+    TauxUnique: 0.0025,
+    Taux: [
+      0.0025
+    ],
+    Valeur: 115.9200,
+    Explication: Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 46 368 €, soit 116 € de cotisations.
+  },
+  GrandTotal: 18822.093575200891642837050541,
+  AssietteDeCalculDesCotisations: 41594.23828125000000
+}
