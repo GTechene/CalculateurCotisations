@@ -32,7 +32,7 @@
         0.0
       ],
       Valeur: 2911.5966796875000000,
-      Explication: L'assiette de 41 594 € est inférieure à 42 946 €, donc le taux fixe de 7% est appliqué à cette assiette, soit 2 912 € de cotisations.
+      Explication: L'assiette de 41 594 € est inférieure à 42 946 €, donc le taux fixe de 7,0% est appliqué à cette assiette, soit 2 912 € de cotisations.
     },
     InvaliditeDeces: {
       TauxUnique: 0.013,
@@ -115,7 +115,7 @@
       0.0
     ],
     Valeur: 2911.5966796875000000,
-    Explication: L'assiette de 41 594 € est inférieure à 42 946 €, donc le taux fixe de 7% est appliqué à cette assiette, soit 2 912 € de cotisations.
+    Explication: L'assiette de 41 594 € est inférieure à 42 946 €, donc le taux fixe de 7,0% est appliqué à cette assiette, soit 2 912 € de cotisations.
   },
   InvaliditeDeces: {
     TauxUnique: 0.013,

@@ -19,7 +19,7 @@
       },
       retraiteComplementaire: {
         valeur: 4120.54,
-        explication: L'assiette de 50 000 € est supérieure à 42 946 €, donc le taux fixe de 8% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 9% est appliqué à la part des revenus qui y est supérieure, soit 4 121 € de cotisations.
+        explication: L'assiette de 50 000 € est supérieure à 42 946 €, donc le taux fixe de 8,1% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 9,1% est appliqué à la part des revenus qui y est supérieure, soit 4 121 € de cotisations.
       },
       invaliditeDeces: {
         valeur: 612.3,

@@ -46,4 +46,20 @@ internal class Calculateur2025Should
         const decimal assietteAttendue = revenu - abattementPlafond;
         Check.That(calculateur.AssietteCsgCrds).IsEqualTo(assietteAttendue);
     }
+
+    [Test]
+    public void Afficher_1_chiffre_apres_la_virgule_dans_l_explication_de_la_retraite_complementaire()
+    {
+        var calculateur = new Calculateur2025();
+
+        const decimal revenu = 50_000m;
+        calculateur.CalculeLesCotisations(revenu);
+
+        Check.That(calculateur.RetraiteComplementaire.Explication).MatchesWildcards("*8,1%*9,1%*");
+
+        const decimal revenuInferieurAuPlafond = 40_000m;
+        calculateur.CalculeLesCotisations(revenuInferieurAuPlafond);
+
+        Check.That(calculateur.RetraiteComplementaire.Explication).MatchesWildcards("*8,1%*");
+    }
 }

@@ -34,7 +34,7 @@
         0.08
       ],
       Valeur: 14408.30,
-      Explication: L'assiette de 310 641 € est supérieure à 42 946 €, donc le taux fixe de 7% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 8% est appliqué à la part des revenus qui y est supérieure, soit 14 408 € de cotisations.
+      Explication: L'assiette de 310 641 € est supérieure à 42 946 €, donc le taux fixe de 7,0% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 8,0% est appliqué à la part des revenus qui y est supérieure, soit 14 408 € de cotisations.
     },
     InvaliditeDeces: {
       TauxUnique: 0.013,
@@ -121,7 +121,7 @@
       0.08
     ],
     Valeur: 14408.30,
-    Explication: L'assiette de 310 641 € est supérieure à 42 946 €, donc le taux fixe de 7% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 8% est appliqué à la part des revenus qui y est supérieure, soit 14 408 € de cotisations.
+    Explication: L'assiette de 310 641 € est supérieure à 42 946 €, donc le taux fixe de 7,0% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 8,0% est appliqué à la part des revenus qui y est supérieure, soit 14 408 € de cotisations.
   },
   InvaliditeDeces: {
     TauxUnique: 0.013,

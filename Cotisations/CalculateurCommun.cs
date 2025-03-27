@@ -74,14 +74,14 @@ public class CalculateurCommun(PlafondAnnuelSecuriteSociale PASS)
         if (assiette <= plafondsRetraiteComplementaireArtisansCommercants)
         {
             var valeur = assiette * tauxPremiereTranche;
-            return new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {plafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {tauxPremiereTranche * 100:N0}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", tauxPremiereTranche, 0m);
+            return new ResultatAvecTauxMultiplesEtExplication(valeur, $"L'assiette de {assiette:C0} est inférieure à {plafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {tauxPremiereTranche * 100:N1}% est appliqué à cette assiette, soit {valeur:C0} de cotisations.", tauxPremiereTranche, 0m);
         }
 
         var cotisationPremiereTranche = tauxPremiereTranche * plafondsRetraiteComplementaireArtisansCommercants;
         var cotisationDeuxiemeTranche = tauxDeuxiemeTranche * (Math.Min(assiette, PASS.Valeur400Pct) - plafondsRetraiteComplementaireArtisansCommercants);
 
         var cotisations = cotisationPremiereTranche + cotisationDeuxiemeTranche;
-        return new ResultatAvecTauxMultiplesEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {plafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {tauxPremiereTranche * 100:N0}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {tauxDeuxiemeTranche * 100:N0}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.", tauxPremiereTranche, tauxDeuxiemeTranche);
+        return new ResultatAvecTauxMultiplesEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {plafondsRetraiteComplementaireArtisansCommercants:C0}, donc le taux fixe de {tauxPremiereTranche * 100:N1}% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de {tauxDeuxiemeTranche * 100:N1}% est appliqué à la part des revenus qui y est supérieure, soit {cotisations:C0} de cotisations.", tauxPremiereTranche, tauxDeuxiemeTranche);
     }
 
     public ResultatAvecTauxUniqueEtExplication CalculeLaCotisationInvaliditeDeces(decimal assiette)
