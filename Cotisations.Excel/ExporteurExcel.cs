@@ -116,42 +116,73 @@ public class ExporteurExcel
     {
         worksheet.Cell("A12").Value = "Retraite de base";
         worksheet.Cell("B11").Value = "Revenus tranche 1";
-        worksheet.Cell("B12").FormulaA1 = "=B5"; // TODO: implem avec des revenus < PASS
+        worksheet.Cell("B12")
+            .SetFormulaA1("=MIN(B4,B5)")
+            .WithPlainNumberFormat();
         worksheet.Cell("C11").Value = "Taux 1";
         worksheet.Cell("C12")
             .SetValue(_calculateur.RetraiteDeBase.Taux1)
             .WithPercentFormat();
-        worksheet.Cell("D11").Value = "Revenus tranche 2";
-        worksheet.Cell("D12")
-            .SetFormulaA1("=B4-B5") // TODO: implem avec des revenus < PASS
-            .WithPlainNumberFormat();
-        worksheet.Cell("E11").Value = "Taux 2";
-        worksheet.Cell("E12")
-            .SetValue(_calculateur.RetraiteDeBase.Taux2)
-            .WithPercentFormat();
-        worksheet.Cell("F11").Value = "Cotisation";
-        const string celluleRetraiteDeBase = "F12";
-        worksheet.Cell(celluleRetraiteDeBase)
-            .WithImportantFormula("=B12*C12+D12*E12")
-            .WithPlainNumberFormat()
-            .WithLargeComment(_calculateur.RetraiteDeBase.Explication);
+
+        string celluleRetraiteDeBase;
+        string celluleRetraiteComplementaire;
 
         worksheet.Cell("A13").Value = "Retraite complémentaire";
-        worksheet.Cell("B13").FormulaA1 = "=B6"; // TODO: implem avec des revenus < PASS
+        worksheet.Cell("B13")
+            .SetFormulaA1("=MIN(B4,B6)")
+            .WithPlainNumberFormat();
         worksheet.Cell("C13")
             .SetValue(_calculateur.RetraiteComplementaire.Taux1)
             .WithPercentFormat();
-        worksheet.Cell("D13")
-            .SetFormulaA1("=B4-B6") // TODO: implem avec des revenus < PASS
-            .WithPlainNumberFormat();
-        worksheet.Cell("E13")
-            .SetValue(_calculateur.RetraiteComplementaire.Taux2)
-            .WithPercentFormat();
-        const string celluleRetraiteComplementaire = "F13";
-        worksheet.Cell(celluleRetraiteComplementaire)
-            .WithImportantFormula("=B13*C13+D13*E13")
-            .WithPlainNumberFormat()
-            .WithLargeComment(_calculateur.RetraiteComplementaire.Explication);
+
+        if (_calculateur.AssietteDeCalculDesCotisations > _pass.Valeur)
+        {
+            celluleRetraiteDeBase = "F12";
+            celluleRetraiteComplementaire = "F13";
+
+            worksheet.Cell("D11").Value = "Revenus tranche 2";
+            worksheet.Cell("D12")
+                .SetFormulaA1("=B4-B5")
+                .WithPlainNumberFormat();
+            worksheet.Cell("E11").Value = "Taux 2";
+            worksheet.Cell("E12")
+                .SetValue(_calculateur.RetraiteDeBase.Taux2)
+                .WithPercentFormat();
+
+            worksheet.Cell("F11").Value = "Cotisation";
+            worksheet.Cell(celluleRetraiteDeBase)
+                .WithImportantFormula("=B12*C12+D12*E12")
+                .WithPlainNumberFormat()
+                .WithLargeComment(_calculateur.RetraiteDeBase.Explication);
+
+            worksheet.Cell("D13")
+                .SetFormulaA1("=B4-B6")
+                .WithPlainNumberFormat();
+            worksheet.Cell("E13")
+                .SetValue(_calculateur.RetraiteComplementaire.Taux2)
+                .WithPercentFormat();
+                
+            worksheet.Cell(celluleRetraiteComplementaire)
+                .WithImportantFormula("=B13*C13+D13*E13")
+                .WithPlainNumberFormat()
+                .WithLargeComment(_calculateur.RetraiteComplementaire.Explication);
+        }
+        else
+        {
+            celluleRetraiteDeBase = "D12";
+            celluleRetraiteComplementaire = "D13";
+
+            worksheet.Cell("D11").Value = "Cotisation";
+            worksheet.Cell(celluleRetraiteDeBase)
+                .WithImportantFormula("=B12*C12")
+                .WithPlainNumberFormat()
+                .WithLargeComment(_calculateur.RetraiteDeBase.Explication);
+                
+            worksheet.Cell(celluleRetraiteComplementaire)
+                .WithImportantFormula("=B13*C13")
+                .WithPlainNumberFormat()
+                .WithLargeComment(_calculateur.RetraiteComplementaire.Explication);
+        }
 
         return (celluleRetraiteDeBase, celluleRetraiteComplementaire);
     }
