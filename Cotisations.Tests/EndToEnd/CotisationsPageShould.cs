@@ -37,6 +37,45 @@ public class CotisationsPageShould : PageTest
         Check.That(formationProfessionnelle).IsEqualTo(116);
     }
 
+    [Test]
+    public async Task Met_les_bons_parametres_dans_l_url_du_navigateur()
+    {
+        await using var api = new CotisationsApi();
+
+        await Page.GotoAsync(api.ServerAddress);
+        await Page.SubmitCotisationsForm(50000, 2024);
+
+        Check.That(Page.Url).EndsWith("?revenuNet=50000&annee=2024");
+    }
+
+    [Test]
+    public async Task Deplie_l_accordeon_des_options_quand_les_cotisations_facultatives_sont_non_nulles_et_qu_on_met_les_params_dans_l_URL()
+    {
+        await using var api = new CotisationsApi();
+
+        await Page.GotoAsync(api.ServerAddress + "?revenuNet=50000&annee=2024&cotisationsFacultatives=1500");
+
+        var accordionButton = Page.Locator(".accordion-button").First;
+        await Expect(accordionButton).Not.ToContainClassAsync("collapsed");
+        await Expect(accordionButton).ToHaveAttributeAsync("aria-expanded", "true");
+        var accordionCollapse = Page.Locator("#accordionCollapse").First;
+        await Expect(accordionCollapse).ToContainClassAsync("show");
+    }
+
+    [Test]
+    public async Task Ne_deplie_pas_l_accordeon_des_options_quand_les_cotisations_facultatives_sont_nulles_et_qu_on_met_les_params_dans_l_URL()
+    {
+        await using var api = new CotisationsApi();
+
+        await Page.GotoAsync(api.ServerAddress + "?revenuNet=50000&annee=2024");
+
+        var accordionButton = Page.Locator(".accordion-button").First;
+        await Expect(accordionButton).ToContainClassAsync("collapsed");
+        await Expect(accordionButton).ToHaveAttributeAsync("aria-expanded", "false");
+        var accordionCollapse = Page.Locator("#accordionCollapse").First;
+        await Expect(accordionCollapse).Not.ToContainClassAsync("show");
+    }
+
     private async Task<decimal> RecupereLaValeurDansLeTableau(string nomDeLaLigne)
     {
         var cellules = await Page.Locator($"tr:has-text('{nomDeLaLigne}')").First.Locator("td").AllAsync();

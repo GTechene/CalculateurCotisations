@@ -40,7 +40,7 @@ document.addEventListener('alpine:init', () => {
       }
             
       if (urlParams.has('revenuNet')) {
-        // Use nextTick to ensure the component is fully rendered before submitting
+        // nextTick permet d'attendre que le composant soit rendu dans le navigateur avant de soumettre le formulaire
         Alpine.nextTick(() => {
           this.submitForm();
         });
@@ -77,15 +77,20 @@ document.addEventListener('alpine:init', () => {
 
       function modifyUrl() {
         const url = new URL(window.location);
+
         if (formData.revenuNet > 0)
           url.searchParams.set('revenuNet', formData.revenuNet);
         else if (url.searchParams.has('revenuNet'))
           url.searchParams.delete('revenuNet');
+
         url.searchParams.set('annee', formData.annee);
+
         if (formData.cotisationsFacultatives > 0)
           url.searchParams.set('cotisationsFacultatives', formData.cotisationsFacultatives);
         else if (url.searchParams.has('cotisationsFacultatives'))
           url.searchParams.delete('cotisationsFacultatives');
+
+        // On change l'URL dans la barre du navigateur sans forcer un rechargement de la page
         history.pushState(null, '', url.toString());
       }
     },

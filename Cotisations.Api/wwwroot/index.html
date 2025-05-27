@@ -133,7 +133,9 @@
               <div class="accordion-item">
                 <h2 class="accordion-header">
                   <button
-                    class="accordion-button btn-secondary collapsed p-2"
+                    class="accordion-button btn-secondary p-2"
+                    :class="{ 'collapsed': formData.cotisationsFacultatives == 0 }"
+                    :aria-expanded="formData.cotisationsFacultatives > 0"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionCollapse"
@@ -142,7 +144,12 @@
                     Options
                   </button>
                 </h2>
-                <div id="accordionCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionFacultatif">
+                <div 
+                  id="accordionCollapse"
+                  class="accordion-collapse collapse"
+                  :class="{ 'show': formData.cotisationsFacultatives > 0 }"
+                  data-bs-parent="#accordionFacultatif"
+                >
                   <div class="accordion-body" id="facultatif">
                     <a
                       data-bs-content="Cotisations supplémentaires type Madelin, PER/PERCO... Nombre entier uniquement, n'entrez pas de centimes."

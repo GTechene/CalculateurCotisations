@@ -10,7 +10,7 @@ namespace Cotisations.Tests.EndToEnd;
 /// <summary>
 /// Technique récupérée depuis https://github.com/donbavand/playwright-webapplicationfactory/blob/main/Playwright.App.Tests/Infrastructure/CustomWebApplicationFactory.cs
 /// Via l'article https://danieldonbavand.com/2022/06/13/using-playwright-with-the-webapplicationfactory-to-test-a-blazor-application/
-/// Via les travaux de Martin Costello qui a ouvert l'issue https://github.com/dotnet/aspnetcore/issues/33846 (non résolue au 14/02/2025)
+/// Via les travaux de Martin Costello qui a ouvert l'issue https://github.com/dotnet/aspnetcore/issues/33846 ; devrait être résolu avec .Net 10 et le UseKestrel() sur la WebApplicationFactory : https://github.com/dotnet/aspnetcore/pull/60635
 /// </summary>
 public class CotisationsApi : WebApplicationFactory<Program>
 {
