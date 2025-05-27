@@ -49,8 +49,12 @@ document.addEventListener('alpine:init', () => {
 
     submitForm() {
       const formData = this.formData;
-      const url = `/cotisations/v2/precises/${formData.revenuNet}?annee=${formData.annee}&cotisationsFacultatives=${formData.cotisationsFacultatives}`;
-      fetch(url)
+
+      modifyUrl();
+
+      const serverUrl = `/cotisations/v2/precises/${formData.revenuNet}?annee=${formData.annee}&cotisationsFacultatives=${formData.cotisationsFacultatives}`;
+
+      fetch(serverUrl)
         .then((response) => (response = response.json()))
         .then((data) => {
           this.cotisationsDetaillees = data;
@@ -70,6 +74,20 @@ document.addEventListener('alpine:init', () => {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
+
+      function modifyUrl() {
+        const url = new URL(window.location);
+        if (formData.revenuNet > 0)
+          url.searchParams.set('revenuNet', formData.revenuNet);
+        else if (url.searchParams.has('revenuNet'))
+          url.searchParams.delete('revenuNet');
+        url.searchParams.set('annee', formData.annee);
+        if (formData.cotisationsFacultatives > 0)
+          url.searchParams.set('cotisationsFacultatives', formData.cotisationsFacultatives);
+        else if (url.searchParams.has('cotisationsFacultatives'))
+          url.searchParams.delete('cotisationsFacultatives');
+        history.pushState(null, '', url.toString());
+      }
     },
   }));
 });
