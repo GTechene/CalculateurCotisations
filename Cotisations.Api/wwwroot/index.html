@@ -447,6 +447,20 @@
               >
                 Export Excel <span class="lds-dual-ring" x-show="isExporting"></span>
               </button>
+              <div x-data="urlCopier" class="containerCopieDeLien">
+                <button @click="copyCurrentUrl()" 
+                        class="btn btn-primary btn-copy btn-sm"
+                        title="Copier le lien vers la simulation">
+                        Copier le lien vers la simulation
+                </button>
+                
+                <!-- Copied message with fade animation -->
+                <span x-show="copyUrl"
+                      x-transition.duration.300ms
+                      class="labelLienCopie">
+                  Lien copié
+                </span>
+              </div>
               <p class="definitions">
                 PASS = Plafond Annuel de la Sécurité Sociale.<br />
                 Assiette = base de calcul. Pour la majorité des cotisations c'est la somme du revenu imposable et des cotisations facultatives. Le revenu imposable est la somme du revenu

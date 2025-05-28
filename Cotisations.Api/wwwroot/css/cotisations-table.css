@@ -35,6 +35,24 @@
   background-size: 24px;
 }
 
+.table-responsive .containerCopieDeLien {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-responsive .btn-copy {
+  padding: 0.2rem;
+  font-size: small;
+}
+
+.table-responsive .labelLienCopie {
+  color: #28a745;
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+
 .table-responsive .btn-exporting {
   padding: 0.2rem 2rem 0.2rem 0.25rem;
   font-size: small;
