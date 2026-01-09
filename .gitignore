@@ -361,3 +361,4 @@ MigrationBackup/
 /Cotisations.Tests/Cotisations.Tests.v3.ncrunchproject
 /Cotisations.Tests/Acceptance/CalculateurAvecConvergenceSurDonneesPersoShould.cs
 /Cotisations.Tests/Acceptance/Snapshots/CalculateurAvecConvergenceSurDonneesPersoShould.*
+/.NCrunch_CalculCotisations/StoredText

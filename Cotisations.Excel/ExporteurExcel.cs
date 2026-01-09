@@ -58,7 +58,11 @@ public class ExporteurExcel
             .WithShortComment($"Plafond Annuel de la Sécurité Sociale pour l'année {_annee}");
 
         worksheet.Cell("A6").Value = "Plafond retraite complémentaire";
-        worksheet.Cell("B6").Value = _constantesAvecHistorique.PlafondsRetraiteComplementaireArtisansCommercants;
+        if (_annee < 2025)
+            worksheet.Cell("B6").Value = _constantesAvecHistorique.PlafondsRetraiteComplementaireArtisansCommercants;
+        else
+            worksheet.Cell("B6").Value = _pass.Valeur;
+
 
         var (celluleCotisationsMaladie, celluleIndemnites) = ExporteLesCotisationsMaladie(worksheet);
         var (celluleRetraiteDeBase, celluleRetraiteComplementaire) = ExporteLesCotisationsRetraite(worksheet);
