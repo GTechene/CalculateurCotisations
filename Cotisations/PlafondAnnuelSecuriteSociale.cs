@@ -6,7 +6,8 @@ public class PlafondAnnuelSecuriteSociale(int year)
     {
         { 2023, 43992m },
         { 2024, 46368m },
-        { 2025, 47100m }
+        { 2025, 47100m },
+        { 2026, 48060m },
     };
     
     public decimal Valeur { init; get; } = HistoriquePASS[year];

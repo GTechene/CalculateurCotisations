@@ -31,21 +31,40 @@ public class Constantes2024 : IConstantesAvecHistorique
 
 public class Constantes2025
 {
-    public decimal TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass => 0.015m;
-    public decimal TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass => 0.04m;
-    public decimal TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass => 0.065m;
-    public decimal TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass => 0.077m;
-    public decimal TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass => 0.085m;
-    public decimal TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass => 0.065m;
-    public decimal TauxCotisationsIndemnitesMaladie => 0.005m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass = 0.015m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass = 0.04m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass = 0.065m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass = 0.077m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass = 0.085m;
+    public const decimal TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass = 0.065m;
+    public const decimal TauxCotisationsIndemnitesMaladie = 0.005m;
 
-    // TODO : va probablement changer en 2025 mais pas défini encore au 24/01/2025. Normalement c'est le PMSS * 0.9973 (pro rata temporis, donc 1 année complète - le 1er mai) * 12 mois. cf https://mon-entreprise.urssaf.fr/documentation/entreprise/prorata-temporis
-    public int PlafondsRetraiteComplementaireArtisansCommercants => 42946;
+    // Basé sur 450h de SMIC (SMIC horaire = 11.88 € en 2025)
+    public const int RevenusPlancherRetraiteDeBase = 5346;
 
-    public decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;
-    public decimal TauxCotisationsRetraiteBaseRevenusInferieursAuPass = 0.1787m;
-    public decimal TauxRetraiteComplementairePremiereTrancheArtisansCommercants = 0.081m;
-    public decimal TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.091m;
+    public const decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;
+    public const decimal TauxCotisationsRetraiteBaseRevenusInferieursAuPass = 0.1787m;
+    public const decimal TauxRetraiteComplementairePremiereTrancheArtisansCommercants = 0.081m;
+    public const decimal TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.091m;
+}
+
+public class Constantes2026
+{
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass = 0.015m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass = 0.04m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass = 0.065m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass = 0.077m;
+    public const decimal TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass = 0.085m;
+    public const decimal TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass = 0.065m;
+    public const decimal TauxCotisationsIndemnitesMaladie = 0.005m;
+
+    // Basé sur 450h de SMIC (SMIC horaire = 12.02 € en 2026)
+    public const int RevenusPlancherRetraiteDeBase = 5409;
+
+    public const decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;
+    public const decimal TauxCotisationsRetraiteBaseRevenusInferieursAuPass = 0.1787m;
+    public const decimal TauxRetraiteComplementairePremiereTrancheArtisansCommercants = 0.081m;
+    public const decimal TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.091m;
 }
 
 public static class ConstantesAvecHistorique

@@ -1,8 +1,5 @@
 ﻿using NFluent;
 
-// On désactive les warnings concernant l'année car il faut que les tests soient pérennes en 2025 et après :)
-// ReSharper disable RedundantArgumentDefaultValue
-
 namespace Cotisations.Tests.Unit;
 
 public class CalculateurSimpleShould

@@ -18,8 +18,8 @@
         explication: L'assiette de 50 000 € est supérieure à 47 100 € (PASS), donc le taux fixe de 17,87% est appliqué à la part des revenus inférieure au PASS et le taux de 7,2% est appliqué à la part des revenus qui y est supérieure, soit 8 626 € de cotisations.
       },
       retraiteComplementaire: {
-        valeur: 4120.54,
-        explication: L'assiette de 50 000 € est supérieure à 42 946 €, donc le taux fixe de 8,1% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 9,1% est appliqué à la part des revenus qui y est supérieure, soit 4 121 € de cotisations.
+        valeur: 4079.0,
+        explication: L'assiette de 50 000 € est supérieure à 47 100 €, donc le taux fixe de 8,1% est appliqué à la part des revenus inférieure à cette valeur et le taux fixe de 9,1% est appliqué à la part des revenus qui y est supérieure, soit 4 079 € de cotisations.
       },
       invaliditeDeces: {
         valeur: 612.3,
@@ -29,7 +29,7 @@
         valeur: 0,
         explication: L'assiette de 50 000 € est inférieure à 51 810 € (110% du PASS). Il n'y a donc pas de cotisation à payer pour les allocations familiales.
       },
-      totalCotisationsObligatoires: 16762.33781316348,
+      totalCotisationsObligatoires: 16720.79781316348,
       csgNonDeductible: {
         valeur: 888.0,
         explication: L'assiette de calcul de la CSG est égale au revenu moins un abattement de 26% soit 37 000 €. Le taux fixe de 2,4% est appliqué à cette assiette, ce qui donne une valeur de 888 € pour la CSG non déductible.
@@ -46,7 +46,7 @@
         valeur: 117.75,
         explication: Un taux fixe de 0,25% est appliqué sur la valeur d'un PASS complet qui vaut 47 100 €, soit 118 € de cotisations.
       },
-      grandTotal: 20469.08781316348,
+      grandTotal: 20427.54781316348,
       assietteDeCotisations: 50000
     }
   }
