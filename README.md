@@ -10,7 +10,7 @@ J'ai démarré avec du Blazor pour la partie front mais au vu de la plomberie in
 
 Le projet est assez simple :
 
-- Le **code métier** (règles, export Excel, etc...), ses adaptateurs (API back) et ses tests sont codés en C# (.Net 8 à l'heure d'écriture de ces lignes).
+- Le **code métier** (règles, export Excel, etc...), ses adaptateurs (API back) et ses tests sont codés en C#.
 - Le **code front** est en HTML/CSS/JS "vanille" avec un peu d'[Alpine.js](https://alpinejs.dev/) pour gérer quelques interactions et animations pour pas cher. Le but était de faire quelque chose de léger sans avoir recours à un gros framework qui n'était pas nécessaire.
 
 Je suis partisan de limiter la [complexité accidentelle](https://fr.wikipedia.org/wiki/Complexit%C3%A9_accidentelle) tout en restant sur ma stack favorite (C# donc) ; comme ici le projet reste léger (pas de base de données, une seule page, effets et anumation limités...), j'ai pu arriver à cet objectif **en évitant les dépendances inutiles**. Il en résulte de bonnes performances, du moins je le crois, le site répondant de façon satisfaisante (moins de 3 secondes pour afficher la page sans cache sur une connexion "type 2G" de 250 kb/s et 300 ms de latence et moins d'une demi-seconde pour afficher les résultats de calcul de cotisations sur cette même connexion).
@@ -25,26 +25,26 @@ Enfin, l'export Excel est minimaliste, le but étant de faire quelque chose qui 
 
 ## *Hic sunt dracones*
 
-Ce calculateur est un **simulateur**, il n'a pas pour vocation à remplacer le calcul fait par l'URSSAF. Cependant, il devrait donner de bonnes approximations. Surtout, les explications données en cliquant sur la petite icône de "i" bleu devrait répondre à pas mal de questions concernant le calcul de chaque type de cotisation.
+Ce calculateur est un **simulateur**, il n'a pas vocation à remplacer le calcul fait par l'URSSAF. Cependant, il devrait donner de bonnes approximations. Surtout, les explications données en cliquant sur la petite icône de "i" bleu devrait répondre à pas mal de questions concernant le calcul de chaque type de cotisation.
 
-La plupart des règles sont difficiles à trouver ou comprendre. Il faut soit partir des textes de loi (ce que j'ai fait par exemple pour comprendre l'assiette de calcul pour 2025), soit passer par les explications, souvent incomplètes, de l'URSSAF, soit faire de la rétro-ingénierie sur le simulateur officiel (mais il faut partir du principe qu'il n'est pas faux, or ce n'est pas toujours le cas).
+La plupart des règles sont difficiles à trouver ou comprendre. Il faut soit partir des textes de loi (ce que j'ai fait par exemple pour comprendre l'assiette de calcul pour 2025 provenant de [la réforme de 2024](https://www.urssaf.fr/accueil/independant/comprendre-payer-cotisations/reforme-cotisations-independants.html)), soit passer par les explications, souvent incomplètes, de l'URSSAF, soit faire de la rétro-ingénierie sur le simulateur officiel (mais il faut partir du principe qu'il n'est pas faux, or ce n'est pas toujours le cas).
 Quoi qu'il en soit, c'est assez chronophage et c'est pour cela que j'ai créé ce simulateur en essayant de synthétiser et vulgariser les explications au maximum.
 
 ## Vocabulaire
 
 Comme chaque métier a son jargon et que j'en utilise certains mots ou concepts, je recense ici ceux qui sont non triviaux et qu'il convient d'expliquer.
 
-- **Assiette** : une base de calcul. En 2023 et 2024, il y a 2 assiettes distinctes : 1 pour calculer les cotisations obligatoires et 1 pour calculer la CSG et la CRDS. À partir de 2025, il n'y a plus qu'une seule assiette.
-- **Cotisations facultatives** : les cotisations type Madelin qui sont réintégrées à l'assiette mais sont déductibles du bénéfice de l'entreprise.
-- **Cotisations obligatoires** : représente les cotisations maladie, les cotisations retraite (base et complémentaire), les cotisations pour les allocations familiales et les cotisations invalidité/décès. Elles n'incluent pas les cotisations pour la formation professionnelle ou la CSG ou la CRDS.
+- **Assiette** : base de calcul des cotisations. En 2023 et 2024, il y a 2 assiettes distinctes : 1 pour calculer les cotisations obligatoires et 1 pour calculer la CSG et la CRDS. À partir de 2025, il n'y a plus qu'une seule assiette, a priori constituée du revenu perçu (voir paragraphe suivant). [La page dédiée au sujet sur le site de l'URSSAF](https://www.urssaf.fr/accueil/independant/comprendre-payer-cotisations/reforme-cotisations-independants.html) dit que l'assiette contient aussi un abattement de 26%. Je trouve que cela cause une grosse différence à la baisse sur les cotisations en elles-mêmes, donc mon simulateur n'applique cet abattement qu'au calcul de la CSG et CRDS. On obtient alors des montants de CSG/CRDS nettement à la baisse, au profit des cotisations (notamment retraite) qui sont revues un peu à la hausse, compensant la baisse CSG/CRDS. Ce qui était le but de la réforme. Mais appliquer 26% d'abattement sur tous les calculs donne des résultats très à la baisse au niveau des cotisations. Donc on va sagement attendre les calculs officiels (qui ne sont toujours pas connus ni disponibles au moment où j'écris ces lignes le 09/01/2026).
+- **Cotisations facultatives** : les cotisations type Madelin qui sont réintégrées à l'assiette mais sont déductibles du bénéfice de l'entreprise. Il est possible que ces cotisations disparaissent de l'assiette et ne soient donc pas inclues dans le calcul pour les revenus 2025 et suivants. Là encore, à confirmer une fois que l'URSSAF fera part des calculs officiels.
+- **Cotisations obligatoires** : représente les cotisations maladie, les cotisations retraite (base et complémentaire), les cotisations pour les allocations familiales et les cotisations invalidité/décès. Elles n'incluent pas les cotisations pour la formation professionnelle ni la CSG ou la CRDS.
 - **PASS, PMSS** : respectivement Plafond Annuel de la Sécurité Sociale et Plafond Mensuel de la Sécurité Sociale. Il s'agit de plafonds fixés chaque année par la loi, par exemple comme ici pour 2025 : https://boss.gouv.fr/portail/accueil/actualites-boss/2024/novembre/le-plafond-de-la-securite-social.html Il s'agit de bases pour le calcul de diverses cotisations.
 
-## Note sur le calcul des assiettes (avant 2025)
+## Notes sur le calcul des assiettes
 
-Comme dit ci-dessus, en 2023 et 2024, il y a 2 assiettes distinctes : 1 pour calculer les cotisations obligatoires et 1 pour calculer la CSG et la CRDS. Or, cette dernière dépend du montant des cotisations obligatoires mais la première dépend du montant de la CSG et de la CRDS. On avait donc une situation dite de "dépendance cyclique", que le simulateur résoud par convergence : on calcule la première assiette un peu au hasard, on en déduit la seconde qui nous donne CSG et CRDS. Puis on recalcule la première en additionnant revenu + CSG + CRDS et on compare avec le premier calcul. Si la différence est < 1 € alors on est OK. Sinon, on recalcule la première assiette en essayant de se rapprocher de la seconde et on recommence.
+Comme dit ci-dessus, en 2023 et 2024, il y a 2 assiettes distinctes : 1 pour calculer les cotisations obligatoires et 1 pour calculer la CSG et la CRDS. Or, cette dernière dépend du montant des cotisations obligatoires mais la première dépend du montant de la CSG et de la CRDS. On avait donc une situation dite de "dépendance cyclique", que le simulateur résout par convergence : on calcule la première assiette un peu au hasard, on en déduit la seconde qui nous donne CSG et CRDS. Puis on recalcule la première en additionnant revenu + CSG + CRDS et on compare avec le premier calcul. Si la différence est < 1 € alors on est OK. Sinon, on recalcule la première assiette en essayant de se rapprocher de la seconde et on recommence.
 C'est un peu fastidieux mais plutôt rapide et semble correspondre à ce qui est fait sur [le simulateur officiel de l'URSSAF](https://mon-entreprise.urssaf.fr/simulateurs/ind%C3%A9pendant).
 
-En 2025, il n'y a plus qu'une seule assiette qui est égale au revenu additionné des cotisations facultatives. Pour le calcul de la CSG et de la CRDS, un abattement de 26% (soumis à plafond et plancher) est appliqué à cette assiette.
+Comme dit plus haut (mais je le répète ici au cas où), à partir de 2025, il n'y a plus qu'une seule assiette qui est égale au revenu additionné des cotisations facultatives. [L'URSSAF mentionne](https://www.urssaf.fr/accueil/independant/comprendre-payer-cotisations/reforme-cotisations-independants.html) un abattement de 26% **que j'ai choisi de ne pas répercuter sur le calcul des cotisations elles-mêmes** afin de respecter l'esprit de la réforme. Pour le calcul de la CSG et de la CRDS, cet abattement de 26% (soumis à plafond et plancher) est en revanche bien appliqué à cette assiette.
 
 
 # Contributions ?
@@ -63,7 +63,7 @@ Quelques règles à respecter avant de soumettre du code sous forme de PR :
 
 - Toute modification doit être **testée**. Pas de test, pas de PR.
 - Toute proposition de modification doit être **justifiée**, notamment par une entrée dans les [Issues](https://github.com/GTechene/CalculateurCotisations/issues).
-- Veillez à bien respecter l'esprit de l'existant : code en français, dépendances minimales, nommage parlant plutôt qu'abrégé (ex : cotisationsFacultatives plutôt que cf ou cotisesFac).
+- Veillez à bien respecter l'esprit de l'existant : code en français, dépendances minimales, nommage parlant plutôt qu'abrégé dans la mesure du possible (ex : `cotisationsFacultatives` plutôt que `cf` ou `cotisesFac`).
 - Je suis conscient que le code n'est pas parfait (mais quel code l'est et selon quels critères ?), on peut tout à fait discuter de refactoring et tout, mais il faut **rester courtois** et ne pas perdre de vue qu'il s'agit d'un projet fait sur le **temps personnel**.
 
 # Merci !
