@@ -95,23 +95,4 @@ document.addEventListener('alpine:init', () => {
       }
     },
   }));
-
-  Alpine.data('urlCopier', () => ({
-    copyUrl: false,
-
-    copyCurrentUrl() {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(window.location.href)
-          .then(() => {
-            this.copyUrl = true;
-            setTimeout(() => {
-              this.copyUrl = false;
-            }, 1500);
-          })
-          .catch((err) => {
-            console.error('Failed to copy URL: ', err);
-          });
-      }
-    }
-  }));
 });
