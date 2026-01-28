@@ -16,5 +16,10 @@ public interface ICalculateur
     public decimal GrandTotal => TotalCotisationsObligatoires + CSGDeductible.Valeur + CSGNonDeductible.Valeur + CRDSNonDeductible.Valeur + FormationProfessionnelle.Valeur;
     public decimal AssietteDeCalculDesCotisations { get; }
 
-    void CalculeLesCotisations(decimal revenu);
+    void CalculeLesCotisations(decimal assiette);
+}
+
+public interface ICalculateurPostReforme2024 : ICalculateur
+{
+    public decimal Abattement { get; }
 }

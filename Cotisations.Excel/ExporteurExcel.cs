@@ -240,9 +240,10 @@ public class ExporteurExcel
         {
             worksheet.Cell("A22").Value = "Assiette CSG/CRDS";
             worksheet.Cell("B22")
-                .SetFormulaA1("=B1-MIN(MAX(B1*0.26,0.0176*B5),1.3*B5)")
+                .SetFormulaA1("=B4")
                 .WithPlainNumberFormat()
-                .WithShortComment("Revenus moins abattement de 26% (avec plancher et plafond)");
+                // TODO : modifier le commentaire quand l'abattement est plafonné ou "planchisé"
+                .WithShortComment("Assiette unique égale au revenu brut abattu forfaitairement de 26%");
         }
 
 

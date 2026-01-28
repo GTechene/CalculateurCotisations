@@ -21,46 +21,32 @@ public class CotisationsController : ControllerBase
     {
         var valeurAnnee = annee.GetValueOrDefault(DateTime.Today.Year);
         var valeurCotisationsFacultatives = cotisationsFacultatives.GetValueOrDefault();
+        var calculateurAvecConvergence = new CalculateurAvecConvergence(revenuNet, valeurAnnee, valeurCotisationsFacultatives);
 
         if (annee < 2025)
         {
-            var calculateurAvecConvergence = new CalculateurAvecConvergence(revenuNet, valeurAnnee, valeurCotisationsFacultatives);
-            calculateurAvecConvergence.Calcule();
-            return new ResultatPrecisDeCotisationsAvecExplications(
-                calculateurAvecConvergence.MaladieHorsIndemnitesJournalieres,
-                calculateurAvecConvergence.MaladieIndemnitesJournalieres,
-                calculateurAvecConvergence.RetraiteDeBase,
-                calculateurAvecConvergence.RetraiteComplementaire,
-                calculateurAvecConvergence.InvaliditeDeces,
-                calculateurAvecConvergence.AllocationsFamiliales,
-                calculateurAvecConvergence.TotalCotisationsObligatoires,
-                calculateurAvecConvergence.CSGNonDeductible,
-                calculateurAvecConvergence.CSGDeductible,
-                calculateurAvecConvergence.CRDS,
-                calculateurAvecConvergence.FormationProfessionnelle,
-                calculateurAvecConvergence.GrandTotal,
-                calculateurAvecConvergence.AssietteDeCalculDesCotisations
-            );
+            calculateurAvecConvergence.Calcule_Avant_2025();
+        }
+        else
+        {
+            calculateurAvecConvergence.Calcule_Depuis_2025();
         }
 
-        var calculateur = Calculateurs.TrouveUnCalculateur(valeurAnnee);
-        calculateur.CalculeLesCotisations(revenuNet + valeurCotisationsFacultatives);
-
-        return Ok(new ResultatPrecisDeCotisationsAvecExplications(
-                calculateur.MaladieHorsIndemnitesJournalieres,
-                calculateur.MaladieIndemnitesJournalieres,
-                calculateur.RetraiteDeBase,
-                calculateur.RetraiteComplementaire,
-                calculateur.InvaliditeDeces,
-                calculateur.AllocationsFamiliales,
-                calculateur.TotalCotisationsObligatoires,
-                calculateur.CSGNonDeductible,
-                calculateur.CSGDeductible,
-                calculateur.CRDSNonDeductible,
-                calculateur.FormationProfessionnelle,
-                calculateur.GrandTotal,
-                calculateur.AssietteDeCalculDesCotisations
-            ));
+        return new ResultatPrecisDeCotisationsAvecExplications(
+            calculateurAvecConvergence.MaladieHorsIndemnitesJournalieres,
+            calculateurAvecConvergence.MaladieIndemnitesJournalieres,
+            calculateurAvecConvergence.RetraiteDeBase,
+            calculateurAvecConvergence.RetraiteComplementaire,
+            calculateurAvecConvergence.InvaliditeDeces,
+            calculateurAvecConvergence.AllocationsFamiliales,
+            calculateurAvecConvergence.TotalCotisationsObligatoires,
+            calculateurAvecConvergence.CSGNonDeductible,
+            calculateurAvecConvergence.CSGDeductible,
+            calculateurAvecConvergence.CRDS,
+            calculateurAvecConvergence.FormationProfessionnelle,
+            calculateurAvecConvergence.GrandTotal,
+            calculateurAvecConvergence.AssietteDeCalculDesCotisations
+        );
     }
 
     [HttpGet("export/{revenuNet}")]
@@ -78,13 +64,17 @@ public class CotisationsController : ControllerBase
         if (annee < 2025)
         {
             var calculateurAvecConvergence = new CalculateurAvecConvergence(revenuNet, valeurAnnee, valeurCotisationsFacultatives);
-            calculateurAvecConvergence.Calcule();
+            calculateurAvecConvergence.Calcule_Avant_2025();
             calculateur = calculateurAvecConvergence.Calculateur;
         }
         else
         {
-            calculateur = Calculateurs.TrouveUnCalculateur(valeurAnnee);
-            calculateur.CalculeLesCotisations(revenuNet + valeurCotisationsFacultatives);
+            //calculateur = Calculateurs.TrouveUnCalculateur(valeurAnnee);
+            //calculateur.CalculeLesCotisations(revenuNet + valeurCotisationsFacultatives);
+
+            var calculateurAvecConvergence = new CalculateurAvecConvergence(revenuNet, valeurAnnee, valeurCotisationsFacultatives);
+            calculateurAvecConvergence.Calcule_Depuis_2025();
+            calculateur = calculateurAvecConvergence.Calculateur;
         }
 
         var exporteur = new ExporteurExcel(calculateur, valeurAnnee, revenuNet, valeurCotisationsFacultatives);

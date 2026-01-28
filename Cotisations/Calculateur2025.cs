@@ -2,7 +2,7 @@
 
 namespace Cotisations;
 
-public class Calculateur2025 : ICalculateur
+public class Calculateur2025 : ICalculateurPostReforme2024
 {
     private const decimal TauxPlancherDeLAbattement = 0.0176m;
     private const decimal TauxPlafondDeLAbattement = 1.30m;
@@ -17,100 +17,105 @@ public class Calculateur2025 : ICalculateur
         _calculateurCommun = new CalculateurCommun(PASS);
     }
 
-    public void CalculeLesCotisations(decimal revenu)
+    public void CalculeLesCotisations(decimal revenuBrut)
     {
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
 
-        AssietteDeCalculDesCotisations = revenu;
-        MaladieHorsIndemnitesJournalieres = CalculeLesCotisationsMaladieHorsIndemnites(revenu);
-        MaladieIndemnitesJournalieres = CalculeLesCotisationsPourIndemnitesMaladie(revenu);
-        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, Constantes2025.TauxCotisationsRetraiteBaseRevenusInferieursAuPass, Constantes2025.TauxCotisationsRetraiteBaseRevenusSuperieursAuPass, Constantes2025.RevenusPlancherRetraiteDeBase);
-        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, Constantes2025.TauxRetraiteComplementairePremiereTrancheArtisansCommercants, Constantes2025.TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants, PASS.Valeur);
-        InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(revenu);
-        AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(revenu);
+        CalculeAbattementEtAssiette(revenuBrut);
+
+        MaladieHorsIndemnitesJournalieres = CalculeLesCotisationsMaladieHorsIndemnites();
+        MaladieIndemnitesJournalieres = CalculeLesCotisationsPourIndemnitesMaladie();
+        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(AssietteDeCalculDesCotisations, Constantes2025.TauxCotisationsRetraiteBaseRevenusInferieursAuPass, Constantes2025.TauxCotisationsRetraiteBaseRevenusSuperieursAuPass, Constantes2025.RevenusPlancherRetraiteDeBase);
+        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(AssietteDeCalculDesCotisations, Constantes2025.TauxRetraiteComplementairePremiereTrancheArtisansCommercants, Constantes2025.TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants, PASS.Valeur);
+        InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(AssietteDeCalculDesCotisations);
+        AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(AssietteDeCalculDesCotisations);
         FormationProfessionnelle = _calculateurCommun.CalculeLaFormationProfessionnelle();
         
-        CalculeCSGEtCRDS(revenu);
+        CalculeCSGEtCRDS();
     }
 
-    private ResultatAvecExplicationEtTaux CalculeLesCotisationsMaladieHorsIndemnites(decimal revenu)
+    private void CalculeAbattementEtAssiette(decimal revenuBrut)
     {
-        if (revenu > PASS.Valeur * 0.2m && revenu <= PASS.Valeur40Pct)
+        var abattementPlancher = TauxPlancherDeLAbattement * PASS.Valeur;
+        var abattementPlafond = TauxPlafondDeLAbattement * PASS.Valeur;
+        Abattement = Math.Min(Math.Max(revenuBrut * TauxAbattement, abattementPlancher), abattementPlafond);
+        AssietteDeCalculDesCotisations = revenuBrut - Abattement;
+        AssietteCsgCrds = AssietteDeCalculDesCotisations;
+    }
+
+    private ResultatAvecExplicationEtTaux CalculeLesCotisationsMaladieHorsIndemnites()
+    {
+        var assiette = AssietteDeCalculDesCotisations;
+        if (assiette > PASS.Valeur * 0.2m && assiette <= PASS.Valeur40Pct)
         {
-            var tauxApplicable = CalculeLeTauxProgressif(revenu, PASS.Valeur * 0.2m, PASS.Valeur40Pct, 0m, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass);
-            var cotisations = revenu * tauxApplicable;
-            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {revenu:C0} est compris entre {PASS.Valeur * 0.2m:C0} (20% du PASS) et {PASS.Valeur40Pct:C0} (40% du PASS), donc un taux progressif entre 0% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {cotisations:C0} de cotisations.", tauxApplicable);
+            var tauxApplicable = CalculeLeTauxProgressif(assiette, PASS.Valeur * 0.2m, PASS.Valeur40Pct, 0m, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass);
+            var cotisations = assiette * tauxApplicable;
+            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est compris entre {PASS.Valeur * 0.2m:C0} (20% du PASS) et {PASS.Valeur40Pct:C0} (40% du PASS), donc un taux progressif entre 0% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {cotisations:C0} de cotisations.", tauxApplicable);
         }
 
-        if (revenu > PASS.Valeur40Pct && revenu <= PASS.Valeur60Pct)
+        if (assiette > PASS.Valeur40Pct && assiette <= PASS.Valeur60Pct)
         {
-            var tauxApplicable = CalculeLeTauxProgressif(revenu, PASS.Valeur40Pct, PASS.Valeur60Pct, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass);
-            var valeur = revenu * tauxApplicable;
-            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {revenu:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur60Pct:C0} (60% du PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass * 100:F1}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass * 100:N0}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+            var tauxApplicable = CalculeLeTauxProgressif(assiette, PASS.Valeur40Pct, PASS.Valeur60Pct, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass);
+            var valeur = assiette * tauxApplicable;
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur60Pct:C0} (60% du PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre20PctEt40PctDuPass * 100:F1}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass * 100:N0}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
         }
 
-        if (revenu > PASS.Valeur60Pct && revenu <= PASS.Valeur110Pct)
+        if (assiette > PASS.Valeur60Pct && assiette <= PASS.Valeur110Pct)
         {
-            var tauxApplicable = CalculeLeTauxProgressif(revenu, PASS.Valeur60Pct, PASS.Valeur110Pct, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass);
-            var valeur = revenu * tauxApplicable;
-            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {revenu:C0} est comprise entre {PASS.Valeur60Pct:C0} (60% du PASS) et {PASS.Valeur110Pct:C0} (110% du PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass * 100:N0}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+            var tauxApplicable = CalculeLeTauxProgressif(assiette, PASS.Valeur60Pct, PASS.Valeur110Pct, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass);
+            var valeur = assiette * tauxApplicable;
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur60Pct:C0} (60% du PASS) et {PASS.Valeur110Pct:C0} (110% du PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre40PctEt60PctDuPass * 100:N0}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
         }
 
-        if (revenu > PASS.Valeur110Pct && revenu <= PASS.Valeur * 2)
+        if (assiette > PASS.Valeur110Pct && assiette <= PASS.Valeur * 2)
         {
-            var tauxApplicable = CalculeLeTauxProgressif(revenu, PASS.Valeur110Pct, PASS.Valeur * 2, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass);
-            var valeur = revenu * tauxApplicable;
-            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {revenu:C0} est comprise entre {PASS.Valeur110Pct:C0} (110% du PASS) et {PASS.Valeur * 2:C0} (2 PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass * 100:F1}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+            var tauxApplicable = CalculeLeTauxProgressif(assiette, PASS.Valeur110Pct, PASS.Valeur * 2, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass);
+            var valeur = assiette * tauxApplicable;
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur110Pct:C0} (110% du PASS) et {PASS.Valeur * 2:C0} (2 PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre60PctEt110PctDuPass * 100:F1}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
         }
 
-        if (revenu > PASS.Valeur * 2 && revenu <= PASS.Valeur * 3)
+        if (assiette > PASS.Valeur * 2 && assiette <= PASS.Valeur * 3)
         {
-            var tauxApplicable = CalculeLeTauxProgressif(revenu, PASS.Valeur * 2, PASS.Valeur * 3, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass);
-            var valeur = revenu * tauxApplicable;
-            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {revenu:C0} est comprise entre {PASS.Valeur * 2:C0} (2 PASS) et {PASS.Valeur * 3:C0} (3 PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass * 100:F1}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
+            var tauxApplicable = CalculeLeTauxProgressif(assiette, PASS.Valeur * 2, PASS.Valeur * 3, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass, Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass);
+            var valeur = assiette * tauxApplicable;
+            return new ResultatAvecTauxUniqueEtExplication(valeur, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur * 2:C0} (2 PASS) et {PASS.Valeur * 3:C0} (3 PASS), donc un taux progressif entre {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre110PctEt200PctDuPass * 100:F1}% et {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass * 100:F1}% est appliqué. Ici il s'agit de {tauxApplicable * 100:F1}%, soit {valeur:C0} de cotisations.", tauxApplicable);
         }
 
-        if (revenu > PASS.Valeur * 3)
+        if (assiette > PASS.Valeur * 3)
         {
             var partTauxMax = PASS.Valeur * 3;
-            var partTauxReduit = revenu - partTauxMax;
+            var partTauxReduit = assiette - partTauxMax;
             var valeur = partTauxMax * Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass + partTauxReduit * Constantes2025.TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass;
-            return new ResultatAvecExplicationEtTaux(valeur, $"L'assiette de {revenu:C0} est supérieure à {PASS.Valeur * 3:C0} (3 PASS), donc un taux de {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass * 100:F1}% est appliqué à la part des revenus dans la limite de 3 PASS et le taux fixe de {Constantes2025.TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass * 100:F1}% est appliqué à la part des revenus qui y est supérieure, soit {valeur:C0} de cotisations.", Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass, Constantes2025.TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass);
+            return new ResultatAvecExplicationEtTaux(valeur, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur * 3:C0} (3 PASS), donc un taux de {Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass * 100:F1}% est appliqué à la part des revenus dans la limite de 3 PASS et le taux fixe de {Constantes2025.TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass * 100:F1}% est appliqué à la part des revenus qui y est supérieure, soit {valeur:C0} de cotisations.", Constantes2025.TauxPlafondCotisationsMaladiePourRevenusEntre200PctEt300PctDuPass, Constantes2025.TauxPartReduiteCotisationsMaladiePourRevenusSupA300PctDuPass);
         }
 
-        return new ResultatAvecTauxUniqueEtExplication(0m, $"L'assiette de {revenu:C0} est inférieure à {PASS.Valeur40Pct:C0} (20% du PASS). Il n'y a donc pas de cotisation maladie à payer.", 0m);
+        return new ResultatAvecTauxUniqueEtExplication(0m, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur40Pct:C0} (20% du PASS). Il n'y a donc pas de cotisation maladie à payer.", 0m);
     }
 
-    private ResultatAvecTauxUniqueEtExplication CalculeLesCotisationsPourIndemnitesMaladie(decimal assiette)
+    private ResultatAvecTauxUniqueEtExplication CalculeLesCotisationsPourIndemnitesMaladie()
     {
         var tauxDeCotisationsIndemnitesMaladie = Constantes2025.TauxCotisationsIndemnitesMaladie;
 
-        if (assiette < PASS.Valeur40Pct)
+        if (AssietteDeCalculDesCotisations < PASS.Valeur40Pct)
         {
             var cotisations = tauxDeCotisationsIndemnitesMaladie * PASS.Valeur40Pct;
-            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est inférieure à {PASS.Valeur40Pct:C0} (40% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plancher de 40% du PASS, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
+            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {AssietteDeCalculDesCotisations:C0} est inférieure à {PASS.Valeur40Pct:C0} (40% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plancher de 40% du PASS, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
         }
 
-        if (assiette < PASS.Valeur500Pct)
+        if (AssietteDeCalculDesCotisations < PASS.Valeur500Pct)
         {
-            var cotisations = tauxDeCotisationsIndemnitesMaladie * assiette;
-            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à cette assiette, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
+            var cotisations = tauxDeCotisationsIndemnitesMaladie * AssietteDeCalculDesCotisations;
+            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {AssietteDeCalculDesCotisations:C0} est comprise entre {PASS.Valeur40Pct:C0} (40% du PASS) et {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à cette assiette, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
         }
         else
         {
             var cotisations = tauxDeCotisationsIndemnitesMaladie * PASS.Valeur500Pct;
-            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {assiette:C0} est supérieure à {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plafond de 500% du PASS, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
+            return new ResultatAvecTauxUniqueEtExplication(cotisations, $"L'assiette de {AssietteDeCalculDesCotisations:C0} est supérieure à {PASS.Valeur500Pct:C0} (500% du PASS), donc le taux fixe de {tauxDeCotisationsIndemnitesMaladie * 100:F1}% est appliqué à ce plafond de 500% du PASS, soit {cotisations:C0} de cotisations.", tauxDeCotisationsIndemnitesMaladie);
         }
     }
 
-    private void CalculeCSGEtCRDS(decimal revenu)
+    private void CalculeCSGEtCRDS()
     {
-        var abattementPlancher = TauxPlancherDeLAbattement * PASS.Valeur;
-        var abattementPlafond = TauxPlafondDeLAbattement * PASS.Valeur;
-        var abattement = Math.Min(Math.Max(revenu * TauxAbattement, abattementPlancher), abattementPlafond);
-
-        AssietteCsgCrds = revenu - abattement;
-
         var valeurCsgNonDeductible = AssietteCsgCrds * TauxInchanges.CSGNonDeductible;
         CSGNonDeductible = new ResultatAvecTauxUniqueEtExplication(valeurCsgNonDeductible, $"L'assiette de calcul de la CSG est égale au revenu moins un abattement de 26% soit {AssietteCsgCrds:C0}. Le taux fixe de {TauxInchanges.CSGNonDeductible * 100:F1}% est appliqué à cette assiette, ce qui donne une valeur de {valeurCsgNonDeductible:C0} pour la CSG non déductible.", TauxInchanges.CSGNonDeductible);
 
@@ -143,4 +148,5 @@ public class Calculateur2025 : ICalculateur
     public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle { get; private set; } = new ResultatVideSansExplication();
     public decimal AssietteCsgCrds { get; private set; }
     public decimal AssietteDeCalculDesCotisations { get; private set; }
+    public decimal Abattement { get; private set; }
 }

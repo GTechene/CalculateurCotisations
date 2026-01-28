@@ -25,8 +25,10 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
     public ResultatAvecTauxUniqueEtExplication FormationProfessionnelle => Calculateur.FormationProfessionnelle;
     public decimal GrandTotal => Calculateur.GrandTotal;
     public decimal AssietteDeCalculDesCotisations { get; private set; }
+    public decimal Abattement => annee >= 2025 ? ((ICalculateurPostReforme2024) Calculateur).Abattement : 0m;
+    public decimal RevenuBrut { get; private set; }
 
-    public void Calcule()
+    public void Calcule_Avant_2025()
     {
         var nombreDIterations = 0;
         var ratioMin = 1m;
@@ -64,6 +66,48 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
         }
 
         if(nombreDIterations > NombreDIterationsMaximal)
+            throw new InvalidOperationException($"On tente de converger depuis trop longtemps ! Revenu = {revenuNet}, année = {annee}, cotisations facultatives = {cotisationsFacultatives}");
+    }
+
+    // TODO : à terme, une fois les API officielle dispo, on les sollicitera pour récupérer le revenu brut et éviter de faire la convergence nous-mêmes.
+    public void Calcule_Depuis_2025()
+    {
+        var nombreDIterations = 0;
+        var ratioMin = 1.2m;
+        var ratioMax = 3m;
+        var ratio = 1.4m;
+        // TODO : quid des cotisations Madelin depuis 2025 ? A priori on fait comme avant mais on attend de voir.
+        var revenuAPrendreEnCompte = revenuNet + cotisationsFacultatives;
+
+        RevenuBrut = revenuAPrendreEnCompte * ratio;
+        while (nombreDIterations <= NombreDIterationsMaximal)
+        {
+            Calculateur.CalculeLesCotisations(RevenuBrut);
+
+            var nouveauRevenuNet = RevenuBrut - Calculateur.GrandTotal;
+            var diffNet = revenuAPrendreEnCompte - nouveauRevenuNet;
+            if (Math.Abs(diffNet) <= 1)
+            {
+                AssietteDeCalculDesCotisations = Calculateur.AssietteDeCalculDesCotisations;
+                break;
+            }
+
+            if (revenuAPrendreEnCompte <= nouveauRevenuNet)
+            {
+                ratioMax = ratio;
+                ratio -= (ratioMax - ratioMin) / 2;
+            }
+            else
+            {
+                ratioMin = ratio;
+                ratio += (ratioMax - ratioMin) / 2;
+            }
+
+            RevenuBrut = revenuAPrendreEnCompte * ratio;
+            nombreDIterations++;
+        }
+
+        if (nombreDIterations > NombreDIterationsMaximal)
             throw new InvalidOperationException($"On tente de converger depuis trop longtemps ! Revenu = {revenuNet}, année = {annee}, cotisations facultatives = {cotisationsFacultatives}");
     }
 }

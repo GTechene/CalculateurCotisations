@@ -19,7 +19,7 @@ public class ExportExcelShould
         var revenuNet = 50_000;
         var annee = 2024;
         var calculateur = new CalculateurAvecConvergence(revenuNet, annee);
-        calculateur.Calcule();
+        calculateur.Calcule_Avant_2025();
         var exporteurExcel = new ExporteurExcel(calculateur.Calculateur, annee, revenuNet, 0);
 
         using var stream = new MemoryStream();
@@ -35,7 +35,7 @@ public class ExportExcelShould
         var revenuNet = 40_000;
         var annee = 2024;
         var calculateur = new CalculateurAvecConvergence(revenuNet, annee);
-        calculateur.Calcule();
+        calculateur.Calcule_Avant_2025();
         var exporteurExcel = new ExporteurExcel(calculateur.Calculateur, annee, revenuNet, 0);
 
         using var stream = new MemoryStream();

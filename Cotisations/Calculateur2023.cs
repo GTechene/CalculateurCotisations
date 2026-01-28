@@ -15,21 +15,21 @@ public class Calculateur2023 : ICalculateur
         _calculateurCommun = new CalculateurCommun(PASS);
     }
 
-    public void CalculeLesCotisations(decimal revenu)
+    public void CalculeLesCotisations(decimal assiette)
     {
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
 
-        AssietteDeCalculDesCotisations = revenu;
-        MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieresAvant2025(revenu, _constantes.CotisationsMaladiePourRevenusInferieursA60PctDuPass, _constantes.CotisationsMaladiePourRevenusSupA60PctPass);
-        CalculeLesCotisationsPourIndemnitesMaladie(revenu);
-        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(revenu, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass, TauxInchanges.PlancherRetraiteDeBase * PASS.Valeur);
-        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(revenu, TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
-        InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(revenu);
-        AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(revenu);
+        AssietteDeCalculDesCotisations = assiette;
+        MaladieHorsIndemnitesJournalieres = _calculateurCommun.CalculeLesCotisationsMaladieHorsIndemnitesJournalieresAvant2025(assiette, _constantes.CotisationsMaladiePourRevenusInferieursA60PctDuPass, _constantes.CotisationsMaladiePourRevenusSupA60PctPass);
+        CalculeLesCotisationsPourIndemnitesMaladie(assiette);
+        RetraiteDeBase = _calculateurCommun.CalculeLaRetraiteDeBase(assiette, TauxInchanges.CotisationsRetraiteBaseRevenusInferieursAuPass, TauxInchanges.CotisationsRetraiteBaseRevenusSuperieursAuPass, TauxInchanges.PlancherRetraiteDeBase * PASS.Valeur);
+        RetraiteComplementaire = _calculateurCommun.CalculeLaRetraiteComplementaireSelonLeRegimeArtisansCommercants(assiette, TauxInchanges.RetraiteComplementairePremiereTrancheArtisansCommercants, TauxInchanges.RetraiteComplementaireDeuxiemeTrancheArtisansCommercants, _constantes.PlafondsRetraiteComplementaireArtisansCommercants);
+        InvaliditeDeces = _calculateurCommun.CalculeLaCotisationInvaliditeDeces(assiette);
+        AllocationsFamiliales = _calculateurCommun.CalculeLesAllocationsFamiliales(assiette);
         FormationProfessionnelle = _calculateurCommun.CalculeLaFormationProfessionnelle();
 
         var totalCotisationsObligatoires = MaladieHorsIndemnitesJournalieres.Valeur + MaladieIndemnitesJournalieres.Valeur + RetraiteDeBase.Valeur + RetraiteComplementaire.Valeur + InvaliditeDeces.Valeur + AllocationsFamiliales.Valeur;
-        (CSGNonDeductible, CSGDeductible, CRDSNonDeductible) = CalculateurCommun.CalculeCSGEtCRDSAvant2025(revenu, totalCotisationsObligatoires);
+        (CSGNonDeductible, CSGDeductible, CRDSNonDeductible) = CalculateurCommun.CalculeCSGEtCRDSAvant2025(assiette, totalCotisationsObligatoires);
     }
 
     private void CalculeLesCotisationsPourIndemnitesMaladie(decimal assiette)

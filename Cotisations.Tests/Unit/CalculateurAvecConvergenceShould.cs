@@ -22,7 +22,7 @@ public class CalculateurAvecConvergenceShould
         const decimal revenuNet = 40_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
-        convergeur.Calcule();
+        convergeur.Calcule_Avant_2025();
 
         await Verify(convergeur, _verifySettings);
     }
@@ -38,7 +38,7 @@ public class CalculateurAvecConvergenceShould
         const decimal revenuNet = 300_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
-        convergeur.Calcule();
+        convergeur.Calcule_Avant_2025();
 
         await Verify(convergeur, _verifySettings);
     }
@@ -50,7 +50,7 @@ public class CalculateurAvecConvergenceShould
         const decimal revenuNet = 18_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
-        convergeur.Calcule();
+        convergeur.Calcule_Avant_2025();
 
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(12m, 1m);
         Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(93m, 1m);
@@ -62,7 +62,7 @@ public class CalculateurAvecConvergenceShould
         const decimal revenuNet = 27_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
-        convergeur.Calcule();
+        convergeur.Calcule_Avant_2025();
 
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(1131m, 1m);
         Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(140m, 1m);
@@ -74,7 +74,7 @@ public class CalculateurAvecConvergenceShould
         const decimal revenuNet = 51_000m;
 
         var convergeur = new CalculateurAvecConvergence(revenuNet);
-        convergeur.Calcule();
+        convergeur.Calcule_Avant_2025();
 
         Check.That(convergeur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(3553, 1m);
         Check.That(convergeur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(265m, 1m);
@@ -85,6 +85,6 @@ public class CalculateurAvecConvergenceShould
     public void Sortir_en_erreur_lorsque_la_convergence_ne_se_fait_pas()
     {
         var convergeur = new CalculateurAvecConvergence(50_000m, 2024, -50_001m);
-        Check.ThatCode(convergeur.Calcule).Throws<InvalidOperationException>();
+        Check.ThatCode(convergeur.Calcule_Avant_2025).Throws<InvalidOperationException>();
     }
 }

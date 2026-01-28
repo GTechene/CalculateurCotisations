@@ -42,7 +42,7 @@ public class Constantes2025
     // Basé sur 450h de SMIC (SMIC horaire = 11.88 € en 2025)
     public const int RevenusPlancherRetraiteDeBase = 5346;
 
-    public const decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;
+    public const decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.0072m;
     public const decimal TauxCotisationsRetraiteBaseRevenusInferieursAuPass = 0.1787m;
     public const decimal TauxRetraiteComplementairePremiereTrancheArtisansCommercants = 0.081m;
     public const decimal TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.091m;
@@ -61,7 +61,7 @@ public class Constantes2026
     // Basé sur 450h de SMIC (SMIC horaire = 12.02 € en 2026)
     public const int RevenusPlancherRetraiteDeBase = 5409;
 
-    public const decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.072m;
+    public const decimal TauxCotisationsRetraiteBaseRevenusSuperieursAuPass = 0.0072m;
     public const decimal TauxCotisationsRetraiteBaseRevenusInferieursAuPass = 0.1787m;
     public const decimal TauxRetraiteComplementairePremiereTrancheArtisansCommercants = 0.081m;
     public const decimal TauxRetraiteComplementaireDeuxiemeTrancheArtisansCommercants = 0.091m;
