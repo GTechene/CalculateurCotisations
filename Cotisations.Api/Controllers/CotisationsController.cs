@@ -52,7 +52,7 @@ public class CotisationsController : ControllerBase
     [HttpGet("export/{revenuNet}")]
     public IActionResult TelechargeFichierExcel(
         [FromRoute][SwaggerParameter("Revenu net effectivement perçu en euros, avant impôt.", Required = true)][Range(1, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner un revenu de valeur positive et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal revenuNet,
-        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)][Range(2023, 2025)] int? annee,
+        [FromQuery][SwaggerParameter("Année pour laquelle calculer les cotisations correspondant au revenu spécifié.", Required = false)][Range(2023, 2026)] int? annee,
         [FromQuery][SwaggerParameter("Montant des cotisations facultatives (Madelin, PER...) versées pendant l'année.", Required = false)][Range(0, (double)RevenuMaximal, ErrorMessage = "Merci de renseigner des cotisations facultatives de valeur positive ou nulle et inférieure à 5 000 000 €", MaximumIsExclusive = true)] decimal? cotisationsFacultatives
     )
     {
@@ -69,9 +69,6 @@ public class CotisationsController : ControllerBase
         }
         else
         {
-            //calculateur = Calculateurs.TrouveUnCalculateur(valeurAnnee);
-            //calculateur.CalculeLesCotisations(revenuNet + valeurCotisationsFacultatives);
-
             var calculateurAvecConvergence = new CalculateurAvecConvergence(revenuNet, valeurAnnee, valeurCotisationsFacultatives);
             calculateurAvecConvergence.Calcule_Depuis_2025();
             calculateur = calculateurAvecConvergence.Calculateur;
