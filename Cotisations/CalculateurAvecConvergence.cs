@@ -4,8 +4,6 @@
 /// Calcule les cotisations en faisant converger l'assiette de base (revenu net + CSG non déductible + CRDS) avec l'assiette calculée. En effet, pour calculer CSG et CRDS, il faut connaître le total des cotisations obligatoires. Or celles-ci ne sont calculables qu'en connaissant l'assiette de base... qui dépend de la CSG et de la CRDS.
 /// J'ai donc opté pour un ratio "au doigt mouillé" pour le premier calcul (1.125) puis je fais converger par dichotomie en fonction de l'assiette calculée à partir de ce premier calcul.
 /// </summary>
-
-// TODO: limiter l'année à 2024 maximum
 public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, decimal cotisationsFacultatives = 0m)
 {
     public ICalculateur Calculateur { get; } = Calculateurs.TrouveUnCalculateur(annee);
@@ -69,41 +67,25 @@ public class CalculateurAvecConvergence(decimal revenuNet, int annee = 2024, dec
             throw new InvalidOperationException($"On tente de converger depuis trop longtemps ! Revenu = {revenuNet}, année = {annee}, cotisations facultatives = {cotisationsFacultatives}");
     }
 
-    // TODO : à terme, une fois les API officielle dispo, on les sollicitera pour récupérer le revenu brut et éviter de faire la convergence nous-mêmes.
     public void Calcule_Depuis_2025()
     {
         var nombreDIterations = 0;
-        var ratioMin = 1.2m;
-        var ratioMax = 3m;
-        var ratio = 1.4m;
-        // TODO : quid des cotisations Madelin depuis 2025 ? A priori on fait comme avant mais on attend de voir.
-        var revenuAPrendreEnCompte = revenuNet + cotisationsFacultatives;
-
-        RevenuBrut = revenuAPrendreEnCompte * ratio;
+        RevenuBrut = (revenuNet + cotisationsFacultatives) * 1.45m;
+        
         while (nombreDIterations <= NombreDIterationsMaximal)
         {
             Calculateur.CalculeLesCotisations(RevenuBrut);
 
             var nouveauRevenuNet = RevenuBrut - Calculateur.GrandTotal;
-            var diffNet = revenuAPrendreEnCompte - nouveauRevenuNet;
+            var diffNet = revenuNet - nouveauRevenuNet;
             if (Math.Abs(diffNet) <= 1)
             {
                 AssietteDeCalculDesCotisations = Calculateur.AssietteDeCalculDesCotisations;
                 break;
             }
 
-            if (revenuAPrendreEnCompte <= nouveauRevenuNet)
-            {
-                ratioMax = ratio;
-                ratio -= (ratioMax - ratioMin) / 2;
-            }
-            else
-            {
-                ratioMin = ratio;
-                ratio += (ratioMax - ratioMin) / 2;
-            }
-
-            RevenuBrut = revenuAPrendreEnCompte * ratio;
+            // 1.5 car en gros, 1 € de brut c'est 0.67 € de net, donc pour répercuter la différence entre les 2 nets, il suffit de multiplier par 1/0.67 soit 1.5.
+            RevenuBrut += 1.5m * diffNet;
             nombreDIterations++;
         }
 

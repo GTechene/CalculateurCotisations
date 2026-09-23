@@ -24,7 +24,7 @@ public class Calculateur2026Should
         Check.That(calculateur.FormationProfessionnelle.Valeur).IsEqualTo(120.15m);
 
         // Teste que la culture est bien appliquée explicitement dans le code et ne dépend pas de la machine qui le fait tourner.
-        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Explication).IsEqualTo("L'assiette de 54 004 € est comprise entre 52 866 € (110% du PASS) et 96 120 € (2 PASS), donc un taux progressif entre 6,5% et 7,7% est appliqué. Ici il s'agit de 6,5%, soit 3 527 € de cotisations.");
+        Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Explication).IsEqualTo("L'assiette de 54 003 € est comprise entre 52 866 € (110% du PASS) et 96 120 € (2 PASS), donc un taux progressif entre 6,5% et 7,7% est appliqué. Ici il s'agit de 6,5%, soit 3 527 € de cotisations.");
     }
 
     [Test]
@@ -129,7 +129,7 @@ public class Calculateur2026Should
 
         calculateur.Calcule_Depuis_2025();
 
-        Check.That(calculateur.AssietteDeCalculDesCotisations).IsCloseTo(209_367m, 1m);
+        Check.That(calculateur.AssietteDeCalculDesCotisations).IsCloseTo(209_369m, 1m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(16492m, 1m);
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(1047m, 1m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsCloseTo(9749m, 1m);
