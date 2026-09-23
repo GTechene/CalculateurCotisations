@@ -2,10 +2,10 @@ document.addEventListener('alpine:init', () => {
   Alpine.data('gestionDuFormulaire', () => ({
     formData: {
       revenuNet: 0,
-      annee: 2025,
+      annee: 2026,
       cotisationsFacultatives: 0,
     },
-    anneeValidee: 2025,
+    anneeValidee: 2026,
     cotisationsFacultativesValidees: 0,
     formulaireEnvoye: false,
     formulaireEnvoyeAuMoinsUneFois: false,
