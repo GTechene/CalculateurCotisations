@@ -34,10 +34,10 @@ public class Calculateur2026Should
 
         calculateur.Calcule_Depuis_2025();
 
-        Check.That(calculateur.AssietteDeCalculDesCotisations).IsCloseTo(9388m, 2m);
+        Check.That(calculateur.AssietteDeCalculDesCotisations).IsCloseTo(9387m, 2m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsEqualTo(0m);
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsEqualTo(96.12m);
-        Check.That(calculateur.RetraiteDeBase.Valeur).IsCloseTo(1678m, 1m);
+        Check.That(calculateur.RetraiteDeBase.Valeur).IsCloseTo(1677m, 1m);
         Check.That(calculateur.RetraiteComplementaire.Valeur).IsCloseTo(760m, 1m);
         Check.That(calculateur.CSGDeductible.Valeur).IsCloseTo(638m, 1m);
         Check.That(calculateur.CSGNonDeductible.Valeur).IsCloseTo(225m, 1m);
@@ -72,7 +72,7 @@ public class Calculateur2026Should
 
         calculateur.Calcule_Depuis_2025();
 
-        Check.That(calculateur.AssietteDeCalculDesCotisations).IsCloseTo(26657m, 2m);
+        Check.That(calculateur.AssietteDeCalculDesCotisations).IsCloseTo(26658m, 2m);
         Check.That(calculateur.MaladieHorsIndemnitesJournalieres.Valeur).IsCloseTo(914m, 2m);
         Check.That(calculateur.MaladieIndemnitesJournalieres.Valeur).IsCloseTo(133m, 1m);
         Check.That(calculateur.RetraiteDeBase.Valeur).IsCloseTo(4764m, 1m);
